@@ -1,0 +1,81 @@
+[tool.poetry]
+authors = ["Viktor Vasylkovskyi <viktor.vasylkovskyi@gmail.com>"]
+description = "AI Agent"
+homepage = "https://github.com/viktorvasylkovskyi/ai-personal-lawyer"
+maintainers = ["Viktor Vasylkovskyi <viktor.vasylkovskyi@gmail.com>"]
+name = "ai-personal-lawyer"
+packages = [{ include = "src" }]
+readme = "README.md"
+repository = "https://github.com/viktorvasylkovskyi/ai-personal-lawyer"
+version = "0.0.0"
+
+
+[tool.poetry.dependencies]
+bs4 = "^0.0.2"
+chromadb = "^0.6.3"
+colorama = "^0.4.6"
+fastapi = ">=0.109.0"
+langchain = "^0.3.14"
+langchain-community = "^0.3.14"
+langchain-core = "^0.3.29"
+langchain-google-genai = "^2.0.9"
+langchain-google-vertexai = "^2.0.10"
+langchain-openai = "^0.3.0"
+langgraph = "^0.2.68"
+python = "^3.13"
+python-dotenv = "^1.0.1"
+uvicorn = ">=0.26.0"
+PyMuPDF = "^1.19.6"
+qdrant-client = "^1.8.2"
+
+[tool.poetry.group.dev.dependencies]
+pyright = "^1.1.374"
+ruff = "^0.5.5"
+
+[tool.ruff]
+fix = true
+line-length = 120
+src = ["src", "tests"]
+target-version = "py313"
+
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+]
+
+
+[tool.ruff.format]
+indent-style = "space"
+line-ending = "lf"
+quote-style = "double"
+skip-magic-trailing-comma = true
+
+[tool.pyright]
+exclude = ["**/__pycache__"]
+ignore = []
+include = ["src"]
+strict = []
+venvPath = ".venv"
+
+reportMissingImports = true
+reportMissingTypeStubs = false
+reportUnknownParameterType = true
+reportUntypedFunctionDecorator = true

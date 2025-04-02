@@ -1,0 +1,46 @@
+services:
+  frontend:
+    container_name: nextjs-frontend
+    build:
+      context: ./frontend
+      dockerfile: ./deploy/Dockerfile
+    restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+  ai-agent:
+    container_name: ai-agent
+    build:
+      context: ./server
+      dockerfile: ./deploy/Dockerfile
+    restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
+    env_file:
+      - ./server/.env
+    volumes:
+      - ./pdfs:/app/pdfs 
+    ports:
+      - "2999:2999"
+    networks:
+      - app-network
+    depends_on:
+      - qdrant
+  qdrant:
+    container_name: qdrant
+    image: qdrant/qdrant
+    restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
+    volumes:
+      - qdrant_data:/qdrant
+    ports:
+      - "6333:6333"
+    networks:
+      - app-network
+
+volumes:
+  qdrant_data:
+networks:
+  app-network:
+    driver: bridge
+    name: app-network
