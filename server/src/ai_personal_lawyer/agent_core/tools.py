@@ -4,6 +4,7 @@ from typing import Any, Callable, List
 
 from dotenv import load_dotenv
 from langchain.tools.retriever import create_retriever_tool
+
 from logger.cust_logger import logger, set_files_message_color
 from rag_index.rag_index import RagIndex
 

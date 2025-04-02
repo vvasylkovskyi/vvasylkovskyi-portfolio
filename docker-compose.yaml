@@ -20,26 +20,12 @@ services:
     env_file:
       - ./server/.env
     volumes:
-      - ./pdfs:/app/pdfs 
+      - ./pdfs:/app/pdfs
     ports:
       - "2999:2999"
     networks:
       - app-network
-    depends_on:
-      - qdrant
-  qdrant:
-    container_name: qdrant
-    image: qdrant/qdrant
-    restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
-    volumes:
-      - qdrant_data:/qdrant
-    ports:
-      - "6333:6333"
-    networks:
-      - app-network
 
-volumes:
-  qdrant_data:
 networks:
   app-network:
     driver: bridge
