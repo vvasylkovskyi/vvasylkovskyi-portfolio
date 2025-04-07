@@ -120,3 +120,15 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* styles/globals.scss or any relevant SCSS file */
+ul {
+  list-style-type: disc; /* or 'circle' or 'square' as per your preference */
+  padding-left: 1.5rem; /* Optional: adds padding to the left to indent the list */
+}
+
+ol {
+  list-style-type: decimal; /* Restores default numbering for ordered lists */
+  padding-left: 1.5rem; /* Optional: adds padding to the left to indent the list */
+}
+

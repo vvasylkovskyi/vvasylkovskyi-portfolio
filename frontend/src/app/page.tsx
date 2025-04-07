@@ -1,123 +1,23 @@
-'use client';
+'use server';
 
-import { AiMessage } from '@/components/ui/ai-message';
-import { ChatForm } from '@/components/ui/chat-form';
-import { HumanMessage } from '@/components/ui/human-message';
-import { ChatFormWrapper } from '@/components/ui/styles/styles';
-import { useWebSocket } from '@/hooks/useWebSocket';
-import type { ChangeEvent } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { AllPosts } from '@/components/all-posts';
+import React from 'react';
 
-export default function Home() {
-  const [messages, setMessages] = useState<{ user: string; msg: string }[]>([]);
-  const [input, setInput] = useState(''); // User input state
-
-  // WebSocket connection logic (message handling & status tracking)
-  const { response, isOpen, sendMessage } = useWebSocket('ws://localhost:2999/ws/chat');
-  const messagesEndRef = useRef<HTMLDivElement>(null); // Ref for scrolling to the latest message
-
-  useEffect(() => {
-    // Handle WebSocket responses and update messages
-    if (response) {
-      setMessages((prevMessages) => {
-        const lastMessage = prevMessages[prevMessages.length - 1];
-        // Update last bot message or add a new one
-        if (lastMessage && lastMessage.user === 'Bot') {
-          lastMessage.msg = response;
-          return [...prevMessages];
-        } else {
-          return [...prevMessages, { user: 'Bot', msg: response }];
-        }
-      });
-    }
-  }, [response]);
-
-  // Updates input field on change
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setInput(event.target.value);
-  };
-
-  // Handles sending of messages from the user
-  const handleSubmit = () => {
-    if (input.trim()) {
-      const userMessage = { user: 'User', msg: input };
-      setMessages((prevMessages) => [...prevMessages, userMessage]); // Add user message to list
-      setInput('');
-
-      if (isOpen) {
-        sendMessage(input); // Send message via WebSocket if open
-      }
-    }
-  };
-
-  // Scrolls to the latest token in the chat whenever a new message is added
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }); // , 100); // you can add delay for scrolling, giving user a moment to read message bots message,
-    // but looks slightly jittery
-
-    return () => clearTimeout(timer); // Cleanup the timeout
-  }, [messages]);
-
-  // Handles "Enter" key submission without needing to click the send button
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleKeyDown = (event: any) => {
-    if (event.key === 'Enter' && !event.shiftKey) {
-      event.preventDefault(); // Prevent default newline
-      handleSubmit();
-    }
-  };
+export default async function Home() {
+  const data = await fetch('http://localhost:3000/get-all-posts');
+  const blogs = await data.json();
 
   return (
-    <div
-      style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}
-      className='flex w-full items-center justify-center p-6 md:p-10'
-    >
-      <div className='w-full  p-6 flex items-center justify-center'>
-        <h1 className='text-2xl font-bold text-center'>Welcome! How can I be of service today?</h1>
-      </div>
-      <div
-        className='rounded-xl w-full border bg-card text-card-foreground shadow'
-        style={{
-          height: '80vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'flex-end',
-        }}
-      >
-        <div
-          className='h-full'
-          style={{
-            display: 'flex',
-            width: '100%',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-          }}
-        >
-          <div className='p-6 space-y-4 xl:space-y-4 h-full overflow-y-auto'>
-            <div className='space-y-4'>
-              {messages.map((message) => {
-                if (message.user === 'User') {
-                  return <HumanMessage key={message.msg} message={message.msg} />;
-                } else {
-                  return <AiMessage key={message.msg} message={message.msg} />;
-                }
-              })}
-            </div>
-            <div ref={messagesEndRef} />
+    <React.Fragment>
+      <div className='greetings-section'>
+        <div className='greetings__left'>
+          <h1 className='heading-h1'>Hi, I&apos;m Viktor</h1>
+          <div className='greeting-flex-wrapper'>
+            <h2 className='greeting-heading'>Welcome to my blog!</h2>
           </div>
-
-          <ChatFormWrapper className='flex items-center p-6 pt-0 h-28'>
-            <ChatForm
-              onClick={handleSubmit}
-              handleChange={handleChange}
-              handleKeyDown={handleKeyDown}
-              input={input}
-            />
-          </ChatFormWrapper>
         </div>
       </div>
-    </div>
+      <AllPosts blogs={blogs} />
+    </React.Fragment>
   );
 }

@@ -1,0 +1,238 @@
+@import '../scss/fonts.scss';
+@import '../scss/variables.scss';
+@import '../scss/code.scss';
+@import '../scss/header.scss';
+@import '../scss/footer.scss';
+@import '../scss/post-item.scss';
+@import '../scss/home.scss';
+@import '../scss/post.scss';
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+label,
+span,
+td,
+li {
+  font-family: $primary-font-family;
+}
+
+body,
+h4,
+h5,
+h6,
+p,
+label,
+span,
+li {
+  color: $primary-text-color;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3 {
+  color: $primary-title-text-color;
+}
+
+a {
+  color: $esmerald-green;
+  font-weight: $bold;
+}
+
+pre h1,
+pre h2,
+pre h3,
+pre h4,
+pre h5,
+pre h6,
+pre p,
+pre a,
+pre label,
+pre span,
+table h1,
+table h2,
+table h3,
+table h4,
+table h5,
+table h6,
+table p,
+table a,
+table th,
+table tr,
+table td,
+table label,
+table span {
+  font-family: $code-font-family;
+}
+
+li::marker {
+  color: $primary-text-color;
+}
+
+body {
+  margin: 0;
+}
+
+html,
+body {
+  background-color: $background-app-color;
+}
+
+.main-content {
+  padding: 0;
+  max-width: $max-width--desktop;
+  margin-top: $topbar-height;
+  width: 100%;
+  padding-top: $topbar-height;
+  min-height: calc(100vh - ($topbar-height * 2) - $footer-height - 24px)
+}
+
+.chat-send-button {
+  background-color: $esmerald-green;
+}
+
+.top-bar-header {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  position: fixed;
+  height: $topbar-height;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  background-color: $background-app-color;
+}
+
+.post-link {
+  text-decoration: none;
+}
+
+.markdown-body h1 {
+  font-size: 32px;
+  line-height: 36px;
+  letter-spacing: 0.02em;
+  font-weight: $bold;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  padding-bottom: 0;
+}
+
+.markdown-body p,
+.body-text {
+  font-size: 18px;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  font-weight: $regular;
+  margin: 0;
+}
+
+.markdown-body h1,
+.heading-h1 {
+  font-size: 25px;
+  line-height: 36px;
+  letter-spacing: 0.02em;
+}
+
+.heading-h1 {
+  font-weight: $semi-bold;
+  margin: 0;
+}
+
+.markdown-body h2 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.sub-heading {
+  margin: 0;
+}
+
+.sub-heading,
+.markdown-body h2 {
+  font-size: 20px;
+  line-height: 1.5;
+  font-weight: $semi-bold;
+}
+
+.markdown-body h3 {
+  font-size: 18px;
+  line-height: 1.5;
+  font-weight: $semi-bold;
+}
+
+.markdown-body span,
+.markdown-body code {
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  font-weight: $medium;
+}
+
+@media (min-width: 992px) {
+  .heading-h1 {
+    font-size: 68px;
+    line-height: 74px;
+    letter-spacing: 0.02em;
+  }
+
+  .greeting-heading {
+    font-size: 25px;
+    line-height: 30px;
+  }
+
+  .markdown-body h1 {
+    border-bottom: 1px solid $esmerald-green;
+    font-size: 48px;
+    line-height: 56px;
+    letter-spacing: 0.02em;
+    padding-bottom: 20px;
+    margin-bottom: 40px;
+  }
+
+  .markdown-body h2 {
+    font-size: 28px;
+    line-height: 32px;
+    font-weight: $semi-bold;
+    margin-top: 30px;
+    margin-bottom: 20px;
+  }
+
+  .markdown-body h3 {
+    font-size: 20px;
+    line-height: 24px;
+  }
+
+  .markdown-body p,
+  .body-text {
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+
+  .markdown-body span,
+  .markdown-body code {
+    font-weight: 400;
+    line-height: 1.5;
+    font-size: 16px;
+  }
+
+  .date-container .date-text {
+    font-size: 22px;
+    line-height: 30px;
+  }
+
+  .date-container {
+    margin-top: 30px;
+  }
+}

@@ -1,0 +1,156 @@
+@import './variables.scss';
+
+.header-logo--wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.header-title {
+  display: none;
+}
+
+.header-nav {
+  width: calc(100% + 40px);
+  display: flex;
+  justify-content: center;
+  background: $dark-black;
+  margin-left: 0px;
+}
+
+.header__inner-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 $padding-xs;
+  height: 60px;
+  max-width: $max-width--desktop;
+  width: 100%;
+}
+
+.navigation {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.navigation-menu-item--wrapper {
+  margin: 0 10px;
+}
+
+.navigation-menu-item {
+  text-decoration: none;
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: $semi-bold;
+  color: $primary-title-text-color;
+  margin: 0 5px;
+}
+
+.navigation-menu-item--blog,
+.navigation-menu-item--about,
+.navigation-menu-item--github {
+  padding-bottom: 3px;
+}
+
+.navigation-menu-item--blog-active {
+  border-bottom: 2px solid $esmerald-green;
+}
+
+.navigation-menu-item--about-active {
+  border-bottom: 2px solid $blue;
+}
+
+.navigation-menu-item--blog:hover,
+.navigation-menu-item--github:hover,
+.navigation-menu-item--about:hover {
+  color: $esmerald-green;
+}
+
+.navigation-menu-item--github-active {
+  border-bottom: 2px solid $esmerald-green;
+}
+
+.github-navigation-link {
+  display: flex;
+  align-items: center;
+}
+
+.top-nav-navigation-item--link,
+.top-nav-navigation-item--text {
+  color: var(--accent-yellow);
+  text-decoration: none;
+  width: min-content;
+  margin-bottom: 1px;
+  margin-top: 0;
+}
+
+.top-nav-navigation-item--link:hover {
+  border-bottom: 1px solid red;
+}
+
+.external-link-icon {
+  width: 15px;
+  height: 15px;
+  margin-left: 4px;
+  margin-bottom: 6px;
+}
+
+.logo-image {
+  width: 32px;
+  height: 52px;
+  border-radius: 32px;
+}
+
+.theme-mode--toggle {
+  width: 52px;
+}
+
+.theme-mode--button {
+  background: none;
+  border: none;
+}
+
+.theme-mode--image {
+  width: 100%;
+}
+
+@media (min-width: 992px) {
+  .header-title {
+    font-size: 28px;
+    letter-spacing: 0.02em;
+    line-height: 24px;
+    margin-left: 20px;
+    height: $header-height-lg;
+    display: flex;
+    align-items: center;
+  }
+
+  .header-title:hover {
+    color: $esmerald-green;
+  }
+
+  .navigation-menu-item {
+    font-size: 18px;
+  }
+
+  .logo-image {
+    width: 30px;
+  }
+
+  .header__inner-nav {
+    height: 100px;
+  }
+}
+
+// header h1 {
+//   font-family: 'Press Start 2P', cursive;
+//   font-size: 17px;
+//   margin-left: 15px;
+//   margin-bottom: 0;
+//   margin-top: 0;
+// }

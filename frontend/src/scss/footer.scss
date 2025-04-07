@@ -1,0 +1,57 @@
+@import './variables.scss';
+
+footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background: $dark-black;
+  width: calc(100% + 40px);
+  height: $footer-height;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer-icon {
+  margin-left: 5px;
+  width: 25px;
+}
+
+.icon-container,
+.footer-icons-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+footer p {
+  font-family: $primary-font-family;
+  font-size: 16px;
+  font-weight: $semi-bold;
+  margin: 0;
+  margin-right: 5px;
+}
+
+@media (min-width: 992px) {
+  footer {
+    width: calc(100% + 40px);
+    display: flex;
+    justify-content: center;
+    background: $dark-black;
+    margin-top: 80px;
+  }
+
+  footer p {
+    font-size: 20px;
+  }
+
+  .footer-icon {
+    width: 30px;
+    margin-left: 10px;
+  }
+}

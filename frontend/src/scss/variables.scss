@@ -1,0 +1,50 @@
+$max-width--desktop: 992px;
+
+$padding-xs: 20px;
+$header-height-lg: 60px;
+
+$border-radius: 3px;
+
+$topbar-height: 56px;
+$footer-height: 101px;
+// $primary-font-family:
+//   'Inter',
+//   -apple-system,
+//   BlinkMacSystemFont,
+//   'Helvetica Neue',
+//   Arial,
+//   sans-serif;
+
+$primary-font-family: 'Montserrat', sans-serif;
+$code-font-family: Roboto Mono, Consolas, Monaco, Andale Mono, Ubuntu Mono,
+  monospace;
+// $primary-font-family: 'Montserrat', sans-serif;
+
+$thin: 100;
+$extra-light: 200;
+$light: 300;
+$regular: 400;
+$medium: 500;
+$semi-bold: 600;
+$bold: 600;
+$extra-bold: 600;
+
+// Colours
+
+$black: #202122;
+$white: #ededed;
+$faded-white: #eceff1;
+$light-grey: #494949;
+// $bright-grey: #2e2e2e;
+// $green: #0f9d58;
+$blue: #4285f4;
+$grey: #dedede;
+// $yellow: #f4b400;
+
+$dark-black: #0f0f0f;
+$esmerald-green: #00c990;
+$esmerald-green-faded: #0096883d;
+
+$background-app-color: $black;
+$primary-title-text-color: $white;
+$primary-text-color: $grey;

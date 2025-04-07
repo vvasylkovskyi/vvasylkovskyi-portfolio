@@ -1,0 +1,364 @@
+@import './variables.scss';
+
+$code-value-color: $esmerald-green;
+$code-border-color: $esmerald-green-faded;
+pre,
+table {
+  background-color: #272822; /* Light grey background */
+  border: none; /* Define a border */
+  border-radius: $border-radius;
+  padding: 10px; /* Inner spacing */
+  box-shadow: none; /* Slight shadow for 3D effect */
+  overflow-x: hidden; /* Allow horizontal scrolling if necessary */
+}
+
+.hljs.html {
+  color: #d4d4d4;
+}
+
+.hljs.javascript,
+.hljs.patch {
+  color: #d4d4d4;
+
+  .hljs-comment {
+    color: #6a9955;
+  }
+
+  .language_ {
+    color: #4ec9b0;
+  }
+
+  .hljs-property {
+    color: #4ec9b0;
+  }
+
+  .hljs-attr {
+    color: #9cdcfe;
+  }
+
+  .hljs-string {
+    color: $code-value-color;
+  }
+
+  .hljs-regexp {
+    color: #cc6666;
+  }
+
+  .hljs-literal {
+    color: #569cd6;
+  }
+
+  .hljs-title.function_ {
+    color: #d7ba7d;
+  }
+
+  .hljs-variable.constant_ {
+    color: #4ec9b0;
+  }
+
+  .hljs-number {
+    color: #b5cea8;
+  }
+
+  .hljs-keyword {
+    color: #569cd6;
+  }
+
+  .hljs-title.class_ {
+    color: #4ec9b0;
+  }
+
+  .hljs-subst {
+    color: #9cdcfe;
+  }
+
+  .hljs-params {
+    color: #9cdcfe;
+  }
+  .hljs-property {
+    color: #d4d4d4;
+  }
+}
+
+.hljs.typescript {
+  color: #d4d4d4;
+
+  .hljs-comment {
+    color: #6a9955;
+  }
+
+  .hljs-property {
+    color: #d4d4d4;
+  }
+
+  .hljs-variable.constant_ {
+    color: #4ec9b0;
+  }
+
+  .hljs-keyword {
+    color: #569cd6;
+  }
+
+  .hljs-built_in {
+    color: #d7ba7d;
+  }
+
+  .hljs-string {
+    color: $code-value-color;
+  }
+
+  .function_ {
+    color: #d7ba7d;
+  }
+
+  .hljs-attr {
+    color: #9cdcfe;
+  }
+
+  .hljs-variable {
+    color: #9cdcfe;
+  }
+
+  .hljs-number {
+    color: #b5cea8;
+  }
+
+  .hljs-title.class_ {
+    color: #4ec9b0;
+  }
+
+  .hljs-subst {
+    color: #9cdcfe;
+  }
+}
+
+.hljs.html {
+  .hljs-meta {
+    color: #569cd6;
+  }
+
+  .hljs-attr {
+    color: #9cdcfe;
+  }
+
+  .hljs-keyword {
+    color: #9cdcfe;
+  }
+
+  .hljs-tag {
+    color: #d4d4d4;
+  }
+
+  .hljs-name {
+    color: #569cd6;
+  }
+
+  .hljs-string {
+    color: $code-value-color;
+  }
+
+  .hljs-comment {
+    color: #608b4e;
+  }
+
+  .language-css {
+    color: #d4d4d4;
+
+    .hljs-selector-class {
+      color: #d7ba7d;
+    }
+
+    .hljs-comment {
+      color: #6a9955;
+    }
+    .hljs-keyword {
+      color: #c586c0;
+    }
+
+    .hljs-attribute {
+      color: #9cdcfe;
+    }
+
+    .hljs-built_in {
+      color: #dcdcaa;
+    }
+
+    .hljs-string {
+      color: $code-value-color;
+    }
+
+    .hljs-selector-tag {
+      color: #d7ba7d;
+    }
+  }
+}
+
+.hljs.css {
+  color: #d4d4d4;
+
+  .hljs-comment {
+    color: #6a9955;
+  }
+  .hljs-keyword {
+    color: #c586c0;
+  }
+
+  .hljs-attribute {
+    color: #9cdcfe;
+  }
+
+  .hljs-built_in {
+    color: #dcdcaa;
+  }
+
+  .hljs-string {
+    color: $code-value-color;
+  }
+
+  .hljs-selector-tag {
+    color: #d7ba7d;
+  }
+
+  .hljs-number {
+    color: #b5cea8;
+  }
+}
+
+.hljs.json {
+  .hljs-comment {
+    color: #608b4e;
+  }
+  .hljs-punctuation {
+    color: #d4d4d4;
+  }
+
+  .hljs-attr {
+    color: #9cdcfe;
+  }
+
+  .hljs-string {
+    color: $code-value-color;
+  }
+
+  .hljs-keyword {
+    color: #569cd6;
+  }
+}
+
+.hljs.yml {
+  .hljs-attr {
+    color: #569cd6;
+  }
+
+  .hljs-string {
+    color: $code-value-color;
+  }
+}
+
+.hljs.bash,
+.hljs.sh {
+  color: #d4d4d4;
+
+  .hljs-comment {
+    color: #6a9955;
+  }
+}
+
+.hljs.sh {
+  .hljs-keyword {
+    color: #9cdcfe;
+  }
+
+  .hljs-string {
+    color: $code-value-color;
+  }
+}
+
+.hljs.jsx {
+  color: #d4d4d4;
+
+  .hljs-comment {
+    color: #6a9955;
+  }
+  .hljs-keyword {
+    color: #c586c0;
+  }
+
+  .hljs-title.class_ {
+    color: #9cdcfe;
+  }
+
+  .hljs-title.function_ {
+    color: #d7ba7d;
+  }
+
+  .hljs-variable {
+    color: #9cdcfe;
+  }
+
+  .hljs-string {
+    color: $code-value-color;
+  }
+
+  .language-xml {
+    .hljs-tag {
+      color: #d4d4d4;
+    }
+    .hljs-name {
+      color: #4ec9b0;
+    }
+
+    .hljs-attr {
+      color: #9cdcfe;
+    }
+  }
+}
+
+.hljs.dockerfile {
+  color: #4ec9b0;
+
+  .hljs-comment {
+    color: #608b4e;
+  }
+  .hljs-keyword {
+    color: #c586c0;
+  }
+
+  .language-bash {
+    color: #9cdcfe;
+  }
+
+  .hljs-string {
+    color: $code-value-color;
+  }
+
+  .hljs-number {
+    color: #b5cea8;
+  }
+}
+
+p > code,
+li > code,
+strong > code,
+h2 > code {
+  background: #1e1e1e;
+  color: $esmerald-green;
+}
+
+code {
+  // font-family: 'Courier New', Courier, monospace; /* Monospace font for the consistency of code styling */
+  font-family: Menlo, 'IBM Plex Mono', Menlo, monospace;
+  color: #333; /* Slightly darker text color for better readability */
+  white-space: pre-wrap; /* This will wrap texts to the next line while preserving white spaces and line breaks */
+  word-break: break-all; /* This will break a word in half if it's too long for its container */
+  overflow-wrap: break-word; /* Similar to word-break but it tries to break on word boundaries */
+}
+
+/* Specific style adjustments for 'sh' or 'bash' scripting to distinguish it */
+/* This requires a way to specifically target the shell script blocks. It often depends on how the HTML is structured by your markdown-to-HTML process. */
+code.lang-shell {
+  /* You can customize this part specifically for shell scripts */
+  /* For example, you might want a specific icon or a slightly different shade of background color */
+  /* Background color could be slightly different from other code blocks */
+  background-color: #e8e8e8;
+}

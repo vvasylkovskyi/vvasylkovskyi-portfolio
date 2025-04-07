@@ -1,0 +1,52 @@
+.greetings-section {
+  border-bottom: 1px solid $esmerald-green;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.greetings__right {
+  display: none;
+}
+
+.greeting-heading {
+  font-size: 18px;
+  line-height: 24px;
+  letter-spacing: 0.02em;
+  font-weight: $regular;
+}
+
+.greeting-flex-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.blog-book-icon {
+}
+
+.blog-book-icon {
+  margin-left: 10px;
+  width: 28px;
+  height: 25px;
+}
+
+@media (min-width: 992px) {
+  .greetings__right {
+    display: flex;
+    margin-bottom: 10px;
+  }
+
+  .greetings-section {
+    margin-top: 40px;
+  }
+
+  .greeting-heading {
+    margin-bottom: 10px;
+  }
+
+  .blog-book-icon {
+    width: 45px;
+    height: 40px;
+  }
+}

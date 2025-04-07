@@ -1,16 +1,9 @@
+import { Footer } from '@/components/footer';
+import { TopBar } from '@/components/top-bar';
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import './app.scss';
 import './globals.css';
-
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
+import StyledComponentsRegistry from './registry';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -24,8 +17,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}>
-        {children}
+      <head>
+        <link rel='icon' href='/code-logo.svg' type='image/svg+xml' />
+      </head>
+      <body className='antialiased dark'>
+        <StyledComponentsRegistry>
+          <div className='app-container'>
+            <TopBar />
+            <div className='main-content'>{children}</div>
+            <Footer />
+          </div>
+        </StyledComponentsRegistry>
       </body>
     </html>
   );
