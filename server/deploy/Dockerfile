@@ -14,6 +14,8 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     build-essential \
+    ninja-build \
+    pkg-config \
     && curl -sSL https://install.python-poetry.org | python3 - \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -22,6 +24,9 @@ ENV PATH="/root/.local/bin:$PATH"
 
 # Copy project files
 COPY pyproject.toml poetry.lock ./
+
+# Install Cython using pip after Poetry installs other dependencies
+RUN pip install cython
 
 # Install dependencies
 RUN poetry config virtualenvs.create false && \

@@ -1,4 +1,3 @@
-import getMarkedHTML from './get-marked-html';
 import { getBlogById } from './get-post-by-id';
 
 export async function GET(request: Request) {
@@ -10,9 +9,7 @@ export async function GET(request: Request) {
 
     const blogData = getBlogById(id);
 
-    const content = getMarkedHTML(blogData.content);
-
-    return Response.json({ ...blogData, content });
+    return Response.json(blogData);
   } catch (error) {
     return Response.json({ error }, { status: 500 });
   }

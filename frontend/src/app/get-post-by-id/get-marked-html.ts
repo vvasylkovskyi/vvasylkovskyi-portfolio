@@ -1,4 +1,3 @@
-import type { HighlightOptions } from 'highlight.js';
 import hljs from 'highlight.js';
 import { marked } from 'marked';
 
@@ -7,7 +6,7 @@ const getMarkedHTML = (content: string) => {
   const renderer = new marked.Renderer();
 
   // Override function for code rendering
-  renderer.code = (code: HighlightOptions, language: string) => {
+  renderer.code = (code: string, language: string) => {
     // Check if the given language is available with highlight.js
     const validLang = hljs.getLanguage(language) ? language : 'plaintext';
     // Highlight the syntax

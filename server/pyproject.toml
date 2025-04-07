@@ -28,7 +28,7 @@ uvicorn = ">=0.26.0"
 PyMuPDF = "^1.19.6"
 pinecone = ">=5.4.0,<6.0.0"
 langchain_pinecone = "0.2.3"
-
+cython = ">=0.29.31,<0.30.0"
 [tool.poetry.group.dev.dependencies]
 pyright = "^1.1.374"
 ruff = "^0.5.5"

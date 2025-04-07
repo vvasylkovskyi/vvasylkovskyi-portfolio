@@ -1,8 +1,7 @@
-'use server';
+import { getPostById } from '@/lib/get-post-by-id';
 
-export default async function PostItemPage({ params }: { params: { id: string } }) {
-  const data = await fetch(`http://localhost:3000/get-post-by-id?id=${params.id}`);
-  const blog = await data.json();
+export default async function PostItemPage({ params }: { params: Promise<{ id: string }> }) {
+  const blog = await getPostById((await params).id);
 
   return (
     <div className='my-5'>

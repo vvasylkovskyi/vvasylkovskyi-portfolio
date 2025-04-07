@@ -1,6 +1,7 @@
 import type { PostType } from '@/types/post';
 import fs from 'fs';
 import path from 'path';
+import getMarkedHTML from './get-marked-html';
 
 export const getBlogById = (id: string) => {
   const filePathBlogPostTextDataPath = path.join(process.cwd(), `./blog-content/ready/${id}.md`);
@@ -25,7 +26,7 @@ export const getBlogById = (id: string) => {
   }
 
   return {
-    content: blogText,
+    content: getMarkedHTML(blogText),
     date: blogJsonData.date,
     meta: blogJsonData.metaText,
     title: blogJsonData.title,

@@ -1,12 +1,7 @@
-'use server';
-
 import { AllPosts } from '@/components/all-posts';
 import React from 'react';
 
 export default async function Home() {
-  const data = await fetch('http://localhost:3000/get-all-posts');
-  const blogs = await data.json();
-
   return (
     <React.Fragment>
       <div className='greetings-section'>
@@ -17,7 +12,7 @@ export default async function Home() {
           </div>
         </div>
       </div>
-      <AllPosts blogs={blogs} />
+      <AllPosts />
     </React.Fragment>
   );
 }

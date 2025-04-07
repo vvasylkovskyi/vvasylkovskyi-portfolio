@@ -13,8 +13,8 @@ from pinecone import Pinecone, ServerlessSpec
 from logger.cust_logger import format_log_message, logger, set_files_message_color
 
 load_dotenv()
-# env_var_key = "DOCS_FOLDER"
-env_var_key = "DOCS_FOLDER_LOCAL"
+env_var_key = "DOCS_FOLDER"
+# env_var_key = "DOCS_FOLDER_LOCAL"
 LOCAL_DOCS_PATH: str | None = os.getenv(env_var_key)
 
 if not LOCAL_DOCS_PATH:

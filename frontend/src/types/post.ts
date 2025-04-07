@@ -5,6 +5,7 @@ interface PostType {
   metaText: string;
   category: string;
   content: string;
+  filename: string;
 }
 
 export type { PostType };
