@@ -20,6 +20,13 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v4
 
+      - name: Recreate SSL certs
+        run: |
+          cd nginx
+          mkdir -p ./certs
+          echo "${{ secrets.SSL_CERT_PEM }}" | base64 -d > ./certs/vvasylkovskyi_com.pem
+          echo "${{ secrets.SSL_CERT_KEY }}" | base64 -d > ./certs/vvasylkovskyi_com.key
+
       - name: Log in to Docker Hub
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
         with:
