@@ -1,0 +1,7 @@
+{
+  "title": "Enhancing GUI Applications Within Docker Containers",
+  "filename": "docker-with-gui",
+  "date": "October 27, 2023",
+  "metaText": "Docker streamlines software consistency but lacks GUI support. For MacOS, XQuartz fills this void, enabling GUI applications within Docker containers. Dive deeper to harness Docker's full potential.",
+  "category": ["Docker", "GUI"]
+}
