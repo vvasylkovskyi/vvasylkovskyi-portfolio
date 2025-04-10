@@ -1,4 +1,4 @@
-FROM --platform=linux/arm64 nginx:alpine
+FROM nginx:alpine
 
 WORKDIR /app
 COPY ./ /app
