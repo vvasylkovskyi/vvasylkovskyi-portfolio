@@ -20,6 +20,12 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v4
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
       - name: Recreate SSL certs
         run: |
           cd nginx
@@ -27,40 +33,23 @@ jobs:
           echo "${{ secrets.SSL_CERT_PEM }}" | base64 -d > ./certs/vvasylkovskyi_com.pem
           echo "${{ secrets.SSL_CERT_KEY }}" | base64 -d > ./certs/vvasylkovskyi_com.key
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push ARM image
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          push: true
-          tags: vvasylkovskiy1/ai-personal-lawyer-server:latest
-          platforms: linux/arm64
-
-      - name: Build and Push Frontend Container Image
-        run: |
-          cd frontend
-          docker build -f ./deploy/Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/ai-personal-lawyer-frontend --platform linux/amd64 .
-          docker push ${{ secrets.DOCKER_USERNAME }}/ai-personal-lawyer-frontend
-
       - name: Build and Push Nginx Container Image
         run: |
           cd nginx
-          docker build -f ./Dockerfile.nginx -t ${{ secrets.DOCKER_USERNAME }}/ai-personal-lawyer-nginx --platform linux/amd64 .
-          docker push ${{ secrets.DOCKER_USERNAME }}/ai-personal-lawyer-nginx
+          docker buildx build -f ./Dockerfile.nginx -t ${{ secrets.DOCKER_USERNAME }}/ai-personal-lawyer-nginx --platform linux/arm64 --push .
 
       - name: Build and Push Server Container Image
         run: |
           cd server
-          docker build -f ./deploy/Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/ai-personal-lawyer-server --platform linux/amd64 .
-          docker push ${{ secrets.DOCKER_USERNAME }}/ai-personal-lawyer-server
+          docker buildx build -f ./deploy/Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/ai-personal-lawyer-server --platform linux/arm64 --push .
+
+      - name: Build and Push Frontend Container Image
+        run: |
+          cd frontend
+          docker buildx build -f ./deploy/Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/ai-personal-lawyer-frontend --platform linux/arm64 --push .
