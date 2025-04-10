@@ -44,10 +44,10 @@ jobs:
           cd nginx
           docker buildx build -f ./Dockerfile.nginx -t ${{ secrets.DOCKER_USERNAME }}/ai-personal-lawyer-nginx --platform linux/arm64 --push .
 
-      - name: Build and Push Server Container Image
-        run: |
-          cd server
-          docker buildx build -f ./deploy/Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/ai-personal-lawyer-server --platform linux/arm64 --push .
+      # - name: Build and Push Server Container Image
+      #   run: |
+      #     cd server
+      #     docker buildx build -f ./deploy/Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/ai-personal-lawyer-server --platform linux/arm64 --push .
 
       - name: Build and Push Frontend Container Image
         run: |
