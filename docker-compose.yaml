@@ -17,8 +17,6 @@ services:
     #   dockerfile: ./deploy/Dockerfile
     image: vvasylkovskyi1/ai-personal-lawyer-frontend:latest
     restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
-    volumes:
-      - ./frontend:/app
     ports:
       - "3000:3000"
     networks:
