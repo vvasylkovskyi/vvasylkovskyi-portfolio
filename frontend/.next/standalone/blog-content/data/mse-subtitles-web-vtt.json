@@ -1,7 +1,0 @@
-{
-  "title": "Integrating WebVTT Subtitles with Media Source Extensions",
-  "filename": "mse-subtitles-web-vtt",
-  "date": "November 2, 2023",
-  "metaText": "Learn how to integrate WebVTT subtitles with HTML5 Media Source Extensions for enhanced video accessibility. Follow our step-by-step guide for a seamless viewing experience with best practices for subtitle visibility and synchronization.",
-  "category": ["Video", "Javascript"]
-}

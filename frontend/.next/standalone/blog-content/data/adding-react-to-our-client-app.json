@@ -1,7 +1,0 @@
-{
-  "title": "Seamlessly Integrating React with Webpack for Modern Web Development",
-  "filename": "adding-react-to-our-client-app",
-  "date": "November 5, 2023",
-  "metaText": "Explore our step-by-step guide to integrating React with Webpack, enhancing your web development workflow. This article covers everything from setting up React dependencies to configuring Babel, ensuring a seamless development experience with the latest React v18 features.",
-  "category": ["React", "Javascript"]
-}

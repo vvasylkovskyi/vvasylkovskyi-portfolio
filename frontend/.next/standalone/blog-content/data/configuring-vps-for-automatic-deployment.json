@@ -1,7 +1,0 @@
-{
-  "title": "Automating App Deployment to a Virtual Machine Using GitHub Actions, Dockerfiles, and Docker-Compose",
-  "filename": "configuring-vps-for-automatic-deployment",
-  "date": "February 3, 2024",
-  "metaText": "Explore an advanced guide on automating application deployment to a Virtual Machine using GitHub Actions, Dockerfiles, and Docker-Compose. Learn how to streamline your development workflow by integrating powerful technologies for efficient and reliable deployment.",
-  "category": ["Security", "SSH", "Deploy", "Docker"]
-}

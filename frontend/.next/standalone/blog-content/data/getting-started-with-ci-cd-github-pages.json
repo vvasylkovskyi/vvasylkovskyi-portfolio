@@ -1,7 +1,0 @@
-{
-  "title": "Collaborative Power of GitHub Pages",
-  "filename": "getting-started-with-ci-cd-github-pages",
-  "date": "October 30, 2023",
-  "metaText": "GitHub Pages offers seamless project hosting. This guide covers setup, auto-deployments with GitHub Actions, and live project viewing, enhancing development collaboration.",
-  "category": ["General", "Github"]
-}
