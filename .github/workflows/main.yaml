@@ -14,24 +14,17 @@ on:
         required: true
 
 jobs:
-  build_and_push_and_deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
 
-      # - name: Set up QEMU
-      #   uses: docker/setup-qemu-action@v1
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
 
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v1
-
-      # - name: Recreate SSL certs
-      #   run: |
-      #     cd nginx
-      #     mkdir -p ./certs
-      #     echo "${{ secrets.SSL_CERT_PEM }}" | base64 -d > ./certs/vvasylkovskyi_com.pem
-      #     echo "${{ secrets.SSL_CERT_KEY }}" | base64 -d > ./certs/vvasylkovskyi_com.key
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
 
       - name: Log in to Docker Hub
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
@@ -49,11 +42,14 @@ jobs:
       #     cd server
       #     docker buildx build -f ./deploy/Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/ai-personal-lawyer-server --platform linux/arm64 --push .
 
-      # - name: Build and Push Frontend Container Image
-      #   run: |
-      #     cd frontend
-      #     docker buildx build -f ./deploy/Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/ai-personal-lawyer-frontend --platform linux/arm64 --push .
+      - name: Build and Push Frontend Container Image
+        run: |
+          cd frontend
+          docker buildx build -f ./deploy/Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/ai-personal-lawyer-frontend --platform linux/arm64 --push .
 
+  build_and_push_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
       - name: Setup SSH Key
         run: |
           mkdir -p ~/.ssh
