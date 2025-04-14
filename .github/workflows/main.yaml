@@ -37,10 +37,10 @@ jobs:
       #     cd server
       #     docker buildx build -f ./deploy/Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/ai-personal-lawyer-server --platform linux/arm64 --push .
 
-      - name: Build and Push Frontend Container Image
-        run: |
-          cd frontend
-          docker buildx build -f ./deploy/Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/ai-personal-lawyer-frontend --platform linux/arm64 --push .
+      # - name: Build and Push Frontend Container Image
+      #   run: |
+      #     cd frontend
+      #     docker buildx build -f ./deploy/Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/ai-personal-lawyer-frontend --platform linux/arm64 --push .
 
       - name: Setup SSH Key
         run: |

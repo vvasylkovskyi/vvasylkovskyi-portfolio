@@ -12,30 +12,30 @@ services:
   #     - app-network
   frontend:
     container_name: nextjs-frontend
-    # build:
-    #   context: ./frontend
-    #   dockerfile: ./deploy/Dockerfile
-    image: vvasylkovskyi1/ai-personal-lawyer-frontend:latest
+    build:
+      context: ./frontend
+      dockerfile: ./deploy/Dockerfile
+    # image: vvasylkovskyi1/ai-personal-lawyer-frontend:latest
     restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
     ports:
       - "3000:3000"
     networks:
       - app-network
-  # ai-agent:
-  #   container_name: ai-agent
-  #   # build:
-  #   #   context: ./server
-  #   #   dockerfile: ./deploy/Dockerfile
-  #   image: vvasylkovskyi1/ai-personal-lawyer-server:latest
-  #   restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
-  #   # env_file:
-  #   #   - ./server/.env
-  #   volumes:
-  #     - ./pdfs:/app/pdfs
-  #   ports:
-  #     - "2999:2999"
-  #   networks:
-  #     - app-network
+  ai-agent:
+    container_name: ai-agent
+    build:
+      context: ./server
+      dockerfile: ./deploy/Dockerfile
+    # image: vvasylkovskyi1/ai-personal-lawyer-server:latest
+    restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
+    # env_file:
+    #   - ./server/.env
+    volumes:
+      - ./pdfs:/app/pdfs
+    ports:
+      - "2999:2999"
+    networks:
+      - app-network
 
 networks:
   app-network:
