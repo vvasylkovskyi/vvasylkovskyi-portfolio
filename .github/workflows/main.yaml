@@ -71,6 +71,11 @@ jobs:
           echo "  UserKnownHostsFile=/dev/null" >> ~/.ssh/config
           chmod 600 ~/.ssh/config
 
+      - name: Upload .env file
+        run: |
+          echo "${{ secrets.ENV_FILE }}" > .env
+          scp .env ${{ secrets.CF_SSH_USER }}@${{ secrets.CF_SSH_HOST }}:/home/${{ secrets.CF_SSH_USER }}/.env
+
       - name: Deploy docker-compose to Raspberry Pi
         run: |
           scp ./docker-compose.yaml ${{ secrets.CF_SSH_USER }}@${{ secrets.CF_SSH_HOST }}:/home/${{ secrets.CF_SSH_USER }}/docker-compose.yaml

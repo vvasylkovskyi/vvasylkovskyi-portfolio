@@ -17,8 +17,8 @@ services:
     #   dockerfile: ./deploy/Dockerfile
     image: vvasylkovskyi1/ai-personal-lawyer-server:latest
     restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
-    # env_file:
-    #   - ./server/.env
+    env_file:
+      - .env
     volumes:
       - ./pdfs:/app/pdfs
     ports:
