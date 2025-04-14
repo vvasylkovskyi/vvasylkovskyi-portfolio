@@ -78,9 +78,6 @@ jobs:
         run: |
           scp ./docker-compose.yaml ${{ secrets.CF_SSH_USER }}@${{ secrets.CF_SSH_HOST }}:/home/${{ secrets.CF_SSH_USER }}/docker-compose.yaml
 
-          ssh ${{ secrets.CF_SSH_USER }}@${{ secrets.CF_SSH_HOST }} \
-              'docker compose -f /home/${{ secrets.CF_SSH_USER }}/docker-compose.yaml pull && docker compose -f /home/${{ secrets.CF_SSH_USER }}/docker-compose.yaml up -d'
-
       - name: Log in to Docker on Remote Host
         run: |
           ssh ${{ secrets.CF_SSH_USER }}@${{ secrets.CF_SSH_HOST }} << 'ENDSSH'

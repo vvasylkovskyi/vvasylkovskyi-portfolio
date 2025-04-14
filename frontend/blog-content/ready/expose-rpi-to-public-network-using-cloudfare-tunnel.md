@@ -315,7 +315,7 @@ jobs:
 
       - name: Deploy docker-compose to Raspberry Pi
         run: |
-          scp ./docker-compose.yaml ${{ secrets.CF_SSH_USER }}@${{ secrets.CF_SSH_HOST }}:/home/${{ secrets.CF_SSH_USER }}/project/docker-compose.yaml
+          scp ./docker-compose.yaml ${{ secrets.CF_SSH_USER }}@${{ secrets.CF_SSH_HOST }}:/home/${{ secrets.CF_SSH_USER }}/docker-compose.yaml
 
       - name: Log in to Docker on Remote Host
         run: |
@@ -326,7 +326,6 @@ jobs:
       - name: Pull Docker Images
         run: |
           ssh ${{ secrets.CF_SSH_USER }}@${{ secrets.CF_SSH_HOST }} << 'ENDSSH'
-          cd ~/${{ secrets.RPI_PROJECT_FOLDER }}
           docker-compose pull 
           ENDSSH
 
