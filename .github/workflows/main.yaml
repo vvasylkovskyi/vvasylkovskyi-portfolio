@@ -16,6 +16,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+  build_and_push_and_deploy:
+    runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
@@ -42,9 +45,6 @@ jobs:
           cd frontend
           docker buildx build -f ./deploy/Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/ai-personal-lawyer-frontend --platform linux/arm64 --push .
 
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
       - name: Setup SSH Key
         run: |
           mkdir -p ~/.ssh
