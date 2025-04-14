@@ -1,0 +1,12 @@
+{
+    "title": "Enable SSH Secure Connection to Remote Device",
+    "filename": "enable-ssh-secure-connection-to-remote-device",
+    "date": "April 14, 2025",
+    "metaText": "Explore an advanced guide on enabling SSH secure connection to a remote device. Learn how to set up SSH key-based authentication and integrate it into a CI pipeline such as GitHub Actions.",
+    "category": [
+        "SSH",
+        "Security",
+        "Deploy",
+        "CI/CD"
+    ]
+}
