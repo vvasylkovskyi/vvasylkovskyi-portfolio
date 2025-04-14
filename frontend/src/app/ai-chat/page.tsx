@@ -13,7 +13,7 @@ export default function Home() {
   const [input, setInput] = useState(''); // User input state
 
   // WebSocket connection logic (message handling & status tracking)
-  const { response, isOpen, sendMessage } = useWebSocket('ws://localhost:2999/ws/chat');
+  const { response, isOpen, sendMessage } = useWebSocket('ws://ai-agent:2999/ws/chat');
   const messagesEndRef = useRef<HTMLDivElement>(null); // Ref for scrolling to the latest message
 
   useEffect(() => {
