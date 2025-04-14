@@ -1,0 +1,11 @@
+{
+    "title": "Setting Up a Raspberry Pi 4B as a GitHub Actions Self-Hosted Runner",
+    "filename": "configuring-rpi-as-github-runner",
+    "date": "April 14, 2025",
+    "metaText": "Setting up a Raspberry Pi 4B as a GitHub Actions self-hosted runner is a powerful way to extend your CI/CD infrastructure. This guide simplifies the process of setting up a self-hosted runner on a Raspberry Pi 4B and configuring it to run in the background on boot.",
+    "category": [
+        "General",
+        "Github",
+        "Raspberry Pi"
+    ]
+}
