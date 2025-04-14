@@ -90,7 +90,8 @@ jobs:
       - name: Pull Docker Images
         run: |
           ssh ${{ secrets.CF_SSH_USER }}@${{ secrets.CF_SSH_HOST }} << 'ENDSSH'
-          docker pull ${{ secrets.DOCKER_USERNAME }}/<your-image-name>
+          cd ~/${{ secrets.RPI_PROJECT_FOLDER }}
+          docker-compose pull 
           ENDSSH
 
       - name: Restart Docker Images

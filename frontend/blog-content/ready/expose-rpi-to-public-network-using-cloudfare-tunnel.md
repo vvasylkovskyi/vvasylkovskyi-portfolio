@@ -309,6 +309,8 @@ jobs:
         run: |
           echo "Host ${{ secrets.CF_SSH_HOST }}" >> ~/.ssh/config
           echo "  ProxyCommand /usr/local/bin/cloudflared access ssh --hostname %h" >> ~/.ssh/config
+          echo "  StrictHostKeyChecking no" >> ~/.ssh/config
+          echo "  UserKnownHostsFile=/dev/null" >> ~/.ssh/config
           chmod 600 ~/.ssh/config
 
       - name: Deploy docker-compose to Raspberry Pi
@@ -324,7 +326,8 @@ jobs:
       - name: Pull Docker Images
         run: |
           ssh ${{ secrets.CF_SSH_USER }}@${{ secrets.CF_SSH_HOST }} << 'ENDSSH'
-          docker pull ${{ secrets.DOCKER_USERNAME }}/<your-image-name>
+          cd ~/${{ secrets.RPI_PROJECT_FOLDER }}
+          docker-compose pull 
           ENDSSH
 
       - name: Restart Docker Images
