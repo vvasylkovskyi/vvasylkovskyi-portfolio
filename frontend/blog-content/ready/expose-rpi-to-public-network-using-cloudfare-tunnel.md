@@ -163,8 +163,185 @@ You can verify it’s running with:
 sudo systemctl status cloudflared
 ```
 
+## Adding CloudFlared to CI for secure SSH tunnel
+
+It is a common requirement to expose your Raspberry Pi SSH access to the internet. CloudFlared is a free and secure way to do this. It is better that exposing the port directly to the internet, and managing the router settings yourself because it is more secure. Here we will describe how to migrate the above working example into cloudflare.
+
+### Add SSH server to the tunnel
+
+```yaml
+tunnel: rpi-tunnel
+credentials-file: /home/banana/.cloudflared/<tunnel-id>.json
+
+ingress:
+  - hostname: www.yourdomain.com
+    service: http://localhost:3000
+
+  - hostname: ssh.yourdomain.com # 👈 Add this line
+    service: ssh://localhost:22 # 👈 And this one
+
+  - service: http_status:404
+```
+
+### Create new DNS records on cloudflare:
+
+1. Run this on your Pi:
+
+```bash
+cloudflared tunnel route dns rpi-tunnel ssh.yourdomain.com
+```
+
+2. Restart the tunnel service:
+
+```bash
+sudo systemctl restart cloudflared
+```
+
+### Test SSH tunnel access from the client
+
+Test the SSH tunnel locally: On your laptop (where cloudflared is installed). Make a one-time change to your SSH configuration file:
+
+```sh
+vim ~/.ssh/config
+```
+
+Input the following values; replacing ssh.example.com with the hostname you created.
+
+```sh
+Host ssh.example.com
+ProxyCommand /usr/local/bin/cloudflared access ssh --hostname %h
+```
+
+The cloudflared path may be different depending on your OS and package manager. For example, if you installed cloudflared on macOS with Homebrew, the path is /opt/homebrew/bin/cloudflared.
+
+You can now test the connection by running a command to reach the service:
+
+```sh
+ssh <username>@ssh.example.com
+```
+
+### Add the SSH tunnel to your CI/CD pipeline:
+
+1. Add the following to your CI/CD pipeline:
+
+```yaml
+- name: Setup SSH key
+  run: |
+    mkdir -p ~/.ssh
+    echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+    chmod 600 ~/.ssh/id_rsa
+    ssh-keyscan -H ssh.yourdomain.com >> ~/.ssh/known_hosts
+```
+
+In your GitHub Actions setup:
+
+```bash
+CF_SSH_HOST = ssh.yourdomain.com
+CF_SSH_USER = username
+```
+
+That’s the address GitHub Actions will use to access the Raspberry Pi securely over SSH through Cloudflare.
+
+### Enable Cloudflare Access for SSH
+
+Go to the Cloudflare Zero Trust dashboard:
+
+- Go to Access > Applications
+- Add new app:
+  - Type: SSH
+  - Hostname: ssh.yourdomain.com
+  - Session Duration: your choice (e.g., 30m)
+
+Add an Access Policy allowing access to the GitHub Actions runner email (or set it to “Public” for testing)
+
+### GitHub Actions Setup
+
+Add the following secrets to GitHub:
+
+| Secret Name     | Description                                   |
+| --------------- | --------------------------------------------- |
+| SSH_PRIVATE_KEY | Private key that matches Pi's authorized_keys |
+| CF_SSH_HOST     | e.g. ssh.yourdomain.com                       |
+| CF_SSH_USER     | e.g. pi                                       |
+
+You’ll generate the Access token manually for now — see below.
+
+### Generate Access Token
+
+To get a token that GitHub can use, run this locally:
+
+```bash
+cloudflared access token --hostname ssh.yourdomain.com
+```
+
+Copy the token and add it as `CF_ACCESS_TOKEN` in GitHub Secrets.
+
+You can automate this later with Service Tokens or short-lived JWTs, but for now, start with this manual approach.
+
+### Github Actions:
+
+Here’s a working job that:
+
+- Uses cloudflared and ssh to connect through the tunnel
+- Deploys the docker-compose.yaml and runs the app
+
+```yaml
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Install cloudflared
+        run: |
+          curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o cloudflared
+          chmod +x cloudflared
+          sudo mv cloudflared /usr/local/bin/cloudflared
+
+      - name: Setup SSH Config for Cloudflare Tunnel
+        run: |
+          echo "Host ${{ secrets.CF_SSH_HOST }}" >> ~/.ssh/config
+          echo "  ProxyCommand /usr/local/bin/cloudflared access ssh --hostname %h" >> ~/.ssh/config
+          chmod 600 ~/.ssh/config
+
+      - name: Deploy docker-compose to Raspberry Pi
+        run: |
+          scp ./docker-compose.yaml ${{ secrets.CF_SSH_USER }}@${{ secrets.CF_SSH_HOST }}:/home/${{ secrets.CF_SSH_USER }}/project/docker-compose.yaml
+
+      - name: Log in to Docker on Remote Host
+        run: |
+          ssh ${{ secrets.CF_SSH_USER }}@${{ secrets.CF_SSH_HOST }} << 'ENDSSH'
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          ENDSSH
+
+      - name: Pull Docker Images
+        run: |
+          ssh ${{ secrets.CF_SSH_USER }}@${{ secrets.CF_SSH_HOST }} << 'ENDSSH'
+          docker pull ${{ secrets.DOCKER_USERNAME }}/<your-image-name>
+          ENDSSH
+
+      - name: Restart Docker Images
+        run: |
+          ssh ${{ secrets.CF_SSH_USER }}@${{ secrets.CF_SSH_HOST }} << 'ENDSSH'
+          docker stop $(docker ps -q)
+          docker rm $(docker ps -aq)
+          docker-compose up -d
+          ENDSSH
+```
+
 # Conclusion
 
 Cloudflare Tunnel is one of the most elegant ways to expose your Raspberry Pi (or any internal service) to the internet. It's free, fast, and secure — and you get the added benefit of not having to deal with the hassle of network configuration.
 
 Whether you’re deploying a hobby project, internal dashboard, or full web app — Cloudflare Tunnel is a must-have tool in your Raspberry Pi dev toolkit.
+
+```
+
+```
