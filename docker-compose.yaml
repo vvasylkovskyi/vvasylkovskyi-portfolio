@@ -1,15 +1,15 @@
 services:
-  nginx:
-    container_name: nginx
-    # build:
-    #   context: ./nginx
-    #   dockerfile: ./Dockerfile.nginx
-    image: vvasylkovskyi1/ai-personal-lawyer-nginx:latest
-    restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
-    ports:
-      - "443:443"
-    networks:
-      - app-network
+  # nginx:
+  #   container_name: nginx
+  #   # build:
+  #   #   context: ./nginx
+  #   #   dockerfile: ./Dockerfile.nginx
+  #   image: vvasylkovskyi1/ai-personal-lawyer-nginx:latest
+  #   restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
+  #   ports:
+  #     - "443:443"
+  #   networks:
+  #     - app-network
   frontend:
     container_name: nextjs-frontend
     # build:
