@@ -18,7 +18,7 @@ export const Footer = () => {
             </Link>
             . The source code is available on
             <Link
-              href='https://github.com/vvasylkovskyi/ai-personal-lawyer'
+              href='https://github.com/vvasylkovskyi/vvasylkovskyi-portfolio'
               target='_blank'
               rel='noreferrer'
               className='font-medium underline underline-offset-4'
