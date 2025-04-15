@@ -5,10 +5,10 @@ type PostItemProps = {
   title: string;
   date: string;
   metaText: string;
-  category: string;
+  categories: string[];
 };
 
-export const PostItem = ({ url, title, date, metaText }: PostItemProps) => {
+export const PostItem = ({ url, title, date, metaText, categories }: PostItemProps) => {
   return (
     <Link className='post-link' href={`/posts/${url}`}>
       <div className='post-item__card'>
@@ -18,6 +18,14 @@ export const PostItem = ({ url, title, date, metaText }: PostItemProps) => {
 
         <div className='meta-text--container'>
           <p className='meta-text'>{metaText}</p>
+        </div>
+
+        <div className='post-item-tags__container'>
+          {categories.map((category) => (
+            <div key={category} className='post-item-tag'>
+              {category}
+            </div>
+          ))}
         </div>
       </div>
     </Link>

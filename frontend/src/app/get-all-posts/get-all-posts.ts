@@ -68,7 +68,7 @@ export const getBlogsData = async (): Promise<PostType[]> => {
         title: formattedTitle,
         metaText: arrayOfBlogPostsData[i].metaText,
         date: arrayOfBlogPostsData[i].date,
-        category: arrayOfBlogPostsData[i].category,
+        categories: arrayOfBlogPostsData[i].category,
       });
     }
 

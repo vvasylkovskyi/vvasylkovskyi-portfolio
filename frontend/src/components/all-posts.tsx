@@ -15,7 +15,7 @@ export const AllPosts = async () => {
             url={post.url}
             title={post.title}
             date={post.date}
-            category={post.category}
+            categories={post.categories}
             metaText={post.metaText}
           />
         ))}

@@ -3,7 +3,7 @@ interface PostType {
   url: string;
   date: string;
   metaText: string;
-  category: string;
+  categories: string[];
   content: string;
   filename: string;
 }

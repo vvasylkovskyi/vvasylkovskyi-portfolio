@@ -44,11 +44,12 @@
 
 .navigation-menu-item {
   text-decoration: none;
-  font-size: 14px;
-  line-height: 18px;
-  font-weight: $semi-bold;
+  font-size: $font-size-sm;
+  line-height: 1.25rem;
+  font-weight: $font-weight-medium;
   color: $primary-title-text-color;
-  margin: 0 5px;
+  padding: 0 0.5rem;
+  // margin: 0 5px;
 }
 
 .navigation-menu-item--blog,
@@ -57,22 +58,11 @@
   padding-bottom: 3px;
 }
 
-.navigation-menu-item--blog-active {
-  border-bottom: 2px solid $esmerald-green;
-}
-
-.navigation-menu-item--about-active {
-  border-bottom: 2px solid $blue;
-}
 
 .navigation-menu-item--blog:hover,
 .navigation-menu-item--github:hover,
 .navigation-menu-item--about:hover {
-  color: $esmerald-green;
-}
-
-.navigation-menu-item--github-active {
-  border-bottom: 2px solid $esmerald-green;
+  cursor: pointer;
 }
 
 .github-navigation-link {
@@ -100,11 +90,6 @@
   margin-bottom: 6px;
 }
 
-.logo-image {
-  width: 32px;
-  height: 52px;
-  border-radius: 32px;
-}
 
 .theme-mode--toggle {
   width: 52px;
@@ -121,25 +106,17 @@
 
 @media (min-width: 992px) {
   .header-title {
-    font-size: 28px;
+    font-size: $font-size-xl;
     letter-spacing: 0.02em;
     line-height: 24px;
-    margin-left: 20px;
+    margin-left: 0px;
     height: $header-height-lg;
     display: flex;
     align-items: center;
   }
 
   .header-title:hover {
-    color: $esmerald-green;
-  }
-
-  .navigation-menu-item {
-    font-size: 18px;
-  }
-
-  .logo-image {
-    width: 30px;
+    color: $primary-color;
   }
 
   .header__inner-nav {

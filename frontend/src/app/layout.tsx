@@ -1,6 +1,7 @@
 import { Footer } from '@/components/footer';
 import { TopBar } from '@/components/top-bar';
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import './app.scss';
 import './globals.css';
 import StyledComponentsRegistry from './registry';
@@ -18,11 +19,20 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <head>
-        <link rel='icon' href='/code-logo.svg' type='image/svg+xml' />
+        <link rel='icon' href='/logo-simbol-moon.svg' type='image/svg+xml' />
       </head>
       <body className='antialiased dark'>
         <StyledComponentsRegistry>
           <div className='app-container'>
+            <div className='background'>
+              <Image
+                src='/logo-simbol-moon.svg'
+                className='logo-image-background'
+                alt='Code Logo'
+                width={200}
+                height={41}
+              />
+            </div>
             <TopBar />
             <div className='main-content'>{children}</div>
             <Footer />
