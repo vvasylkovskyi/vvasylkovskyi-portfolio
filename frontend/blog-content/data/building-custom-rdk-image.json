@@ -3,5 +3,10 @@
   "filename": "building-custom-rdk-image",
   "date": "January 11, 2024",
   "metaText": "Explore the comprehensive guide to building a WPE and RDK image for Raspberry Pi 4B using Buildroot. This detailed blog covers everything from setting up a virtual machine, configuring Buildroot, to navigating ThunderUI and Metrologic UI, providing essential insights for enthusiasts and professionals in embedded systems development.",
-  "category": ["Embedded", "WPE", "RDK", "Raspberry"]
+  "categories": [
+    "Embedded",
+    "WPE",
+    "RDK",
+    "Raspberry"
+  ]
 }

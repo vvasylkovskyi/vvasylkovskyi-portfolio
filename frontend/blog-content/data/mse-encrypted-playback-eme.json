@@ -3,5 +3,9 @@
   "filename": "mse-encrypted-playback-eme",
   "date": "October 2, 2023",
   "metaText": "Discover the power of Encrypted Media Extensions (EME) integrated with Media Source Extensions (MSE) for secure web media playback. Dive deep into video encryption, key management, and hands-on decryption in this comprehensive guide.",
-  "category": ["Video", "Javascript", "Encryption"]
+  "categories": [
+    "Video",
+    "Javascript",
+    "Encryption"
+  ]
 }

@@ -3,5 +3,8 @@
   "filename": "ffmpeg-manipulate-black-video-into-png",
   "date": "October 22, 2023",
   "metaText": "Using FFmpeg, videos are sequences of frames rapidly displayed. By manipulating a 5-second black video, we demonstrated decoding it into images and then encoding these images back into a video. This process provides insights into video encoding, decoding, and the intricacies of video playback.",
-  "category": ["FFmpeg", "Video"]
+  "categories": [
+    "FFmpeg",
+    "Video"
+  ]
 }

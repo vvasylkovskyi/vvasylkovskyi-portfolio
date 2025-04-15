@@ -3,5 +3,9 @@
   "filename": "http-server-setup",
   "date": "September 30, 2023",
   "metaText": "Learn to set up an Express server in Node.js, handle CORS, and manage dependencies. Dive in for a streamlined server initialization guide.",
-  "category": ["General", "HTTP", "Javascript"]
+  "categories": [
+    "General",
+    "HTTP",
+    "Javascript"
+  ]
 }

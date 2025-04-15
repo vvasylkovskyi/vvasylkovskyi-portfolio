@@ -3,5 +3,9 @@
   "filename": "simple-video-element-playback",
   "date": "September 22, 2023",
   "metaText": "Dive deep into mastering video element playback in web development. This guide covers the essentials of embedding videos with the HTML <video> element, ensuring seamless playback, and implementing custom controls",
-  "category": ["General", "Video", "Javascript"]
+  "categories": [
+    "General",
+    "Video",
+    "Javascript"
+  ]
 }

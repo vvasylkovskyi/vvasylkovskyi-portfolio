@@ -3,5 +3,8 @@
   "filename": "adding-ssl-with-ca",
   "date": "December 15, 2023",
   "metaText": "Learn how to secure your website with SSL using Let's Encrypt and Certbot. This comprehensive guide covers the installation of SSL on Linux and macOS, explains SSL certificates, and the role of Certificate Authorities, ensuring enhanced website security and credibility.",
-  "category": ["Security", "SSL"]
+  "categories": [
+    "Security",
+    "SSL"
+  ]
 }

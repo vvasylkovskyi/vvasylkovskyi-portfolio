@@ -3,5 +3,8 @@
   "filename": "adding-react-routing",
   "date": "October 25, 2023",
   "metaText": "Navigate React apps with React Router v6 and React 18. This guide simplifies modern routing techniques for optimal React development.",
-  "category": ["React", "Javascript"]
+  "categories": [
+    "React",
+    "Javascript"
+  ]
 }

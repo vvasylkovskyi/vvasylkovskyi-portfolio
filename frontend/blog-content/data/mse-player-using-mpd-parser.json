@@ -3,5 +3,8 @@
   "filename": "mse-player-using-mpd-parser",
   "date": "October 7, 2023",
   "metaText": "Master web-based content playback using MSE & MPEG-DASH. Learn to set up a Webpack server, stream videos, and build a custom MSE Player. Elevate your web media.",
-  "category": ["Video", "Javascript"]
+  "categories": [
+    "Video",
+    "Javascript"
+  ]
 }

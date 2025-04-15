@@ -3,7 +3,7 @@
     "filename": "automating-ssl-certificates-deploy",
     "date": "April 8, 2025",
     "metaText": "Learn how to securely automate your CI pipeline with GitHub Actions by handling private SSL certificates without exposing them in your repository. This guide walks you through a simple, base64-encoded secret management approach that keeps your builds both safe and fully automated.",
-    "category": [
+    "categories": [
         "Security",
         "SSL",
         "Deploy"

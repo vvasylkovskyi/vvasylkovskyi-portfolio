@@ -3,5 +3,9 @@
   "filename": "moving-from-react-to-ssr",
   "date": "November 6, 2023",
   "metaText": "Discover the advantages of server-side rendering for React apps with our comprehensive guide. Learn to enhance performance, improve SEO, and optimize user experience by integrating Express.js into your workflow",
-  "category": ["Performance", "Javascript", "Frontend"]
+  "categories": [
+    "Performance",
+    "Javascript",
+    "Frontend"
+  ]
 }

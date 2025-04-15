@@ -37,7 +37,7 @@ export const TopBar = () => {
                 className={`navigation-menu-item navigation-menu-item--blog ${
                   pathname !== '/ai-chat' ? 'navigation-menu-item--blog-active' : ''
                 }`}
-                href='/'
+                href='/posts'
               >
                 Blog
               </Link>

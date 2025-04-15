@@ -3,5 +3,8 @@
   "filename": "mse-multi-qualities",
   "date": "October 6, 2023",
   "metaText": "Dive into Adaptive Bitrate (ABR) for modern streaming. Learn to use Media Source Extensions for multi-quality playback and understand the role of an ABR Manager",
-  "category": ["Video", "Javascript"]
+  "categories": [
+    "Video",
+    "Javascript"
+  ]
 }
