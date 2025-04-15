@@ -3,12 +3,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { TopBarContainerWrapper } from './ui/styles/styles';
 export const TopBar = () => {
   const pathname = usePathname();
   return (
     <div className='top-bar-header z-50 w-full backdrop-blur supports-[backdrop-filter]:bg-background/60 bg-background/95'>
-      <TopBarContainerWrapper className='container-wrapper'>
+      <div className='topbar-container-wrapper'>
         <div className='container flex h-14 items-center gap-2 md:gap-4'>
           <div className='mr-4 md:flex'>
             <Link className='mr-4 flex items-center gap-2 lg:mr-6' href='/'>
@@ -53,7 +52,7 @@ export const TopBar = () => {
             </nav>
           </div>
         </div>
-      </TopBarContainerWrapper>
+      </div>
     </div>
   );
 };

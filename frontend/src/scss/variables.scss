@@ -1,4 +1,4 @@
-$max-width--desktop: 992px;
+$max-width--desktop: 1440px;
 
 $padding-xs: 20px;
 $header-height-lg: 60px;
@@ -133,5 +133,9 @@ $background-code-color: $colors-gray-950;
 $background-code-border-color: $colors-gray-800;
 
 // Gutter
+$app-padding-mobile: 0 20px;
+$app-padding-desktop: 0 50px;
 
-$app-padding: 0 20px;
+// Button
+$button-primary-background-color: $colors-teal-600;
+$button-primary-background-color-hover: $colors-teal-700;

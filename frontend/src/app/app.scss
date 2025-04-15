@@ -135,7 +135,7 @@ body {
   width: 100%;
   position: fixed;
   height: $topbar-height;
-  padding: $app-padding;
+  padding: $app-padding-mobile;
 }
 
 .app-container {
@@ -144,7 +144,7 @@ body {
   align-items: center;
   overflow: hidden;
   background-color: $background-app-color;
-  padding: $app-padding;
+  padding: $app-padding-mobile;
 }
 
 .background {
@@ -173,6 +173,28 @@ body {
   position: relative;
 }
 
+.topbar-container-wrapper {
+  position: relative;
+  display: flex;
+  max-width: $max-width--desktop;
+  width: 100%;
+}
+
+.landing-heading-h1 {
+  font-size: $font-size-5xl;
+  line-height: 3.75rem;
+  letter-spacing: -0.025em;
+  font-weight: $semi-bold;
+}
+
+.landing-page__left {
+  max-width: 100%;
+}
+
+.landing-page__cta-container {
+  margin-top: 20px;
+}
+
 .post-link {
   text-decoration: none;
 }
@@ -197,7 +219,8 @@ body {
 }
 
 .markdown-body h1,
-.heading-h1 {
+.heading-h1,
+.landing-heading-h1 {
   font-size: 25px;
   line-height: 36px;
   letter-spacing: 0.02em;
@@ -244,16 +267,54 @@ body {
   color: $white;
 }
 
+.primary-button {
+  color: $primary-text-color;
+  background-color: $button-primary-background-color;
+  border-radius: $radii-sm;
+  padding-inline: $spacing-5;
+  height: 3rem;
+  font-weight: $medium;
+  line-height: 1.5rem;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: $button-primary-background-color-hover;
+  }
+}
+
+.greeting-heading, .landing-subheading {
+  color: $secondary-text-color
+}
+
+@media (min-width: 575px) {
+  .landing-page__left {
+    max-width: 80%;
+  }
+}
+
 @media (min-width: 992px) {
-  .heading-h1 {
+  .landing-page__left {
+    max-width: 50%;
+  }
+
+  .top-bar-header,
+  .app-container {
+    padding: $app-padding-desktop;
+  }
+  
+  .heading-h1, .landing-heading-h1 {
     font-size: $font-size-5xl;
     line-height: 3.75rem;
   }
 
-  .greeting-heading {
+  .greeting-heading, .landing-subheading {
     font-size: $font-size-xl;
     line-height: 1.875rem;
-    color: $secondary-text-color
   }
 
   .markdown-body h1 {
