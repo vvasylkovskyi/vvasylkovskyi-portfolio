@@ -8,7 +8,7 @@ export const AllPosts = async () => {
 
   return (
     <div className='my-5'>
-      <div>
+      <div className='blogs__grid'>
         {blogs.map((post: PostType) => (
           <PostItem
             key={post.url}

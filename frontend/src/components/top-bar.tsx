@@ -50,6 +50,15 @@ export const TopBar = () => {
                 Github
               </Link>
             </nav>
+            <nav className='flex items-center gap-4 text-sm xl:gap-6 navigation-menu-item'>
+              <Image
+                src='/moon.png'
+                className='navigation-menu-item navigation-menu-item--moon'
+                alt='Moon'
+                width={20}
+                height={20}
+              />
+            </nav>
           </div>
         </div>
       </div>

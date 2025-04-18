@@ -13,15 +13,6 @@ $primary-font-family: "Inter","Inter Fallback";
 $code-font-family: Roboto Mono, Consolas, Monaco, Andale Mono, Ubuntu Mono,
   monospace;
 
-$thin: 100;
-$extra-light: 200;
-$light: 300;
-$regular: 400;
-$medium: 500;
-$semi-bold: 600;
-$bold: 600;
-$extra-bold: 600;
-
 // Colours
 
 $black: #202122;
@@ -133,8 +124,12 @@ $background-code-color: $colors-gray-950;
 $background-code-border-color: $colors-gray-800;
 
 // Gutter
+$app-padding-horizontal-desktop: 50px;
+
 $app-padding-mobile: 0 20px;
-$app-padding-desktop: 0 50px;
+$app-padding-desktop: 0 $app-padding-horizontal-desktop;
+
+$blog-grid-gap: $spacing-4;
 
 // Button
 $button-primary-background-color: $colors-teal-600;

@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/components/atoms/button';
+import Image from 'next/image';
 import React, { useCallback } from 'react';
 
 export default function Home() {
@@ -26,6 +27,15 @@ export default function Home() {
     <React.Fragment>
       <div className='landing-page-section'>
         <div className='landing-page__left'>
+          <div>
+            <Image
+              src='/logo-header.svg'
+              className='logo-image-about'
+              alt='Code Logo'
+              width={200}
+              height={41}
+            />
+          </div>
           <h1 className='landing-heading-h1'>
             Full-Stack Engineer building reliable, scalable software
           </h1>

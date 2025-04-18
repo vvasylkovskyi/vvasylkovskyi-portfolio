@@ -74,7 +74,7 @@ html {
 
 a {
   color: $primary-color;
-  font-weight: $bold;
+  font-weight: $font-weight-bold;
 }
 
 pre h1,
@@ -115,6 +115,7 @@ html,
 body {
   background-color: $background-app-color;
 }
+
 
 .main-content {
   padding: 0;
@@ -184,7 +185,20 @@ body {
   font-size: $font-size-5xl;
   line-height: 3.75rem;
   letter-spacing: -0.025em;
-  font-weight: $semi-bold;
+  font-weight: $font-weight-semibold;
+}
+
+
+.blogs__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  gap: $blog-grid-gap;
+}
+
+.logo-image-about {
+  height: 160px;
+  width: 450px;
 }
 
 .landing-page__left {
@@ -203,7 +217,7 @@ body {
   font-size: 32px;
   line-height: 36px;
   letter-spacing: 0.02em;
-  font-weight: $bold;
+  font-weight: $font-weight-bold;
   margin-top: 10px;
   margin-bottom: 20px;
   padding-bottom: 0;
@@ -214,7 +228,7 @@ body {
   font-size: 18px;
   line-height: 1.5;
   letter-spacing: 0.02em;
-  font-weight: $regular;
+  font-weight: $font-weight-normal;
   margin: 0;
 }
 
@@ -227,7 +241,7 @@ body {
 }
 
 .heading-h1 {
-  font-weight: $semi-bold;
+  font-weight: $font-weight-semibold;
   margin: 0;
 }
 
@@ -244,13 +258,13 @@ body {
 .markdown-body h2 {
   font-size: 20px;
   line-height: 1.5;
-  font-weight: $semi-bold;
+  font-weight: $font-weight-semibold;
 }
 
 .markdown-body h3 {
   font-size: 18px;
   line-height: 1.5;
-  font-weight: $semi-bold;
+  font-weight: $font-weight-semibold;
   margin: 20px 0 10px;
 }
 
@@ -259,7 +273,7 @@ body {
   font-size: 16px;
   line-height: 1.5;
   letter-spacing: 0.02em;
-  font-weight: $medium;
+  font-weight: $font-weight-medium;
 }
 
 .ai-message {
@@ -273,7 +287,7 @@ body {
   border-radius: $radii-sm;
   padding-inline: $spacing-5;
   height: 3rem;
-  font-weight: $medium;
+  font-weight: $font-weight-medium;
   line-height: 1.5rem;
   user-select: none;
   display: flex;
@@ -298,6 +312,12 @@ body {
 }
 
 @media (min-width: 992px) {
+
+  .blogs__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: $blog-grid-gap;
+  }
+
   .landing-page__left {
     max-width: 50%;
   }
@@ -329,7 +349,7 @@ body {
   .markdown-body h2 {
     font-size: 28px;
     line-height: 32px;
-    font-weight: $semi-bold;
+    font-weight: $font-weight-semibold;
     margin-top: 30px;
     margin-bottom: 20px;
   }
