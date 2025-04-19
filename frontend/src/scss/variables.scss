@@ -74,6 +74,9 @@ $colors-teal-800: #114240;
 $colors-teal-900: #032726;
 $colors-teal-950: #021716;
 
+$colors-teal-900-faded: #0d948942;
+
+
 $colors-gray-50: #fafafa;
 $colors-gray-100: #f4f4f5;
 $colors-gray-200: #e4e4e7;
@@ -84,6 +87,7 @@ $colors-gray-600: #52525b;
 $colors-gray-700: #3f3f46;
 $colors-gray-800: #27272a;
 $colors-gray-900: #18181b;
+$colors-gray-925: #171717;
 $colors-gray-950: #111111;
 
 $radii-none: 0;
@@ -100,7 +104,7 @@ $radii-full: 9999px;
 
 
 
-$background-app-color: #0a0a0b;
+$background-app-color: $colors-gray-925;
 // $background-app-color: radial-gradient(circle at top left, #ff9a9e, #fad0c4);
 
 $primary-title-text-color: $white;
@@ -134,3 +138,7 @@ $blog-grid-gap: $spacing-4;
 // Button
 $button-primary-background-color: $colors-teal-600;
 $button-primary-background-color-hover: $colors-teal-700;
+$button-secondary-background-color: $colors-gray-800;
+$button-secondary-background-color-hover: $colors-gray-700;
+
+$radial-gradient: radial-gradient(600px at 613px 553px, rgb(45 212 191 / 22%), transparent 80%);

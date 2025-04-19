@@ -77,6 +77,10 @@ a {
   font-weight: $font-weight-bold;
 }
 
+.spotlight-cursor-color {
+  background-color: $colors-teal-900-faded;
+}
+
 pre h1,
 pre h2,
 pre h3,
@@ -146,6 +150,10 @@ body {
   overflow: hidden;
   background-color: $background-app-color;
   padding: $app-padding-mobile;
+
+  // &--home {
+  //   background-color: $colors-teal-300;
+  // }
 }
 
 .background {
@@ -183,7 +191,7 @@ body {
 
 .landing-heading-h1 {
   font-size: $font-size-5xl;
-  line-height: 3.75rem;
+  line-height: 1.5;
   letter-spacing: -0.025em;
   font-weight: $font-weight-semibold;
 }
@@ -197,16 +205,34 @@ body {
 }
 
 .logo-image-about {
-  height: 160px;
   width: 450px;
+}
+
+.landing-page-section {
+  display: flex;
 }
 
 .landing-page__left {
   max-width: 100%;
 }
 
+.landing-page__right {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+  // margin-top: 100px;
+
+  p {
+    color: $secondary-text-color;
+    font-size: $font-size-md;
+    line-height: 1.5;
+  }
+}
+
 .landing-page__cta-container {
   margin-top: 20px;
+  display: flex;
+  gap: 20px;
 }
 
 .post-link {
@@ -281,9 +307,7 @@ body {
   color: $white;
 }
 
-.primary-button {
-  color: $primary-text-color;
-  background-color: $button-primary-background-color;
+.generic-button {
   border-radius: $radii-sm;
   padding-inline: $spacing-5;
   height: 3rem;
@@ -295,11 +319,27 @@ body {
   justify-content: center; 
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
+}
+
+.primary-button {
+  color: $primary-text-color;
+  background-color: $button-primary-background-color;
 
   &:hover {
     background-color: $button-primary-background-color-hover;
   }
 }
+
+.secondary-button {
+  color: $primary-text-color;
+  background-color: $button-secondary-background-color;
+
+  &:hover {
+    background-color: $button-secondary-background-color-hover;
+  }
+}
+
+
 
 .greeting-heading, .landing-subheading {
   color: $secondary-text-color
@@ -328,8 +368,8 @@ body {
   }
   
   .heading-h1, .landing-heading-h1 {
-    font-size: $font-size-5xl;
-    line-height: 3.75rem;
+    font-size: $font-size-3xl;
+    line-height: 1.5;
   }
 
   .greeting-heading, .landing-subheading {

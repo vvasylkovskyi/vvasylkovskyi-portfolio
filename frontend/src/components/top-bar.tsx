@@ -34,9 +34,19 @@ export const TopBar = () => {
             <nav className='flex items-center gap-4 text-sm xl:gap-6 navigation-menu-item'>
               <Link
                 className={`navigation-menu-item navigation-menu-item--blog ${
-                  pathname !== '/ai-chat' ? 'navigation-menu-item--blog-active' : ''
+                  pathname === '/about' ? 'navigation-menu-item--active' : ''
                 }`}
-                href='/posts'
+                href='/about'
+              >
+                About
+              </Link>
+            </nav>
+            <nav className='flex items-center gap-4 text-sm xl:gap-6 navigation-menu-item'>
+              <Link
+                className={`navigation-menu-item navigation-menu-item--blog ${
+                  pathname === '/' ? 'navigation-menu-item--active' : ''
+                }`}
+                href='/'
               >
                 Blog
               </Link>

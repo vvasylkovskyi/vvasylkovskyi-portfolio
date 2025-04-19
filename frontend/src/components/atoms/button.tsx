@@ -4,12 +4,16 @@ import type { FC } from 'react';
 
 type ButtonProps = {
   text: string;
-  onClick: () => void;
+  onClick?: () => void;
+  hierarchy: 'primary' | 'secondary' | 'tertiary';
 };
 
-export const Button: FC<ButtonProps> = ({ text, onClick }) => {
+export const Button: FC<ButtonProps> = ({ text, hierarchy, onClick }) => {
   return (
-    <button className='primary-button' onClick={onClick}>
+    <button
+      className={`generic-button ${hierarchy === 'secondary' ? 'secondary-button' : 'primary-button'}`}
+      onClick={onClick}
+    >
       {text}
     </button>
   );
