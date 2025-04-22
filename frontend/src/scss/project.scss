@@ -1,7 +1,7 @@
 
 
 .project__section {
-    background-color: $project-section-background-color;
+    background-color: var(--project-section-background-color);
     padding: 0.5rem;
     border-radius: .75rem;
     margin-top: 1rem;
@@ -17,14 +17,13 @@
     line-height: 1.75rem;
     letter-spacing: 0.01em;
     font-weight: $font-weight-normal;
-    color: $secondary-text-color;
+    color: var(--secondary-text-color);
 }
 
 .card__inner-wrapper {
     display: flex;
     gap: 1rem;
     align-items: center;
-
 }
 
 .card__wrapper {
@@ -40,7 +39,7 @@
     justify-content: space-between;
 
     &:not(:last-of-type) {
-        border-bottom: 1px solid $colors-gray-700-faded;
+        border-bottom: 1px solid var(--project-card-border-color);
     }
 
     &--small {
@@ -59,8 +58,8 @@
     &:hover {
         border-radius: .5rem;
 
-        border-color: $colors-gray-700-faded;
-        background-color: $colors-gray-800-faded;
+        border-color: var(--project-card-border-color);
+        background-color: var(--project-card-background-color-hover);
 
         .card__icon-wrapper.pager-duty-icon {
             background-color: $pager-duty-color;
@@ -75,7 +74,7 @@
 }
 
 .card__icon-wrapper {
-    background-color: $colors-gray-700;
+    background-color: var(--project-card-icon-wrapper-color);
     display: flex;
     height: 40px;
     width: 40px;
@@ -88,18 +87,18 @@
 }
 
 .card__title {
-    font-size: 14px;
+    font-size: $font-size-md;
     font-weight: $font-weight-normal;
-    line-height: 1.25rem;
+    line-height: 1.5;
 }
 
 .card__description, .card__date {
-    font-size: 13px;
-    line-height: 150%;
-    color: $secondary-text-color;
+    font-size: $font-size-sm;
+    line-height: 1.5;
+    color: var(--secondary-text-color);
     font-weight: $font-weight-light;
 }
 
 .card__content {
-    min-width: 180px;
+    min-width: 230px;
 }

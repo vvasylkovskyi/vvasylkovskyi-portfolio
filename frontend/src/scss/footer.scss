@@ -6,15 +6,18 @@ footer {
   margin-top: 30px;
   padding-top: 20px;
   padding-bottom: 20px;
-  background: $dark-black;
+  background: var(--background-app-color);
   width: calc(100% + 40px);
   height: $footer-height;
+
+  border-top: 1px solid var(--background-code-border-color);
 }
 
 .footer-container {
   display: flex;
   justify-content: center;
   align-items: center;
+  color: var(--footer-text-color);
 }
 
 .footer-icon {
@@ -42,7 +45,6 @@ footer p {
     width: calc(100% + $app-padding-horizontal-desktop * 2);
     display: flex;
     justify-content: center;
-    background: $dark-black;
     margin-top: 80px;
   }
 

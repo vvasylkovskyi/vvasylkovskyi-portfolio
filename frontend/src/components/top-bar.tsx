@@ -1,12 +1,16 @@
 'use client';
 
+import { useTheme } from '@/hooks/useTheme';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+
 export const TopBar = () => {
   const pathname = usePathname();
+  const { theme, toggleTheme } = useTheme();
+
   return (
-    <div className='top-bar-header z-50 w-full backdrop-blur supports-[backdrop-filter]:bg-background/60 bg-background/95'>
+    <div className='top-bar-header z-50 w-full'>
       <div
         className={`topbar-container-wrapper ${pathname === '/about' ? 'topbar-container-wrapper--about' : ''}`}
       >
@@ -14,7 +18,9 @@ export const TopBar = () => {
           <div className='mr-4 md:flex'>
             <Link className='mr-4 flex items-center gap-2 lg:mr-6' href='/'>
               <Image
-                src='/logo-header.svg'
+                src={
+                  theme === 'dark' ? '/logo-header-dark-mode.svg' : '/logo-header-white-mode.svg'
+                }
                 className='logo-image'
                 alt='Code Logo'
                 width={200}
@@ -56,20 +62,32 @@ export const TopBar = () => {
             <nav className='flex items-center gap-4 text-sm xl:gap-6 navigation-menu-item'>
               <Link
                 href='https://github.com/vvasylkovskyi'
-                className='navigation-menu-item navigation-menu-item--github'
+                className='toggle_mode__wraper'
                 target='_blank'
               >
-                Github
+                <Image
+                  src={
+                    theme === 'dark'
+                      ? '/github-icon--dark-mode.svg'
+                      : '/github-icon--white-mode.svg'
+                  }
+                  className='navigation-menu-item'
+                  alt='Moon'
+                  width={20}
+                  height={20}
+                />
               </Link>
             </nav>
             <nav className='flex items-center gap-4 text-sm xl:gap-6 navigation-menu-item'>
-              <Image
-                src='/moon.png'
-                className='navigation-menu-item navigation-menu-item--moon'
-                alt='Moon'
-                width={20}
-                height={20}
-              />
+              <button className='toggle_mode__wraper' onClick={toggleTheme}>
+                <Image
+                  src={theme === 'dark' ? '/moon.svg' : '/sun.svg'}
+                  className='navigation-menu-item'
+                  alt='Moon'
+                  width={20}
+                  height={20}
+                />
+              </button>
             </nav>
           </div>
         </div>

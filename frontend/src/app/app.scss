@@ -8,6 +8,76 @@
 @import '../scss/post.scss';
 @import "../scss/project.scss";
 
+:root {
+  --markdown-h1-font-size: #{$font-size-4xl};
+  --markdown-h1-font-weight: #{$font-weight-semibold};
+  --markdown-h1-line-height: 2.75rem;
+  --markdown-h2-font-size: #{$font-size-3xl};
+  --markdown-h2-font-weight: #{$font-weight-semibold};
+  --markdown-h3-font-size: #{$font-size-2xl};
+  --markdown-h3-font-weight: #{$font-weight-semibold};
+  --markdown-h4-font-size: #{$font-size-xl};
+  --markdown-h4-font-weight: #{$font-weight-semibold};
+  --markdown-h5-font-size: #{$font-size-lg};
+  --markdown-h5-font-weight: #{$font-weight-semibold};
+  --markdown-h6-font-size: #{$font-size-md};
+  --markdown-h6-font-weight: #{$font-weight-semibold};
+  --markdown-p-font-size: #{$font-size-md};
+  --markdown-p-font-weight: #{$font-weight-normal};
+  --markdown-p-line-height: 1.75;
+  --markdown-a-font-size: #{$font-size-md};
+  --markdown-a-font-weight: #{$font-weight-normal};
+  --markdown-span-font-size: #{$font-size-sm};
+  --markdown-span-font-weight: #{$font-weight-normal};
+  --markdown-span-line-height: 1.5;
+}
+
+.app-container--light {
+  --background-app-color: #{$background-app-color--light-mode};
+  --primary-text-color: #{$primary-text-color--light-mode};
+  --primary-title-text-color: #{$primary-title-text-color--light-mode};
+  --secondary-text-color: #{$secondary-text-color--light-mode};
+  --primary-color: #{$primary-color--light-mode};
+  --hover-card-background-color: #{$hover-card-background-color--light-mode};
+  --background-blog-card-color: #{$background-blog-card-color--light-mode};
+  --background-blog-card-border-color: #{$background-blog-card-border-color--light-mode};
+  --background-tag-color: #{$background-tag-color--light-mode};
+  --tag-color: #{$tag-color--light-mode};
+  --background-code-color: #{$background-code-color--light-mode};
+  --background-code-inline-color: #{$background-code-inline-color--light-mode};
+  --background-code-border-color: #{$background-code-border-color--light-mode};
+  --footer-text-color: #{$footer-text-color--light-mode};
+  --project-section-background-color: #{$project-section-background-color--light-mode};
+  --project-card-background-color-hover: #{$project-card-background-color-hover--light-mode};
+  --project-card-border-color: #{$project-card-border-color--light-mode};
+  --project-card-icon-wrapper-color: #{$project-card-icon-wrapper-color--light-mode};
+  --header-font-weight: #{$font-weight-medium};
+  --primary-code-text-color: #{$primary-code-text-color--light-mode};
+}
+
+.app-container--dark {
+  --background-app-color: #{$background-app-color--dark-mode};
+  --primary-text-color: #{$primary-text-color--dark-mode};
+  --primary-title-text-color: #{$primary-title-text-color--dark-mode};
+  --secondary-text-color: #{$secondary-text-color--dark-mode};
+  --primary-color: #{$primary-color--dark-mode};
+  --hover-card-background-color: #{$hover-card-background-color--dark-mode};
+  --background-blog-card-color: #{$background-blog-card-color--dark-mode};
+  --background-blog-card-border-color: #{$background-blog-card-border-color--dark-mode};
+  --background-tag-color: #{$background-tag-color--dark-mode};
+  --tag-color: #{$tag-color--dark-mode};
+  --background-code-color: #{$background-code-color--dark-mode};
+  --background-code-inline-color: #{$background-code-inline-color--dark-mode};
+  --background-code-border-color: #{$background-code-border-color--dark-mode};
+  --footer-text-color: #{$footer-text-color--dark-mode};
+  --project-section-background-color: #{$project-section-background-color--dark-mode};
+  --project-card-background-color-hover: #{$project-card-background-color-hover--dark-mode};
+  --project-card-border-color: #{$project-card-border-color--dark-mode};
+  --project-card-icon-wrapper-color: #{$project-card-icon-wrapper-color--dark-mode};
+  --header-font-weight: #{$font-weight-normal};
+  --primary-code-text-color: #{$primary-code-text-color--dark-mode};
+}
+
 h1,
 h2,
 h3,
@@ -31,7 +101,7 @@ p,
 label,
 span,
 li {
-  color: $primary-text-color;
+  color: var(--primary-text-color);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -39,7 +109,7 @@ li {
 h1,
 h2,
 h3 {
-  color: $primary-title-text-color;
+  color: var(--primary-title-text-color);
 }
 
 html {
@@ -74,7 +144,7 @@ html {
 
 
 a {
-  color: $primary-color;
+  color: var(--primary-color);
   font-weight: $font-weight-bold;
 }
 
@@ -109,7 +179,7 @@ table span {
 }
 
 li::marker {
-  color: $primary-text-color;
+  color: var(--primary-text-color);
 }
 
 body {
@@ -118,7 +188,7 @@ body {
 
 html,
 body {
-  background-color: $background-app-color;
+  background-color: var(--background-app-color);
 }
 
 
@@ -136,7 +206,7 @@ body {
 }
 
 .chat-send-button {
-  background-color: $primary-color;
+  background-color: var(--primary-color);
 }
 
 .top-bar-header {
@@ -146,6 +216,7 @@ body {
   position: fixed;
   height: $topbar-height;
   padding: $app-padding-mobile;
+  background: var(--background-app-color);
 }
 
 .app-container {
@@ -153,12 +224,9 @@ body {
   flex-direction: column;
   align-items: center;
   overflow: hidden;
-  background-color: $background-app-color;
+  background-color: var(--background-app-color);
   padding: $app-padding-mobile;
 
-  // &--home {
-  //   background-color: $colors-teal-300;
-  // }
 }
 
 .background {
@@ -199,7 +267,7 @@ body {
 }
 
 .landing-heading-h1 {
-  font-size: $font-size-5xl;
+  font-size: $font-size-3xl;
   line-height: 1.5;
   letter-spacing: -0.025em;
   font-weight: $font-weight-semibold;
@@ -218,11 +286,12 @@ body {
 }
 
 .separator-line {
-  border: 1px solid $colors-gray-700-faded;
+  border: 1px solid var(--background-blog-card-border-color);
 }
 
 .landing-page__left {
   max-width: 100%;
+  margin-bottom: 1rem;
 }
 
 .landing-page__right {
@@ -233,7 +302,7 @@ body {
   margin: 3rem 0;
 
   p {
-    color: $secondary-text-color;
+    color: var(--secondary-text-color);
     font-size: $font-size-md;
     line-height: 1.5;
   }
@@ -250,10 +319,9 @@ body {
 }
 
 .markdown-body h1 {
-  font-size: 32px;
-  line-height: 36px;
-  letter-spacing: 0.02em;
-  font-weight: $font-weight-bold;
+  font-size: var(--markdown-h1-font-size);
+  line-height: var(--markdown-h1-line-height);
+  font-weight: var(--markdown-h1-font-weight);
   margin-top: 10px;
   margin-bottom: 20px;
   padding-bottom: 0;
@@ -261,19 +329,19 @@ body {
 
 .markdown-body p,
 .body-text {
-  font-size: 18px;
-  line-height: 1.5;
+  font-size: var(--markdown-p-font-size);
+  line-height: var(--markdown-p-line-height);
+  font-weight: var(--markdown-p-font-weight);
   letter-spacing: 0.02em;
-  font-weight: $font-weight-normal;
   margin: 0;
 }
 
 .markdown-body h1,
 .heading-h1,
 .landing-heading-h1 {
-  font-size: 25px;
-  line-height: 36px;
-  letter-spacing: 0.02em;
+  font-size: var(--markdown-h1-font-size);
+  font-weight: var(--markdown-h1-font-weight);
+  line-height: var(--markdown-h1-line-height);
 }
 
 .heading-h1 {
@@ -292,24 +360,24 @@ body {
 
 .sub-heading,
 .markdown-body h2 {
-  font-size: 20px;
-  line-height: 1.5;
-  font-weight: $font-weight-semibold;
+  font-size: var(--markdown-h2-font-size);
+  line-height: var(--markdown-h2-line-height);
+  font-weight: var(--markdown-h2-font-weight);
 }
 
 .markdown-body h3 {
-  font-size: 18px;
-  line-height: 1.5;
-  font-weight: $font-weight-semibold;
+  font-size: var(--markdown-h3-font-size);
+  line-height: var(--markdown-h3-line-height);
+  font-weight: var(--markdown-h3-font-weight);
   margin: 20px 0 10px;
 }
 
 .markdown-body span,
 .markdown-body code {
-  font-size: 16px;
-  line-height: 1.5;
+  font-size: var(--markdown-span-font-size);
+  line-height: var(--markdown-span-line-height);
   letter-spacing: 0.02em;
-  font-weight: $font-weight-medium;
+  font-weight: var(--markdown-span-font-weight);
 }
 
 .ai-message {
@@ -332,7 +400,7 @@ body {
 }
 
 .primary-button {
-  color: $primary-text-color;
+  color: var(--primary-text-color);
   background-color: $button-primary-background-color;
 
   &:hover {
@@ -341,7 +409,7 @@ body {
 }
 
 .secondary-button {
-  color: $primary-text-color;
+  color: var(--primary-text-color);
   background-color: $button-secondary-background-color;
 
   &:hover {
@@ -350,9 +418,23 @@ body {
 }
 
 
+.toggle_mode__wraper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radii-sm;
+  cursor: pointer;
+  height: 2.25rem;
+  min-width: 2.25rem;
+  gap: 0.5rem;
+
+  &:hover {
+    background-color: var(--hover-card-background-color);
+  }
+}
 
 .greeting-heading, .landing-subheading {
-  color: $secondary-text-color
+  color: var(--secondary-text-color);
 }
 
 @media (min-width: 575px) {
@@ -384,44 +466,46 @@ body {
   }
 
   .markdown-body h1 {
-    border-bottom: 1px solid $primary-color;
-    font-size: 48px;
-    line-height: 56px;
+    border-bottom: 1px solid var(--primary-color);
+    font-size: var(--markdown-h1-font-size);
+    font-weight: var(--markdown-h1-font-weight);
+    line-height: var(--markdown-h1-line-height);
     letter-spacing: 0.02em;
     padding-bottom: 20px;
     margin-bottom: 40px;
   }
 
   .markdown-body h2 {
-    font-size: 28px;
-    line-height: 32px;
-    font-weight: $font-weight-semibold;
+    font-size: var(--markdown-h2-font-size);
+    line-height: var(--markdown-h2-line-height);
+    font-weight: var(--markdown-h2-font-weight);
     margin-top: 30px;
     margin-bottom: 20px;
   }
 
   .h3 {
-    font-size: 20px;
-    line-height: 24px;
+    font-size: var(--markdown-h3-font-size);
+    line-height: var(--markdown-h3-line-height);
+    font-weight: var(--markdown-h3-font-weight);
   }
 
   .markdown-body p,
   .body-text {
-    font-size: 20px;
-    font-weight: 400;
-    line-height: 1.5;
+    font-size: var(--markdown-p-font-size);
+    font-weight: var(--markdown-p-font-weight);
+    line-height: var(--markdown-p-line-height);
   }
 
   .markdown-body span,
   .markdown-body code {
-    font-weight: 400;
-    line-height: 1.5;
-    font-size: 16px;
+    font-weight: var(--markdown-span-font-weight);
+    line-height: var(--markdown-span-line-height);
+    font-size: var(--markdown-span-font-size);
   }
 
   .date-container .date-text {
-    font-size: 22px;
-    line-height: 30px;
+    font-size: var(--markdown-p-text-font-size);
+    line-height: var(--markdown-p-text-line-height);
   }
 
   .date-container {

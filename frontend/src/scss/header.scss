@@ -50,13 +50,13 @@
   text-decoration: none;
   font-size: $font-size-sm;
   line-height: 1.25rem;
-  font-weight: $font-weight-medium;
-  color: $primary-title-text-color;
+  font-weight: var(--header-font-weight);
+  color: var(--primary-title-text-color);
   margin: 0 0.5rem;
   border-bottom: 2px solid transparent;
 
   &--active {
-    border-bottom: 2px solid $primary-color;
+    border-bottom: 2px solid var(--primary-color);
   }
   // margin: 0 5px;
 }
@@ -125,7 +125,7 @@
   }
 
   .header-title:hover {
-    color: $primary-color;
+    color: var(--primary-color);
   }
 
   .header__inner-nav {

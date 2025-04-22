@@ -9,7 +9,7 @@ const contacts = [
     height: 18,
   },
   {
-    iconPath: '/github-icon.svg',
+    iconPath: '/github-icon--dark-mode.svg',
     title: 'Github',
     url: 'https://github.com/vvasylkovskyi',
     width: 18,

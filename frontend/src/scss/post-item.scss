@@ -13,8 +13,8 @@
   gap: $card-gap;
   padding: $card-padding;
   border-radius: $card-border-radius;
-  background-color: $background-card-color;
-  border: 1px solid $background-card-border-color;
+  background-color: var(--background-blog-card-color);
+  border: 1px solid var(--background-blog-card-border-color);
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   display: flex;
@@ -32,8 +32,8 @@
   border-radius: $radii-sm;
   gap: $spacing-1;
   font-weight: $font-weight-semibold;
-  background: $background-tag-color;
-  color: $tag-color;
+  background: var(--background-tag-color);
+  color: var(--tag-color);
   font-size: $font-size-xs;
   line-height: 1rem;
   padding-inline: $spacing-2;
@@ -49,7 +49,7 @@
 }
 
 .post-link:hover .title-container p {
-  color: $primary-color;
+  color: var(--primary-color);
 }
 
 .title-container p,
@@ -63,7 +63,7 @@
   line-height: 16px;
   letter-spacing: 0.02em;
   font-weight: $font-weight-bold;
-  color: $primary-color;
+  color: var(--primary-color);
 }
 
 .title-container p {
@@ -95,8 +95,9 @@
 @media (min-width: 992px) {
   .date-container p {
     font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
     line-height: 1.5rem;
-    color: $secondary-text-color;
+    color: var(--secondary-text-color);
   }
 
   .title-container p {
@@ -107,7 +108,7 @@
   .meta-text {
     font-size: $font-size-sm;
     line-height: 1.5rem;
-    color: $secondary-text-color;
+    color: var(--secondary-text-color);
   }
 
   .post-item__card {

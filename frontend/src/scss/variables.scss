@@ -17,7 +17,7 @@ $code-font-family: Roboto Mono, Consolas, Monaco, Andale Mono, Ubuntu Mono,
 // Colours
 
 $black: #202122;
-$white: #ededed;
+$white: #FFFFFF;
 $faded-white: #eceff1;
 $light-grey: #494949;
 // $bright-grey: #2e2e2e;
@@ -92,6 +92,9 @@ $colors-gray-800-faded: #27272a99;
 $colors-gray-900: #18181b;
 $colors-gray-925: #171717;
 $colors-gray-950: #111111;
+$colors-gray-1000: #1e1e1e;
+
+$colors-gray-muted: #9f9fa9;
 
 $radii-none: 0;
 $radii-2xs: 0.0625rem;
@@ -107,14 +110,31 @@ $radii-full: 9999px;
 
 
 
-$background-app-color: $dark-black;
+$background-app-color--dark-mode: $dark-black;
+$background-app-color--light-mode: $white;
 // $background-app-color: radial-gradient(circle at top left, #ff9a9e, #fad0c4);
 
-$primary-title-text-color: $white;
-$primary-text-color: $grey;
-$secondary-text-color: $colors-gray-400;
+$primary-title-text-color--dark-mode: $white;
+$primary-title-text-color--light-mode: $dark-black;
 
-$primary-color: $colors-teal-400;
+$primary-text-color--dark-mode: $grey;
+$primary-text-color--light-mode: $colors-gray-600;
+
+$secondary-text-color--dark-mode: $colors-gray-400;
+$secondary-text-color--light-mode: $dark-black;
+
+$primary-color--dark-mode: $colors-teal-400;
+$primary-color--light-mode: $colors-teal-600;
+
+$hover-card-background-color--light-mode: $colors-gray-50;
+$hover-card-background-color--dark-mode: $colors-gray-900;
+
+$footer-text-color--dark-mode: $colors-gray-muted;
+$footer-text-color--light-mode: $dark-black;
+
+$primary-code-text-color--dark-mode: #d4d4d4;
+$primary-code-text-color--light-mode: #d4d4d4;
+
 
 $pager-duty-color: #048a23;
 $peacock-color: #000000;
@@ -122,22 +142,45 @@ $rely-color: #006cd9;
 
 
 // Blog Card
-$background-card-color: $colors-gray-950;
-$background-card-border-color: $colors-gray-800;
+$background-blog-card-color--light-mode: $white;
+$background-blog-card-color--dark-mode: $colors-gray-950;
+
+$background-blog-card-border-color--light-mode: $colors-gray-200;
+$background-blog-card-border-color--dark-mode: $colors-gray-800;
+
+$background-tag-color--light-mode: $colors-teal-100;
+$background-tag-color--dark-mode: $colors-teal-900;
+$tag-color--light-mode: $colors-teal-700;
+$tag-color--dark-mode: $colors-teal-300;
+
 $card-padding: $spacing-4;
 $card-border-radius: $radii-md;
 $card-gap: $spacing-2;
 
-$background-tag-color: $colors-teal-900;
-$tag-color: $colors-teal-300;
-
 // Project section
-$project-section-background-color: $colors-gray-900;
+$project-section-background-color--dark-mode: $colors-gray-900;
+$project-section-background-color--light-mode: $colors-gray-50;
+
+$project-card-background-color-hover--light-mode: $colors-gray-200;
+$project-card-background-color-hover--dark-mode: $colors-gray-700-faded;
+
+$project-card-border-color--light-mode: $colors-gray-300;
+$project-card-border-color--dark-mode: $colors-gray-700-faded;
+
+$project-card-icon-wrapper-color--light-mode: $colors-gray-700;
+$project-card-icon-wrapper-color--dark-mode: $colors-gray-700;
+
 
 
 // Code editor
-$background-code-color: $colors-gray-950;
-$background-code-border-color: $colors-gray-800;
+$background-code-color--light-mode: $colors-gray-1000;
+$background-code-color--dark-mode: $colors-gray-950;
+
+$background-code-border-color--light-mode: $colors-gray-200;
+$background-code-border-color--dark-mode: $colors-gray-800;
+
+$background-code-inline-color--light-mode: $colors-gray-100;
+$background-code-inline-color--dark-mode: $colors-gray-950;
 
 // Gutter
 $app-padding-horizontal-desktop: 50px;

@@ -57,28 +57,17 @@ export default function Home() {
 
         <div className='landing-page__right w-full'>
           <p>
-            As a passionate Full-Stack Software Engineer, I thrive in collaborative environments
-            where learning and innovation drive impact. I have extensive experience building and
-            scaling web applications, working across the stack with React, TypeScript, Python,
-            FastAPI, and Node.js.
-          </p>
-          <p>
-            My background includes contributing to large-scale projects serving millions of users,
-            refining my expertise in frontend technologies, backend development, and cloud
-            infrastructure. I’ve worked with Kubernetes, Terraform, and Docker, focusing on
-            scalability, reliability, and automation.
-          </p>
-          <p>
-            Previously, I worked at Sky, delivering cutting-edge solutions in video engineering,
-            WebGL, and embedded systems, shaping video experiences for millions of users. More
-            recently, at Rely.io, I embraced the fast-paced startup world, working on AI-driven
-            workflows and full-stack product development.
-          </p>
-          <p>
-            Beyond my professional work, I enjoy experimenting with hardware, electronics, and
-            robotics, combining software with the physical world. Holding a Master’s in Computer
-            Science and Engineering (Software Security) from the University of Lisbon, I believe in
-            continuously expanding my technical expertise.
+            I am an accomplished Senior Product Engineer with a solid background in developing
+            scalable solutions. At Sky, I contributed to significant projects such as the launch of
+            Peacock in the US and its expansion to SkyShowtime in Europe, marking important
+            milestones in my career. Transitioning into the startup world at Rely.io, has allowed me
+            to leverage my engineering expertise alongside agile problem-solving and a strong focus
+            on delivering product value. As a full-stack engineer with a keen product sense, I
+            transform concepts into scalable solutions across frontend (React), backend (Python,
+            PostgreSQL), AI (LLM integrations), and infrastructure (Kubernetes). I have a strong
+            product sense and can quickly sketch low-fidelity concepts and translate them into
+            high-fidelity Figma designs when needed. I love tackling hard problems, shipping
+            solutions, and making tech that actually works.
           </p>
         </div>
 

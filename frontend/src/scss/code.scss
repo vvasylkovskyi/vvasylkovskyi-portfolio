@@ -1,25 +1,29 @@
 @import './variables.scss';
 
-$code-value-color: $primary-color;
-$code-border-color: $esmerald-green-faded;
+$code-value-color: var(--primary-color);
+
 pre,
 table {
-  background-color: $background-code-color; /* Light grey background */
-  border: 1px solid $background-code-border-color; /* Define a border */
-  border-radius: $border-radius;
+  background-color: var(--background-code-color); /* Light grey background */
+  border: 1px solid var(--background-code-border-color); /* Define a border */
+  border-radius: $radii-md;
   padding: 10px; /* Inner spacing */
-  box-shadow: none; /* Slight shadow for 3D effect */
   overflow-x: hidden; /* Allow horizontal scrolling if necessary */
   margin: 10px 0;
+
+  span, td, tr {
+    color: var(--primary-code-text-color);
+  }
+
 }
 
 .hljs.html {
-  color: #d4d4d4;
+  color: var(--primary-code-text-color);
 }
 
 .hljs.javascript,
 .hljs.patch {
-  color: #d4d4d4;
+  color: var(--primary-code-text-color);
 
   .hljs-comment {
     color: #6a9955;
@@ -342,8 +346,8 @@ p > code,
 li > code,
 strong > code,
 h2 > code {
-  background: #1e1e1e;
-  color: $primary-color;
+  background: var(--background-code-inline-color);
+  color: var(--primary-color);
 }
 
 code {
