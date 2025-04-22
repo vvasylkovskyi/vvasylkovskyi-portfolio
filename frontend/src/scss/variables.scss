@@ -1,4 +1,5 @@
 $max-width--desktop: 992px;
+$max-width--desktop-about-page: 992px;
 
 $padding-xs: 20px;
 $header-height-lg: 60px;
@@ -13,15 +14,6 @@ $primary-font-family: 'Montserrat', sans-serif;
 $code-font-family: Roboto Mono, Consolas, Monaco, Andale Mono, Ubuntu Mono,
   monospace;
 
-$thin: 100;
-$extra-light: 200;
-$light: 300;
-$regular: 400;
-$medium: 500;
-$semi-bold: 600;
-$bold: 600;
-$extra-bold: 600;
-
 // Colours
 
 $black: #202122;
@@ -34,7 +26,7 @@ $blue: #4285f4;
 $grey: #dedede;
 // $yellow: #f4b400;
 
-$dark-black: #0f0f0f;
+$dark-black: #09090b;
 $esmerald-green: #00c990;
 $esmerald-green-faded: #00c99080;
 
@@ -83,6 +75,9 @@ $colors-teal-800: #114240;
 $colors-teal-900: #032726;
 $colors-teal-950: #021716;
 
+$colors-teal-900-faded: #0d948942;
+
+
 $colors-gray-50: #fafafa;
 $colors-gray-100: #f4f4f5;
 $colors-gray-200: #e4e4e7;
@@ -91,8 +86,11 @@ $colors-gray-400: #a1a1aa;
 $colors-gray-500: #71717a;
 $colors-gray-600: #52525b;
 $colors-gray-700: #3f3f46;
+$colors-gray-700-faded: #3f3f4666;
 $colors-gray-800: #27272a;
+$colors-gray-800-faded: #27272a99;
 $colors-gray-900: #18181b;
+$colors-gray-925: #171717;
 $colors-gray-950: #111111;
 
 $radii-none: 0;
@@ -109,7 +107,7 @@ $radii-full: 9999px;
 
 
 
-$background-app-color: #0a0a0b;
+$background-app-color: $dark-black;
 // $background-app-color: radial-gradient(circle at top left, #ff9a9e, #fad0c4);
 
 $primary-title-text-color: $white;
@@ -117,6 +115,11 @@ $primary-text-color: $grey;
 $secondary-text-color: $colors-gray-400;
 
 $primary-color: $colors-teal-400;
+
+$pager-duty-color: #048a23;
+$peacock-color: #000000;
+$rely-color: #006cd9;
+
 
 // Blog Card
 $background-card-color: $colors-gray-950;
@@ -128,10 +131,26 @@ $card-gap: $spacing-2;
 $background-tag-color: $colors-teal-900;
 $tag-color: $colors-teal-300;
 
+// Project section
+$project-section-background-color: $colors-gray-900;
+
+
 // Code editor
 $background-code-color: $colors-gray-950;
 $background-code-border-color: $colors-gray-800;
 
 // Gutter
+$app-padding-horizontal-desktop: 50px;
 
-$app-padding: 0 20px;
+$app-padding-mobile: 0 20px;
+$app-padding-desktop: 0 $app-padding-horizontal-desktop;
+
+$blog-grid-gap: $spacing-4;
+
+// Button
+$button-primary-background-color: $colors-teal-600;
+$button-primary-background-color-hover: $colors-teal-700;
+$button-secondary-background-color: $colors-gray-800;
+$button-secondary-background-color-hover: $colors-gray-700;
+
+$radial-gradient: radial-gradient(600px at 613px 553px, rgb(45 212 191 / 22%), transparent 80%);

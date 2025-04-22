@@ -1,7 +1,7 @@
 import { AllPosts } from '@/components/all-posts';
 import React from 'react';
 
-export default async function Home() {
+export default async function Posts() {
   return (
     <React.Fragment>
       <div className='greetings-section'>

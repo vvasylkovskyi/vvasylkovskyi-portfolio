@@ -3,12 +3,13 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { TopBarContainerWrapper } from './ui/styles/styles';
 export const TopBar = () => {
   const pathname = usePathname();
   return (
     <div className='top-bar-header z-50 w-full backdrop-blur supports-[backdrop-filter]:bg-background/60 bg-background/95'>
-      <TopBarContainerWrapper className='container-wrapper'>
+      <div
+        className={`topbar-container-wrapper ${pathname === '/about' ? 'topbar-container-wrapper--about' : ''}`}
+      >
         <div className='container flex h-14 items-center gap-2 md:gap-4'>
           <div className='mr-4 md:flex'>
             <Link className='mr-4 flex items-center gap-2 lg:mr-6' href='/'>
@@ -35,9 +36,19 @@ export const TopBar = () => {
             <nav className='flex items-center gap-4 text-sm xl:gap-6 navigation-menu-item'>
               <Link
                 className={`navigation-menu-item navigation-menu-item--blog ${
-                  pathname !== '/ai-chat' ? 'navigation-menu-item--blog-active' : ''
+                  pathname === '/about' ? 'navigation-menu-item--active' : ''
                 }`}
-                href='/posts'
+                href='/about'
+              >
+                About
+              </Link>
+            </nav>
+            <nav className='flex items-center gap-4 text-sm xl:gap-6 navigation-menu-item'>
+              <Link
+                className={`navigation-menu-item navigation-menu-item--blog ${
+                  pathname === '/' ? 'navigation-menu-item--active' : ''
+                }`}
+                href='/'
               >
                 Blog
               </Link>
@@ -51,9 +62,18 @@ export const TopBar = () => {
                 Github
               </Link>
             </nav>
+            <nav className='flex items-center gap-4 text-sm xl:gap-6 navigation-menu-item'>
+              <Image
+                src='/moon.png'
+                className='navigation-menu-item navigation-menu-item--moon'
+                alt='Moon'
+                width={20}
+                height={20}
+              />
+            </nav>
           </div>
         </div>
-      </TopBarContainerWrapper>
+      </div>
     </div>
   );
 };

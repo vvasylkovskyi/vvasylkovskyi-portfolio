@@ -6,6 +6,7 @@
 @import '../scss/post-item.scss';
 @import '../scss/home.scss';
 @import '../scss/post.scss';
+@import "../scss/project.scss";
 
 h1,
 h2,
@@ -74,7 +75,11 @@ html {
 
 a {
   color: $primary-color;
-  font-weight: $bold;
+  font-weight: $font-weight-bold;
+}
+
+.spotlight-cursor-color {
+  background-color: $colors-teal-900-faded;
 }
 
 pre h1,
@@ -116,13 +121,18 @@ body {
   background-color: $background-app-color;
 }
 
+
 .main-content {
   padding: 0;
   max-width: $max-width--desktop;
   margin-top: $topbar-height;
   width: 100%;
   padding-top: $topbar-height;
-  min-height: calc(100vh - ($topbar-height * 2) - $footer-height - 24px)
+  min-height: calc(100vh - ($topbar-height * 2) - $footer-height - 24px);
+
+  &--about {
+    max-width: $max-width--desktop-about-page;
+  }
 }
 
 .chat-send-button {
@@ -135,7 +145,7 @@ body {
   width: 100%;
   position: fixed;
   height: $topbar-height;
-  padding: $app-padding;
+  padding: $app-padding-mobile;
 }
 
 .app-container {
@@ -144,7 +154,11 @@ body {
   align-items: center;
   overflow: hidden;
   background-color: $background-app-color;
-  padding: $app-padding;
+  padding: $app-padding-mobile;
+
+  // &--home {
+  //   background-color: $colors-teal-300;
+  // }
 }
 
 .background {
@@ -173,6 +187,64 @@ body {
   position: relative;
 }
 
+.topbar-container-wrapper {
+  position: relative;
+  display: flex;
+  max-width: $max-width--desktop;
+  width: 100%;
+
+  &--about {
+    max-width: $max-width--desktop-about-page;
+  }
+}
+
+.landing-heading-h1 {
+  font-size: $font-size-5xl;
+  line-height: 1.5;
+  letter-spacing: -0.025em;
+  font-weight: $font-weight-semibold;
+}
+
+
+.blogs__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  gap: $blog-grid-gap;
+}
+
+.logo-image-about {
+  width: 450px;
+}
+
+.separator-line {
+  border: 1px solid $colors-gray-700-faded;
+}
+
+.landing-page__left {
+  max-width: 100%;
+}
+
+.landing-page__right {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+  // margin-top: 100px;
+  margin: 3rem 0;
+
+  p {
+    color: $secondary-text-color;
+    font-size: $font-size-md;
+    line-height: 1.5;
+  }
+}
+
+.landing-page__cta-container {
+  margin-top: 20px;
+  display: flex;
+  gap: 20px;
+}
+
 .post-link {
   text-decoration: none;
 }
@@ -181,7 +253,7 @@ body {
   font-size: 32px;
   line-height: 36px;
   letter-spacing: 0.02em;
-  font-weight: $bold;
+  font-weight: $font-weight-bold;
   margin-top: 10px;
   margin-bottom: 20px;
   padding-bottom: 0;
@@ -192,19 +264,20 @@ body {
   font-size: 18px;
   line-height: 1.5;
   letter-spacing: 0.02em;
-  font-weight: $regular;
+  font-weight: $font-weight-normal;
   margin: 0;
 }
 
 .markdown-body h1,
-.heading-h1 {
+.heading-h1,
+.landing-heading-h1 {
   font-size: 25px;
   line-height: 36px;
   letter-spacing: 0.02em;
 }
 
 .heading-h1 {
-  font-weight: $semi-bold;
+  font-weight: $font-weight-semibold;
   margin: 0;
 }
 
@@ -221,13 +294,13 @@ body {
 .markdown-body h2 {
   font-size: 20px;
   line-height: 1.5;
-  font-weight: $semi-bold;
+  font-weight: $font-weight-semibold;
 }
 
 .markdown-body h3 {
   font-size: 18px;
   line-height: 1.5;
-  font-weight: $semi-bold;
+  font-weight: $font-weight-semibold;
   margin: 20px 0 10px;
 }
 
@@ -236,7 +309,7 @@ body {
   font-size: 16px;
   line-height: 1.5;
   letter-spacing: 0.02em;
-  font-weight: $medium;
+  font-weight: $font-weight-medium;
 }
 
 .ai-message {
@@ -244,16 +317,70 @@ body {
   color: $white;
 }
 
+.generic-button {
+  border-radius: $radii-sm;
+  padding-inline: $spacing-5;
+  height: 3rem;
+  font-weight: $font-weight-medium;
+  line-height: 1.5rem;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.primary-button {
+  color: $primary-text-color;
+  background-color: $button-primary-background-color;
+
+  &:hover {
+    background-color: $button-primary-background-color-hover;
+  }
+}
+
+.secondary-button {
+  color: $primary-text-color;
+  background-color: $button-secondary-background-color;
+
+  &:hover {
+    background-color: $button-secondary-background-color-hover;
+  }
+}
+
+
+
+.greeting-heading, .landing-subheading {
+  color: $secondary-text-color
+}
+
+@media (min-width: 575px) {
+  .landing-page__left {
+    max-width: 80%;
+  }
+}
+
 @media (min-width: 992px) {
-  .heading-h1 {
-    font-size: $font-size-5xl;
-    line-height: 3.75rem;
+
+  .blogs__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: $blog-grid-gap;
   }
 
-  .greeting-heading {
+  .top-bar-header,
+  .app-container {
+    padding: $app-padding-desktop;
+  }
+  
+  .heading-h1, .landing-heading-h1 {
+    font-size: $font-size-3xl;
+    line-height: 1.5;
+  }
+
+  .greeting-heading, .landing-subheading {
     font-size: $font-size-xl;
     line-height: 1.875rem;
-    color: $secondary-text-color
   }
 
   .markdown-body h1 {
@@ -268,7 +395,7 @@ body {
   .markdown-body h2 {
     font-size: 28px;
     line-height: 32px;
-    font-weight: $semi-bold;
+    font-weight: $font-weight-semibold;
     margin-top: 30px;
     margin-bottom: 20px;
   }

@@ -1,0 +1,105 @@
+
+
+.project__section {
+    background-color: $project-section-background-color;
+    padding: 0.5rem;
+    border-radius: .75rem;
+    margin-top: 1rem;
+}
+
+.project__section-outer-wrapper, .contacts-outer-wrapper {
+    margin-top: $spacing-8;
+    margin-bottom: $spacing-8;
+}
+
+.projects__title {
+    font-size: 16px;
+    line-height: 1.75rem;
+    letter-spacing: 0.01em;
+    font-weight: $font-weight-normal;
+    color: $secondary-text-color;
+}
+
+.card__inner-wrapper {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+
+}
+
+.card__wrapper {
+    position: relative;
+    display: flex;
+    min-height: 88px;
+    align-items: center;
+    gap: 1rem;
+    border-width: 1px;
+    border-color: #0000;
+    line-height: 1.25rem;   
+    padding: 0 1rem;
+    justify-content: space-between;
+
+    &:not(:last-of-type) {
+        border-bottom: 1px solid $colors-gray-700-faded;
+    }
+
+    &--small {
+        min-height: 48px;
+        padding: .5rem 1rem;
+        gap: .75rem;
+
+        .card__icon-wrapper {
+            min-width: 30px;
+            min-height: 30px;
+            width: 30px;
+            height: 30px;
+        }
+    }
+
+    &:hover {
+        border-radius: .5rem;
+
+        border-color: $colors-gray-700-faded;
+        background-color: $colors-gray-800-faded;
+
+        .card__icon-wrapper.pager-duty-icon {
+            background-color: $pager-duty-color;
+        }
+        .card__icon-wrapper.peacock-icon {
+            background: $peacock-color;
+        }
+        .card__icon-wrapper.rely-icon {
+            background: $rely-color;
+        }
+    }    
+}
+
+.card__icon-wrapper {
+    background-color: $colors-gray-700;
+    display: flex;
+    height: 40px;
+    width: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    align-items: center;
+    justify-content: center;
+    border-radius: .5rem;
+
+}
+
+.card__title {
+    font-size: 14px;
+    font-weight: $font-weight-normal;
+    line-height: 1.25rem;
+}
+
+.card__description, .card__date {
+    font-size: 13px;
+    line-height: 150%;
+    color: $secondary-text-color;
+    font-weight: $font-weight-light;
+}
+
+.card__content {
+    min-width: 180px;
+}

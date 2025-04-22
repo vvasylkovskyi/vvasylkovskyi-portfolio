@@ -32,14 +32,14 @@ footer {
 footer p {
   font-family: $primary-font-family;
   font-size: 16px;
-  font-weight: $semi-bold;
+  font-weight: $font-weight-semibold;
   margin: 0;
   margin-right: 5px;
 }
 
 @media (min-width: 992px) {
   footer {
-    width: calc(100% + 40px);
+    width: calc(100% + $app-padding-horizontal-desktop * 2);
     display: flex;
     justify-content: center;
     background: $dark-black;
