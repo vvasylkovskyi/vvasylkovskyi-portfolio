@@ -11,7 +11,7 @@ export default function LayoutInner({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
-  const { theme, toggleTheme } = useTheme();
+  const { theme } = useTheme();
 
   const content = (
     <div
@@ -24,12 +24,6 @@ export default function LayoutInner({
       <Footer />
     </div>
   );
-
-  // if (pathname === '/about') {
-  //   return (
-  //     <SpotlightCursor className='rounded-xl bg-neutral-900 text-white'>{content}</SpotlightCursor>
-  //   );
-  // }
 
   return content;
 }

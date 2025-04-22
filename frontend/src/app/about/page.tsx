@@ -2,27 +2,9 @@
 
 import { ContactsSection } from '@/components/contacts-section';
 import { ProjectsSection } from '@/components/projects-section';
-import React, { useCallback } from 'react';
+import React from 'react';
 
 export default function Home() {
-  const handleDownload = useCallback(async () => {
-    const response = await fetch('/get-resume');
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch the PDF');
-    }
-
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'viktor_vasylkovskyi_cv.pdf';
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    window.URL.revokeObjectURL(url);
-  }, []);
-
   return (
     <React.Fragment>
       <div className='landing-page-section'>
