@@ -6,6 +6,7 @@
 @import '../scss/post-item.scss';
 @import '../scss/home.scss';
 @import '../scss/post.scss';
+@import "../scss/project.scss";
 
 h1,
 h2,
@@ -127,7 +128,11 @@ body {
   margin-top: $topbar-height;
   width: 100%;
   padding-top: $topbar-height;
-  min-height: calc(100vh - ($topbar-height * 2) - $footer-height - 24px)
+  min-height: calc(100vh - ($topbar-height * 2) - $footer-height - 24px);
+
+  &--about {
+    max-width: $max-width--desktop-about-page;
+  }
 }
 
 .chat-send-button {
@@ -187,6 +192,10 @@ body {
   display: flex;
   max-width: $max-width--desktop;
   width: 100%;
+
+  &--about {
+    max-width: $max-width--desktop-about-page;
+  }
 }
 
 .landing-heading-h1 {
@@ -208,8 +217,8 @@ body {
   width: 450px;
 }
 
-.landing-page-section {
-  display: flex;
+.separator-line {
+  border: 1px solid $colors-gray-700-faded;
 }
 
 .landing-page__left {
@@ -221,6 +230,7 @@ body {
   flex-direction: column;
   gap: $spacing-4;
   // margin-top: 100px;
+  margin: 3rem 0;
 
   p {
     color: $secondary-text-color;
@@ -356,10 +366,6 @@ body {
   .blogs__grid {
     grid-template-columns: 1fr 1fr;
     gap: $blog-grid-gap;
-  }
-
-  .landing-page__left {
-    max-width: 50%;
   }
 
   .top-bar-header,

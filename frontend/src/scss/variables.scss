@@ -1,4 +1,5 @@
-$max-width--desktop: 1440px;
+$max-width--desktop: 992px;
+$max-width--desktop-about-page: 992px;
 
 $padding-xs: 20px;
 $header-height-lg: 60px;
@@ -8,8 +9,8 @@ $border-radius: 3px;
 $topbar-height: 56px;
 $footer-height: 101px;
 
-$primary-font-family: "Inter","Inter Fallback";
-// $primary-font-family: 'Montserrat', sans-serif;
+// $primary-font-family: "Inter","Inter Fallback";
+$primary-font-family: 'Montserrat', sans-serif;
 $code-font-family: Roboto Mono, Consolas, Monaco, Andale Mono, Ubuntu Mono,
   monospace;
 
@@ -25,7 +26,7 @@ $blue: #4285f4;
 $grey: #dedede;
 // $yellow: #f4b400;
 
-$dark-black: #0f0f0f;
+$dark-black: #09090b;
 $esmerald-green: #00c990;
 $esmerald-green-faded: #00c99080;
 
@@ -85,7 +86,9 @@ $colors-gray-400: #a1a1aa;
 $colors-gray-500: #71717a;
 $colors-gray-600: #52525b;
 $colors-gray-700: #3f3f46;
+$colors-gray-700-faded: #3f3f4666;
 $colors-gray-800: #27272a;
+$colors-gray-800-faded: #27272a99;
 $colors-gray-900: #18181b;
 $colors-gray-925: #171717;
 $colors-gray-950: #111111;
@@ -104,7 +107,7 @@ $radii-full: 9999px;
 
 
 
-$background-app-color: $colors-gray-925;
+$background-app-color: $dark-black;
 // $background-app-color: radial-gradient(circle at top left, #ff9a9e, #fad0c4);
 
 $primary-title-text-color: $white;
@@ -112,6 +115,11 @@ $primary-text-color: $grey;
 $secondary-text-color: $colors-gray-400;
 
 $primary-color: $colors-teal-400;
+
+$pager-duty-color: #048a23;
+$peacock-color: #000000;
+$rely-color: #006cd9;
+
 
 // Blog Card
 $background-card-color: $colors-gray-950;
@@ -122,6 +130,10 @@ $card-gap: $spacing-2;
 
 $background-tag-color: $colors-teal-900;
 $tag-color: $colors-teal-300;
+
+// Project section
+$project-section-background-color: $colors-gray-900;
+
 
 // Code editor
 $background-code-color: $colors-gray-950;

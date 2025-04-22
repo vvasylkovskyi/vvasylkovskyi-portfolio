@@ -1,8 +1,7 @@
 'use client';
 
-import { Button } from '@/components/atoms/button';
-import Image from 'next/image';
-import Link from 'next/link';
+import { ContactsSection } from '@/components/contacts-section';
+import { ProjectsSection } from '@/components/projects-section';
 import React, { useCallback } from 'react';
 
 export default function Home() {
@@ -26,9 +25,9 @@ export default function Home() {
 
   return (
     <React.Fragment>
-      <div className='landing-page-section d-flex'>
+      <div className='landing-page-section'>
         <div className='landing-page__left'>
-          <div>
+          {/* <div>
             <Image
               src='/logo-header.svg'
               className='logo-image-about'
@@ -36,7 +35,7 @@ export default function Home() {
               width={200}
               height={41}
             />
-          </div>
+          </div> */}
           <h1 className='landing-heading-h1'>
             Full-Stack Engineer building reliable, scalable software
           </h1>
@@ -45,14 +44,17 @@ export default function Home() {
               passionate about open knowledge, dev tools, and creative engineering.
             </h2>
           </div>
-
+          {/* 
           <div className='landing-page__cta-container'>
             <Button hierarchy={'primary'} text='Get Resume' onClick={handleDownload} />
             <Link href='/'>
               <Button hierarchy={'secondary'} text='Read blog' />
             </Link>
-          </div>
+          </div> */}
         </div>
+
+        <div className='separator-line'></div>
+
         <div className='landing-page__right w-full'>
           <p>
             As a passionate Full-Stack Software Engineer, I thrive in collaborative environments
@@ -78,6 +80,18 @@ export default function Home() {
             Science and Engineering (Software Security) from the University of Lisbon, I believe in
             continuously expanding my technical expertise.
           </p>
+        </div>
+
+        <div className='separator-line'></div>
+
+        <div className='project__section-outer-wrapper'>
+          <ProjectsSection />
+        </div>
+
+        <div className='separator-line'></div>
+
+        <div className='contacts-outer-wrapper'>
+          <ContactsSection />
         </div>
       </div>
       {/* <AllPosts /> */}

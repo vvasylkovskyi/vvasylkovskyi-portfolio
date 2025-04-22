@@ -7,7 +7,9 @@ export const TopBar = () => {
   const pathname = usePathname();
   return (
     <div className='top-bar-header z-50 w-full backdrop-blur supports-[backdrop-filter]:bg-background/60 bg-background/95'>
-      <div className='topbar-container-wrapper'>
+      <div
+        className={`topbar-container-wrapper ${pathname === '/about' ? 'topbar-container-wrapper--about' : ''}`}
+      >
         <div className='container flex h-14 items-center gap-2 md:gap-4'>
           <div className='mr-4 md:flex'>
             <Link className='mr-4 flex items-center gap-2 lg:mr-6' href='/'>

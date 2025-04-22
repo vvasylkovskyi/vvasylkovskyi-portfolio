@@ -30,6 +30,10 @@
   height: 60px;
   max-width: $max-width--desktop;
   width: 100%;
+
+  &--about {
+    max-width: $max-width--desktop-about-page;
+  }
 }
 
 .navigation {
