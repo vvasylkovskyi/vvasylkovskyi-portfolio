@@ -14,9 +14,6 @@ footer {
 }
 
 .footer-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   color: var(--footer-text-color);
 }
 
@@ -38,6 +35,15 @@ footer p {
   font-weight: $font-weight-semibold;
   margin: 0;
   margin-right: 5px;
+}
+
+@media (min-width: 575px) {
+  .footer-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: $spacing-2;
+  } 
 }
 
 @media (min-width: 992px) {
