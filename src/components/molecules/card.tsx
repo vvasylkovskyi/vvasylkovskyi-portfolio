@@ -16,6 +16,7 @@ interface CardProps {
   date?: string;
   role?: string;
   isSmallCard?: boolean;
+  onClick?: () => void;
 }
 
 export const Card: FC<CardProps> = ({
@@ -29,12 +30,17 @@ export const Card: FC<CardProps> = ({
   date,
   role,
   isSmallCard,
+  onClick,
 }) => {
   const windowWidth = useWindowWidth();
 
   if ((!windowWidth || windowWidth < 600) && !isSmallCard) {
     return (
-      <Link href={url} className={`card__wrapper ${isSmallCard ? 'card__wrapper--small' : ''}`}>
+      <Link
+        href={url}
+        className={`card__wrapper ${isSmallCard ? 'card__wrapper--small' : ''}`}
+        onClick={onClick}
+      >
         <div className='card__inner-wrapper'>
           <div className={'card__icon-wrapper ' + iconClassName}>
             <Image src={iconPath} alt={title} width={width} height={height} />
@@ -49,7 +55,11 @@ export const Card: FC<CardProps> = ({
   }
 
   return (
-    <Link href={url} className={`card__wrapper ${isSmallCard ? 'card__wrapper--small' : ''}`}>
+    <Link
+      href={url}
+      className={`card__wrapper ${isSmallCard ? 'card__wrapper--small' : ''}`}
+      onClick={onClick}
+    >
       <div className='card__inner-wrapper'>
         <div className={'card__icon-wrapper ' + iconClassName}>
           <Image src={iconPath} alt={title} width={width} height={height} />

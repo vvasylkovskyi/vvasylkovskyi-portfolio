@@ -1,3 +1,6 @@
+'use client';
+
+import { useJune } from '@/hooks/useJune';
 import { Card } from './molecules/card';
 
 const contacts = [
@@ -18,22 +21,26 @@ const contacts = [
 ];
 
 export const ContactsSection = () => {
+  const analytics = useJune();
   return (
     <div>
       <h2 className='projects__title'>Contacts</h2>
       <div className='project__section'>
         {contacts.map((contact) => (
-          <>
-            <Card
-              key={contact.title}
-              iconPath={contact.iconPath}
-              title={contact.title}
-              url={contact.url}
-              width={contact.width}
-              height={contact.height}
-              isSmallCard={true}
-            />
-          </>
+          <Card
+            key={contact.title}
+            iconPath={contact.iconPath}
+            title={contact.title}
+            url={contact.url}
+            width={contact.width}
+            height={contact.height}
+            isSmallCard={true}
+            onClick={() => {
+              if (analytics) {
+                analytics.track(`Contact clicked - ${contact.title}`, { contact: contact.title });
+              }
+            }}
+          />
         ))}
       </div>
     </div>

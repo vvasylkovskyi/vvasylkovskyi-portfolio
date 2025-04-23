@@ -1,6 +1,11 @@
+'use client';
+
+import { useJune } from '@/hooks/useJune';
 import Link from 'next/link';
 
 export const Footer = () => {
+  const analytics = useJune();
+
   return (
     <footer className='py-6 md:py-0'>
       <div className='container-wrapper'>
@@ -14,6 +19,11 @@ export const Footer = () => {
                 rel='noreferrer'
                 className='font-medium underline underline-offset-4'
                 style={{ marginLeft: 5 }}
+                onClick={() => {
+                  if (analytics) {
+                    analytics.track('Footer - Built by clicked');
+                  }
+                }}
               >
                 Viktor Vasylkovskyi
               </Link>
@@ -26,6 +36,11 @@ export const Footer = () => {
                 rel='noreferrer'
                 className='font-medium underline underline-offset-4'
                 style={{ marginLeft: 5 }}
+                onClick={() => {
+                  if (analytics) {
+                    analytics.track('Footer - Source code clicked');
+                  }
+                }}
               >
                 GitHub
               </Link>

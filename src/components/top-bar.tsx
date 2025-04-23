@@ -1,9 +1,11 @@
 'use client';
 
+import { useJune } from '@/hooks/useJune';
 import { useTheme } from '@/hooks/useTheme';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useCallback } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,6 +16,45 @@ import {
 export const TopBar = () => {
   const pathname = usePathname();
   const { theme, toggleTheme } = useTheme();
+  const analytics = useJune();
+
+  const handleToggleTheme = useCallback(() => {
+    toggleTheme();
+
+    if (analytics) {
+      analytics.track(`Theme toggled - ${theme}`, { theme });
+    }
+  }, [analytics, toggleTheme, theme]);
+
+  const handleLogoClick = useCallback(() => {
+    if (analytics) {
+      analytics.track('Logo clicked');
+    }
+  }, [analytics]);
+
+  const handleGithubClick = useCallback(() => {
+    if (analytics) {
+      analytics.track('Github clicked');
+    }
+  }, [analytics]);
+
+  const handleHamburgerClick = useCallback(() => {
+    if (analytics) {
+      analytics.track('Hamburger clicked');
+    }
+  }, [analytics]);
+
+  const handleHamburgerClickBlog = useCallback(() => {
+    if (analytics) {
+      analytics.track('Hamburger clicked - Blog');
+    }
+  }, [analytics]);
+
+  const handleHamburgerClickAbout = useCallback(() => {
+    if (analytics) {
+      analytics.track('Hamburger clicked - About');
+    }
+  }, [analytics]);
 
   return (
     <div className='top-bar-header z-50 w-full'>
@@ -22,7 +63,11 @@ export const TopBar = () => {
       >
         <div className='container flex h-14 items-center gap-2 md:gap-4'>
           <div className='mr-4 md:flex'>
-            <Link className='mr-4 flex items-center gap-2 lg:mr-6' href='/'>
+            <Link
+              className='mr-4 flex items-center gap-2 lg:mr-6'
+              href='/'
+              onClick={handleLogoClick}
+            >
               <Image
                 src={
                   theme === 'dark' ? '/logo-header-dark-mode.svg' : '/logo-header-white-mode.svg'
@@ -70,6 +115,7 @@ export const TopBar = () => {
                 href='https://github.com/vvasylkovskyi'
                 className='toggle_mode__wraper'
                 target='_blank'
+                onClick={handleGithubClick}
               >
                 <Image
                   src={
@@ -85,7 +131,7 @@ export const TopBar = () => {
               </Link>
             </nav>
             <nav className='flex items-center gap-4 text-sm xl:gap-6 navigation-menu-item'>
-              <button className='toggle_mode__wraper' onClick={toggleTheme}>
+              <button className='toggle_mode__wraper' onClick={handleToggleTheme}>
                 <Image
                   src={theme === 'dark' ? '/moon.svg' : '/sun.svg'}
                   className='navigation-menu-item'
@@ -97,7 +143,7 @@ export const TopBar = () => {
             </nav>
             <nav className='flex items-center gap-4 text-sm xl:gap-6 navigation-menu-item'>
               <DropdownMenu>
-                <DropdownMenuTrigger className='toggle_mode__wraper'>
+                <DropdownMenuTrigger className='toggle_mode__wraper' onClick={handleHamburgerClick}>
                   <Image
                     src={
                       theme === 'dark'
@@ -113,7 +159,7 @@ export const TopBar = () => {
                 <DropdownMenuContent className='dropdown-menu__content'>
                   {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}
                   {/* <DropdownMenuSeparator /> */}
-                  <Link href='/'>
+                  <Link href='/' onClick={handleHamburgerClickBlog}>
                     <DropdownMenuItem className='dropdown-menu-item'>
                       <div
                         className={`navigation-menu-item navigation-menu-item--blog ${
@@ -124,7 +170,7 @@ export const TopBar = () => {
                       </div>
                     </DropdownMenuItem>
                   </Link>
-                  <Link href='/about'>
+                  <Link href='/about' onClick={handleHamburgerClickAbout}>
                     <DropdownMenuItem className='dropdown-menu-item'>
                       <div
                         className={`navigation-menu-item navigation-menu-item--blog ${

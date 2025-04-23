@@ -1,5 +1,3 @@
-'use client';
-
 import { ContactsSection } from '@/components/contacts-section';
 import { ProjectsSection } from '@/components/projects-section';
 import React from 'react';

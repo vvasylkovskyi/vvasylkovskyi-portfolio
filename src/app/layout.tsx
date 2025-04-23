@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Analytics } from './analytics-client';
 import './app.scss';
 import './globals.css';
 import LayoutInner from './layout-inner';
@@ -36,6 +37,7 @@ export default function RootLayout({
       <body className='antialiased'>
         <StyledComponentsRegistry>
           <ThemeScript />
+          <Analytics />
           <LayoutInner>{children}</LayoutInner>
         </StyledComponentsRegistry>
       </body>
