@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 
 export function useJune() {
   const [analytics, setAnalytics] = useState<AnalyticsBrowser | undefined>(undefined);
-  const writeKey = process.env.NEXT_PUBLIC_JUNE_WRITE_KEY;
+  const writeKey = 'wk-2dd323e31b2f419285fa63537d4fe583';
 
   useEffect(() => {
     if (!writeKey) {
