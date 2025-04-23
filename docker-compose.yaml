@@ -6,6 +6,8 @@ services:
     #   dockerfile: ./deploy/Dockerfile
     image: vvasylkovskyi1/vvasylkovskyi-portfolio:latest
     restart: '${DOCKER_RESTART_POLICY:-unless-stopped}'
+    env_file:
+      - .env
     ports:
       - '3000:3000'
     networks:
