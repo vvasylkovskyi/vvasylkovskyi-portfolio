@@ -1,5 +1,6 @@
 'use client';
 
+import { useWindowWidth } from '@/hooks/useWindowWidth';
 import Image from 'next/image';
 import Link from 'next/link';
 import type { FC } from 'react';
@@ -29,6 +30,24 @@ export const Card: FC<CardProps> = ({
   role,
   isSmallCard,
 }) => {
+  const windowWidth = useWindowWidth();
+
+  if ((!windowWidth || windowWidth < 600) && !isSmallCard) {
+    return (
+      <Link href={url} className={`card__wrapper ${isSmallCard ? 'card__wrapper--small' : ''}`}>
+        <div className='card__inner-wrapper'>
+          <div className={'card__icon-wrapper ' + iconClassName}>
+            <Image src={iconPath} alt={title} width={width} height={height} />
+          </div>
+          <div className='card__content'>
+            <p className='card__title'>{role}</p>
+            <p className='card__description'>{date}</p>
+          </div>
+        </div>
+      </Link>
+    );
+  }
+
   return (
     <Link href={url} className={`card__wrapper ${isSmallCard ? 'card__wrapper--small' : ''}`}>
       <div className='card__inner-wrapper'>
