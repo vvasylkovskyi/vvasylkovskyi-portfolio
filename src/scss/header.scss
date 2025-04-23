@@ -52,13 +52,26 @@
   line-height: 1.25rem;
   font-weight: var(--header-font-weight);
   color: var(--primary-title-text-color);
-  margin: 0 0.5rem;
+  margin: 0;
   border-bottom: 2px solid transparent;
 
   &--active {
     border-bottom: 2px solid var(--primary-color);
   }
   // margin: 0 5px;
+}
+
+.dropdown-menu__content {
+  background: var(--dropdown-menu-content-background);
+  border: 1px solid var(--dropdown-menu-content-item-hover-background);
+}
+
+.dropdown-menu-item {
+  cursor: pointer;
+
+  &:hover, &:focus {
+    background: var(--dropdown-menu-content-item-hover-background);
+  }
 }
 
 .navigation-menu-item--blog,
@@ -130,6 +143,10 @@
 
   .header__inner-nav {
     height: 100px;
+  }
+
+  .navigation-menu-item {
+    margin: 0 0.5rem;
   }
 }
 

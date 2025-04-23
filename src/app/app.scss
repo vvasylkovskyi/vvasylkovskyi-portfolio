@@ -53,6 +53,8 @@
   --project-card-icon-wrapper-color: #{$project-card-icon-wrapper-color--light-mode};
   --header-font-weight: #{$font-weight-medium};
   --primary-code-text-color: #{$primary-code-text-color--light-mode};
+  --dropdown-menu-content-background: #{$dropdown-menu-content-background--light-mode};
+  --dropdown-menu-content-item-hover-background: #{$dropdown-menu-content-item-hover-background--light-mode};
 }
 
 .app-container--dark {
@@ -76,6 +78,8 @@
   --project-card-icon-wrapper-color: #{$project-card-icon-wrapper-color--dark-mode};
   --header-font-weight: #{$font-weight-normal};
   --primary-code-text-color: #{$primary-code-text-color--dark-mode};
+  --dropdown-menu-content-background: #{$dropdown-menu-content-background--dark-mode};
+  --dropdown-menu-content-item-hover-background: #{$dropdown-menu-content-item-hover-background--dark-mode};
 }
 
 h1,
@@ -142,6 +146,9 @@ html {
   }
 }
 
+html body[data-scroll-locked] {
+  margin-right: 0px !important;
+}
 
 a {
   color: var(--primary-color);
@@ -426,6 +433,10 @@ body {
 
   &:hover {
     background-color: var(--hover-card-background-color);
+  }
+
+  &:focus-visible {
+    outline: none;
   }
 }
 

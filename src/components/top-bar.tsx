@@ -4,6 +4,12 @@ import { useTheme } from '@/hooks/useTheme';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from './ui/dropdown-menu';
 
 export const TopBar = () => {
   const pathname = usePathname();
@@ -39,7 +45,7 @@ export const TopBar = () => {
                 AI Chat
               </Link>
             </nav> */}
-            <nav className='flex items-center gap-4 text-sm xl:gap-6 navigation-menu-item'>
+            {/* <nav className='flex items-center gap-4 text-sm xl:gap-6 navigation-menu-item'>
               <Link
                 className={`navigation-menu-item navigation-menu-item--blog ${
                   pathname === '/about' ? 'navigation-menu-item--active' : ''
@@ -58,7 +64,7 @@ export const TopBar = () => {
               >
                 Blog
               </Link>
-            </nav>
+            </nav> */}
             <nav className='flex items-center gap-4 text-sm xl:gap-6 navigation-menu-item'>
               <Link
                 href='https://github.com/vvasylkovskyi'
@@ -88,6 +94,49 @@ export const TopBar = () => {
                   height={20}
                 />
               </button>
+            </nav>
+            <nav className='flex items-center gap-4 text-sm xl:gap-6 navigation-menu-item'>
+              <DropdownMenu>
+                <DropdownMenuTrigger className='toggle_mode__wraper'>
+                  <Image
+                    src={
+                      theme === 'dark'
+                        ? '/hamburger-menu--dark-mode.svg'
+                        : '/hamburger-menu--white-mode.svg'
+                    }
+                    className='logo-image'
+                    alt='Code Logo'
+                    width={30}
+                    height={30}
+                  />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className='dropdown-menu__content'>
+                  {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}
+                  {/* <DropdownMenuSeparator /> */}
+                  <Link href='/'>
+                    <DropdownMenuItem className='dropdown-menu-item'>
+                      <div
+                        className={`navigation-menu-item navigation-menu-item--blog ${
+                          pathname === '/' ? 'navigation-menu-item--active' : ''
+                        }`}
+                      >
+                        Blog
+                      </div>
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link href='/about'>
+                    <DropdownMenuItem className='dropdown-menu-item'>
+                      <div
+                        className={`navigation-menu-item navigation-menu-item--blog ${
+                          pathname === '/about' ? 'navigation-menu-item--active' : ''
+                        }`}
+                      >
+                        About
+                      </div>
+                    </DropdownMenuItem>
+                  </Link>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </nav>
           </div>
         </div>
