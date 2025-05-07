@@ -56,6 +56,8 @@ You’ll see output like:
 2025-04-13T21:07:17Z INF You have successfully logged in.
 ```
 
+Note for CI/CD authentication you should use different approach. See the [Automate Cloudflare Tunnel Setup using Ansible](#automate-cloudflare-tunnel-setup-using-ansible) section.
+
 ## Step 3: Create the Tunnel
 
 Create a new named tunnel (replace `my-tunnel` with your preferred name):
@@ -330,6 +332,69 @@ jobs:
           docker rm $(docker ps -aq)
           docker-compose up -d
           ENDSSH
+```
+
+## Automate Cloudflare Tunnel Setup using Ansible
+
+You can use Ansible to install cloudflared on the Raspberry Pi.
+
+### Create a tunnel in Cloudflare manually (once):
+
+1. Go to your Cloudflare dashboard → Zero Trust → Networks → Tunnels
+2. Create a new tunnel (e.g., `rpi-ssh`)
+3. Follow the steps of tunnel creating, you will get to the point where you need to authenticate with token, and the token will be visible like follows:
+
+```sh
+brew install cloudflared && sudo cloudflared service install <token>
+```
+
+## Save token and config in your Ansible role:
+
+First we need to store the token under `cloudflare_tunnel_token` in playbooks:
+
+```yml
+# playbook -> cloudflared_playbook.yml
+- hosts: all
+  become: yes
+
+  vars:
+    cloudflare_tunnel_token: 'your_cloudflare_token_here' # Replace with your actual token
+
+  roles:
+    - cloudflare_tunnel
+```
+
+Here is the full ansible code for installing and enabling the cloudflared tunnel that you just created.
+
+```yml
+# role -> cloudflared_tunnel.yml
+- name: Install cloudflared binary
+  command: >
+    wget -O /usr/local/bin/cloudflared https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm
+  args:
+    creates: /usr/local/bin/cloudflared
+
+- name: Make cloudflared executable
+  command: chmod +x /usr/local/bin/cloudflared
+
+- name: Install Cloudflare Tunnel service using token
+  command: cloudflared service install {{ cloudflare_tunnel_token }}
+  args:
+    creates: /etc/systemd/system/cloudflared.service
+
+- name: Enable cloudflared service to start on boot
+  command: systemctl enable cloudflared
+
+- name: Start cloudflared service
+  command: systemctl start cloudflared
+
+- name: Verify cloudflared version
+  command: cloudflared --version
+  register: cloudflared_version
+
+- name: Show cloudflared version
+  debug:
+    var: cloudflared_version.stdout
 ```
 
 # Conclusion
