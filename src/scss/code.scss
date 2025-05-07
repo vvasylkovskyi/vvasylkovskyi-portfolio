@@ -10,6 +10,11 @@ table {
   padding: 10px; /* Inner spacing */
   overflow-x: hidden; /* Allow horizontal scrolling if necessary */
   margin: 10px 0;
+  width: 100%;
+
+  th, td {
+    display: table-cell;
+  }
 
   span, td, tr {
     color: var(--primary-code-text-color);

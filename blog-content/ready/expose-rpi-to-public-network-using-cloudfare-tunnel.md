@@ -4,8 +4,6 @@ Exposing local applications (like your Next.js app running on a Raspberry Pi) to
 
 Luckily, **Cloudflare Tunnel** makes this painless. It's secure, fast, and removes the need for any router configuration. This guide walks you through setting it up step-by-step.
 
----
-
 ## Why Cloudflare Tunnel?
 
 - **No port forwarding**
@@ -14,26 +12,22 @@ Luckily, **Cloudflare Tunnel** makes this painless. It's secure, fast, and remov
 - **Free TLS/SSL certificates**
 - **Super low latency via Cloudflare’s global network**
 
----
-
 ## SSL/TLS Certificates — Handled for You
 
 Cloudflare automatically issues and manages SSL certificates using [Let’s Encrypt](https://letsencrypt.org/) or its own CA. These certificates terminate at Cloudflare’s edge — meaning HTTPS is secured from the end-user to Cloudflare, and then proxied to your Raspberry Pi.
-
----
 
 ## Step 1: Install `cloudflared` on Raspberry Pi
 
 SSH into your Pi and install the `cloudflared` daemon:
 
-```bash
+```sh
 sudo apt update
 sudo apt install cloudflared
 ```
 
 If it’s not available via `apt` (e.g. on Debian Bullseye), install it manually:
 
-```bash
+```sh
 curl -s https://api.github.com/repos/cloudflare/cloudflared/releases/latest \
 | grep "browser_download_url.*linux-arm64.deb" \
 | cut -d '"' -f 4 \
@@ -46,19 +40,19 @@ sudo dpkg -i cloudflared-linux-arm64.deb
 
 Run the login command:
 
-```bash
+```sh
 cloudflared tunnel login
 ```
 
 This will open a browser window to Cloudflare where you log in and select your domain. Once successful, credentials are saved to your home directory:
 
-```bash
+```sh
 /home/<your-username>/.cloudflared/cert.pem
 ```
 
 You’ll see output like:
 
-```bash
+```sh
 2025-04-13T21:07:17Z INF You have successfully logged in.
 ```
 
@@ -66,13 +60,13 @@ You’ll see output like:
 
 Create a new named tunnel (replace `my-tunnel` with your preferred name):
 
-```bash
+```sh
 cloudflared tunnel create my-tunnel
 ```
 
 You'll get output like:
 
-```bash
+```sh
 Tunnel credentials written to /home/banana/.cloudflared/<tunnel-id>.json
 Created tunnel my-tunnel with id <tunnel-id>
 ```
@@ -83,7 +77,7 @@ Keep that `.json` file secret — it acts as the tunnel's credentials.
 
 To point a domain/subdomain to the tunnel, run:
 
-```bash
+```sh
 cloudflared tunnel route dns my-tunnel your-subdomain.yourdomain.com
 ```
 
@@ -93,13 +87,13 @@ This creates a CNAME in Cloudflare's DNS routing traffic to your tunnel.
 
 Run your tunnel and map it to a local port (replace `PORT` with your app's port):
 
-```bash
+```sh
 cloudflared tunnel run --url http://localhost:3000 my-tunnel
 ```
 
 Your app should now be available at:
 
-```bash
+```sh
 https://your-subdomain.yourdomain.com
 ```
 
@@ -107,14 +101,14 @@ https://your-subdomain.yourdomain.com
 
 Create a Cloudflare Tunnel config file:
 
-```bash
+```sh
 mkdir -p ~/.cloudflared
 nano ~/.cloudflared/config.yml
 ```
 
 Paste in:
 
-```yaml
+```yml
 tunnel: my-tunnel
 credentials-file: /home/banana/.cloudflared/<tunnel-id>.json
 
@@ -136,7 +130,7 @@ This config allows Cloudflare to route requests to the local app on your Pi.
 
 Start the tunnel using the config file:
 
-```bash
+```sh
 cloudflared tunnel run my-tunnel
 ```
 
@@ -146,20 +140,20 @@ You should again see output confirming the tunnel is active and routing traffic.
 
 To have the tunnel start automatically when the Raspberry Pi boots:
 
-```bash
+```sh
 sudo cloudflared --config ~/.cloudflared/config.yml service install
 ```
 
 Then enable and start the systemd service:
 
-```bash
+```sh
 sudo systemctl enable cloudflared
 sudo systemctl start cloudflared
 ```
 
 You can verify it’s running with:
 
-```bash
+```sh
 sudo systemctl status cloudflared
 ```
 
@@ -169,7 +163,7 @@ It is a common requirement to expose your Raspberry Pi SSH access to the interne
 
 ### Add SSH server to the tunnel
 
-```yaml
+```yml
 tunnel: rpi-tunnel
 credentials-file: /home/banana/.cloudflared/<tunnel-id>.json
 
@@ -187,13 +181,13 @@ ingress:
 
 1. Run this on your Pi:
 
-```bash
+```sh
 cloudflared tunnel route dns rpi-tunnel ssh.yourdomain.com
 ```
 
 2. Restart the tunnel service:
 
-```bash
+```sh
 sudo systemctl restart cloudflared
 ```
 
@@ -224,7 +218,7 @@ ssh <username>@ssh.example.com
 
 1. Add the following to your CI/CD pipeline:
 
-```yaml
+```yml
 - name: Setup SSH key
   run: |
     mkdir -p ~/.ssh
@@ -235,7 +229,7 @@ ssh <username>@ssh.example.com
 
 In your GitHub Actions setup:
 
-```bash
+```sh
 CF_SSH_HOST = ssh.yourdomain.com
 CF_SSH_USER = username
 ```
@@ -270,7 +264,7 @@ You’ll generate the Access token manually for now — see below.
 
 To get a token that GitHub can use, run this locally:
 
-```bash
+```sh
 cloudflared access token --hostname ssh.yourdomain.com
 ```
 
@@ -285,7 +279,7 @@ Here’s a working job that:
 - Uses cloudflared and ssh to connect through the tunnel
 - Deploys the docker-compose.yaml and runs the app
 
-```yaml
+```yml
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -343,7 +337,3 @@ jobs:
 Cloudflare Tunnel is one of the most elegant ways to expose your Raspberry Pi (or any internal service) to the internet. It's free, fast, and secure — and you get the added benefit of not having to deal with the hassle of network configuration.
 
 Whether you’re deploying a hobby project, internal dashboard, or full web app — Cloudflare Tunnel is a must-have tool in your Raspberry Pi dev toolkit.
-
-```
-
-```
