@@ -73,7 +73,7 @@ Here’s a simple example:
 
 Add the following to your GitHub Actions workflow:
 
-```yaml
+```yml
 jobs:
   build:
     runs-on: [self-hosted, rpi, arm64, docker]

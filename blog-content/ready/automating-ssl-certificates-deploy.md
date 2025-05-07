@@ -17,7 +17,7 @@ base64 -i ./certs/example_com.key -o key.b64
 
 4. In your GitHub Actions workflow, recreate the certs at runtime before building the Docker image:
 
-```yaml
+```yml
 jobs:
   build:
     runs-on: ubuntu-latest

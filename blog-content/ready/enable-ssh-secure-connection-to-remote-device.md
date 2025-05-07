@@ -61,7 +61,7 @@ This allows your CI jobs to authenticate with your Raspberry Pi securely and pro
 
 Here’s how to configure your GitHub Actions workflow to use the SSH key:
 
-```yaml
+```yml
 - name: Setup SSH key
   run: |
     mkdir -p ~/.ssh
