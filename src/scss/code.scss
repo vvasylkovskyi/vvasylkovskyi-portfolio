@@ -2,8 +2,50 @@
 
 $code-value-color: var(--primary-color);
 
-pre,
 table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.95rem;
+  background-color: var(--background-code-color);
+  border: 1px solid var(--background-code-border-color);
+  border-radius: $radii-md;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+  span, td, tr {
+    color: var(--primary-code-text-color);
+  }
+
+  thead {
+    background-color: var(--background-code-color);
+    font-weight: 600;
+  }
+
+  th,
+  td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--background-code-border-color);
+    cursor: pointer;
+  }
+
+  th:first-child,
+  td:first-child {
+    width: 35%;
+    white-space: nowrap;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  tr:hover {
+    background-color: var(--hover-table-row-background-color);
+  }
+}
+
+pre {
   background-color: var(--background-code-color); /* Light grey background */
   border: 1px solid var(--background-code-border-color); /* Define a border */
   border-radius: $radii-md;
@@ -12,14 +54,9 @@ table {
   margin: 10px 0;
   width: 100%;
 
-  th, td {
-    display: table-cell;
-  }
-
   span, td, tr {
     color: var(--primary-code-text-color);
   }
-
 }
 
 .hljs.html {

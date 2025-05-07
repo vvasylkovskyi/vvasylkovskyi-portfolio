@@ -55,6 +55,7 @@
   --primary-code-text-color: #{$primary-code-text-color--light-mode};
   --dropdown-menu-content-background: #{$dropdown-menu-content-background--light-mode};
   --dropdown-menu-content-item-hover-background: #{$dropdown-menu-content-item-hover-background--light-mode};
+  --hover-table-row-background-color: #{$hover-table-row-background-color--light-mode};
 }
 
 .app-container--dark {
@@ -80,6 +81,7 @@
   --primary-code-text-color: #{$primary-code-text-color--dark-mode};
   --dropdown-menu-content-background: #{$dropdown-menu-content-background--dark-mode};
   --dropdown-menu-content-item-hover-background: #{$dropdown-menu-content-item-hover-background--dark-mode};
+  --hover-table-row-background-color: #{$hover-table-row-background-color--dark-mode};
 }
 
 h1,
