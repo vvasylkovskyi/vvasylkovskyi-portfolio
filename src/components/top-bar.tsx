@@ -166,7 +166,7 @@ export const TopBar = () => {
                           pathname === '/' ? 'navigation-menu-item--active' : ''
                         }`}
                       >
-                        Blog
+                        Notes
                       </div>
                     </DropdownMenuItem>
                   </Link>
