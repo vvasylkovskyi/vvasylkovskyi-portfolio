@@ -6,9 +6,9 @@ export default async function Posts() {
     <React.Fragment>
       <div className='greetings-section'>
         <div className='greetings__left'>
-          <h1 className='heading-h1'>Viktor&apos;s Blog</h1>
+          <h1 className='heading-h1'>Viktor&apos;s Notes</h1>
           <div className='greeting-flex-wrapper'>
-            <h2 className='greeting-heading'>Catch up on latest updates </h2>
+            <h2 className='greeting-heading'>Feel free to explore my notes</h2>
           </div>
         </div>
       </div>
