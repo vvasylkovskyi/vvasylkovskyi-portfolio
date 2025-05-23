@@ -1,0 +1,11 @@
+{
+    "title": "From Zero to SSH: Setting Up Raspberry Pi with OS Lite and Ansible Automation",
+    "filename": "raspberry-pi-setup",
+    "date": "May 23, 2025",
+    "metaText": "Learn how to set up a Raspberry Pi from scratch using Raspberry Pi OS Lite, configure headless SSH access with public-key authentication, and automate software installation using Ansible. A hands-on guide for developers and makers who want a repeatable and efficient Raspberry Pi setup.",
+    "categories": [
+        "Network",
+        "Raspberry Pi",
+        "SSH"
+    ]
+}
