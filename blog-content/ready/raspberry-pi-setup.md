@@ -91,27 +91,48 @@ At this stage, your Raspberry Pi is running a bare OS. Let’s install useful ba
 brew install ansible
 ```
 
-2. Create an inventory file (e.g., `inventory.ini`):
-
-```bash
-[raspberrypi]
-raspberrypi.local ansible_user=pi ansible_ssh_private_key_file=~/.ssh/id_ed25519
-```
-
-3. Write a playbook (e.g., `setup.yml`) to install packages:
+2. Create an inventory file (e.g., `inventory.yml`):
 
 ```yml
-- hosts: raspberrypi
-  become: true
-  tasks:
-    - name: Update APT cache
-      apt:
-        update_cache: yes
+# inventory.yml
+all:
+  hosts:
+    raspberrypi:
+      ansible_host: raspberrypi.local
+      ansible_user: vvasylkovskyi
+      ansible_ssh_private_key_file: ~/.ssh/<your-key-file>
+```
 
-    - name: Install Git
-      apt:
-        name: git
-        state: present
+3. Write a playbook (e.g., `playbook.yml`) to install packages:
+
+```yml
+# playbook.yml
+- name: Setup Raspberry Pi 
+  hosts: all
+  become: true
+
+  roles:
+    - setup
+```
+
+4. Write a role: (e.g. `setup.yml`)
+
+```yml
+# setup.yml 
+
+- name: Update package list
+  command: apt update
+
+- name: Upgrade all packages
+  command: apt upgrade -y
+
+- name: Install Python 3 and pip
+  apt:
+    name:
+      - python3
+      - python3-pip
+    state: latest
+    update_cache: yes
 ```
 
 4. Run the playbook:
@@ -119,6 +140,50 @@ raspberrypi.local ansible_user=pi ansible_ssh_private_key_file=~/.ssh/id_ed25519
 ```bash
 ansible-playbook -i inventory.ini setup.yml
 ```
+
+Verify on the Rpi that python was installed by running: 
+
+```bash
+python -v
+```
+
+## Adding Datadog Agent to Rpi 
+
+Install the Datadog Ansible Collection from Ansible Galaxy on your Ansible Server: 
+
+```bash
+ansible-galaxy collection install datadog.dd
+```
+
+Add datadog rule: 
+
+```yml
+- hosts: servers
+  tasks:
+    - name: Import the Datadog Agent role from the Datadog collection
+      import_role:
+        name: datadog.dd.agent
+  vars:
+    datadog_api_key: "{{ datadog_api_key }}"
+    datadog_site: "datadoghq.eu"
+```
+
+### Check the Datadog process is working
+
+```bash
+sudo datadog-agent status
+sudo systemctl status datadog-agent
+sudo tail -n 100 /var/log/datadog/agent.log
+```
+
+### Confirm on the Datadog UI
+Go to your [Datadog infrastructure dashboard](https://app.datadoghq.eu/infrastructure) (or the appropriate site for your region) and check:
+
+  - Your Raspberry Pi shows up as a host.
+  - Metrics are being collected.
+  - The host has the correct hostname (matching your RPi).
+
+
 
 ## ✅ Summary
 
