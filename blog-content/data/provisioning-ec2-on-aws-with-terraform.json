@@ -1,0 +1,10 @@
+{
+    "title": "Deploying EC2 instance on AWS with Terraform",
+    "filename": "provisioning-ec2-on-aws-with-terraform",
+    "date": "June 3, 2025",
+    "metaText": "Learn how to deploy an EC2 instance on AWS using Terraform, from setting up AWS credentials to provisioning a secure and scalable infrastructure with VPC, subnets, and security groups. A practical, step-by-step guide for beginners and DevOps enthusiasts alike.",
+    "categories": [
+        "AWS",
+        "Terraform"
+    ]
+}
