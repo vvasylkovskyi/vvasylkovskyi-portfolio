@@ -303,6 +303,7 @@ pre {
 }
 
 .hljs.bash,
+.hljs.txt,
 .hljs.sh {
   color: #d4d4d4;
 
@@ -361,7 +362,7 @@ pre {
   }
 }
 
-.hljs.dockerfile {
+.hljs.dockerfile, .hljs.tf, .hljs.tfvars {
   color: #4ec9b0;
 
   .hljs-comment {
