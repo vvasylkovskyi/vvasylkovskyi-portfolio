@@ -3,3 +3,12 @@ output "ec2_ip_address" {
   description = "The Elastic IP address allocated to the EC2 instance."
 }
 
+output "ec2_http_url" {
+  value       = "http://${aws_instance.portfolio.public_dns}"
+  description = "The public DNS-based HTTP URL to access the EC2 instance."
+}
+
+output "ec2_https_domain" {
+  value       = "https://${aws_route53_record.notes_https.name}"
+  description = "The domain name pointing to your EC2 instance."
+}

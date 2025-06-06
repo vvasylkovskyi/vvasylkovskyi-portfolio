@@ -13,6 +13,13 @@ resource "aws_instance" "portfolio" {
 
   key_name = "ssh-key"
 
+  user_data = <<-EOF
+              #!/bin/bash
+              sudo yum update -y || sudo apt-get update -y
+              sudo yum install -y python3 || sudo apt-get install -y python3
+              echo "<html><body><h1>Hello from Terraform EC2!</h1></body></html>" > index.html
+              nohup python3 -m http.server 80 &
+              EOF
   tags = {
     Name = "portfolio"
   }
