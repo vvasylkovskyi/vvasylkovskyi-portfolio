@@ -8,7 +8,14 @@ output "ec2_http_url" {
   description = "The public DNS-based HTTP URL to access the EC2 instance."
 }
 
-output "ec2_https_domain" {
-  value       = "https://${aws_route53_record.notes_https.name}"
-  description = "The domain name pointing to your EC2 instance."
-}
+# output "ec2_https_domain" {
+#   value       = "https://${aws_route53_record.notes_https.name}"
+#   description = "The domain name pointing to your EC2 instance."
+# }
+
+# output "cloudfront_distribution_arn" {
+#   value = aws_cloudfront_distribution.cdn.arn
+# }
+# output "cloudfront_distribution_domain_name" {
+#   value = aws_cloudfront_distribution.cdn.domain_name
+# }
