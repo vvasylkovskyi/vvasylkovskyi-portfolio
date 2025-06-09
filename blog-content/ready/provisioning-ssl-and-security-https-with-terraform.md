@@ -28,12 +28,18 @@ Note, even if your original provider is `us-east-1`, we need to define the alias
 ```tf
 # ssl.tf
 resource "aws_acm_certificate" "cert" {
-  domain_name       = "www.your-domain.com"
+  domain_name       = "your-domain.com"
   validation_method = "DNS"
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 ```
 
 This requests an SSL/TLS certificate from AWS Certificate Manager for your domain. We choose DNS validation (simplest in Terraform if using Route 53).
+
+Note that we are adding `lifecycle.create_before_destroy`. This is because in case you change something on this resource, since Cloud Front will be using the certificate, this directive allows to duplicate certificate, and replace old one before destroying it thus allowing cloud front to switch certificates without issues.
 
 ### DNS Validation via Route 53
 
