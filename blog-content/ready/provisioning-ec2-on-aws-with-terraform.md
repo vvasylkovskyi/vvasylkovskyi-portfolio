@@ -108,9 +108,6 @@ resource "aws_vpc" "main" {
   cidr_block           = "10.0.0.0/16"
   enable_dns_hostnames = true
   enable_dns_support   = true
-  tags = {
-    Name = "EC2 + VPC"
-  }
 }
 ```
 
@@ -125,9 +122,6 @@ resource "aws_vpc" "main" {
   cidr_block           = "10.0.0.0/16"
   enable_dns_hostnames = true
   enable_dns_support   = true
-  tags = {
-    Name = "EC2 + VPC"
-  }
 }
 
 resource "aws_eip" "my_app" {
@@ -186,10 +180,6 @@ resource "aws_route_table" "my_app" {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.my_app.id
   }
-
-  tags = {
-    Name = "my_app"
-  }
 }
 
 resource "aws_route_table_association" "subnet-association" {
@@ -207,9 +197,6 @@ Finally, we need to defined the gateway resource. It only needs to know what VPC
 
 resource "aws_internet_gateway" "my_app" {
   vpc_id = aws_vpc.main.id
-  tags = {
-    Name = "my_app"
-  }
 }
 ```
 
@@ -247,10 +234,6 @@ resource "aws_instance" "my_app" {
   subnet_id                   = aws_subnet.my_app.id
 
   key_name = "ssh-key"
-
-  tags = {
-    Name = "my_app_API"
-  }
 }
 ```
 
