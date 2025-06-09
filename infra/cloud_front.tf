@@ -42,7 +42,6 @@ resource "aws_cloudfront_distribution" "cdn" {
     acm_certificate_arn      = aws_acm_certificate.cert.arn
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.2_2019"
-    # cloudfront_default_certificate = true
   }
 
   restrictions {

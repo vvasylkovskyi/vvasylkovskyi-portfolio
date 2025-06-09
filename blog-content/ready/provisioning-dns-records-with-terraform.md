@@ -5,13 +5,13 @@ In the previous notes we talked about how to setup the ec2 instance inside of th
 In this note, I will walk you through how to do it using terraform. In practice, we will spawn a simple http server on our ec2 instance, and provide `Route53` DNS records to access to this application, so that we will move from:
 
 ```bash
-http://ec2-52-70-0-203.compute-1.amazonaws.com/
+http://52.206.93.210/
 ```
 
 to actual domain that you own like
 
 ```bash
-https://www.vvasylkovskyi.com
+http://www.your-domain.com
 ```
 
 Let's dive in
@@ -40,11 +40,6 @@ output "ec2_ip_address" {
   value       = aws_eip.portfolio.public_ip
   description = "The Elastic IP address allocated to the EC2 instance."
 }
-
-output "ec2_http_url" {
-  value       = "http://${aws_instance.portfolio.public_dns}"
-  description = "The public DNS-based HTTP URL to access the EC2 instance."
-}
 ```
 
 The `user_data` is a cool utility in aws that allows us to bake in ec2 some bootstrap code. In this example we start a server using python that is a simple `<html><body><h1>Hello from Terraform EC2!</h1></body></html>` static page. Run `terraform apply --auto-approve`.
@@ -52,11 +47,10 @@ The `user_data` is a cool utility in aws that allows us to bake in ec2 some boot
 See the output:
 
 ```bash
-ec2_http_url = "http://url.compute-1.amazonaws.com"
 ec2_ip_address = <IP>
 ```
 
-Navigate to `ec2_http_url` and see website opening
+Navigate to `ec2_ip_address` and see website opening
 
 ![alt text](./provisioning-dns-records-with-terraform/terraform-ec2-server.png)
 
@@ -75,17 +69,15 @@ Run `terraform apply --auto-approve` and navigate to [Route 53 Hosted Zones](htt
 
 ### Updating DNS Registrar
 
-At this point, there is a manual step where we actually have to go to the web and click our way through. We need to ensure that our DNS registrar has namespaces of our hosted zone from route 53. You may be familiar with the process of updating NS records in your registrar, however, for full integration with AWS, here I will walk through how to transfer your domain to Route53 from your current registrar.
+At this point, there is a manual step where we actually have to go to the web and click our way through. We need to ensure that our DNS registrar has namespaces of our hosted zone from route 53. You may be familiar with the process of updating NS records in your registrar.
 
-Your registrar can be anyone from GoDaddy, Cloudflared, DigitalOcean etc. (yes I had them all). So I leave you figure out how to find your DNS management in the registrar. Once you get there, next step is to move the DNS management to Route53
-
-TODO
+You may have several registrar providers, in my case it is `GoDaddy`. So I leave you figure out how to find your DNS management in the registrar. Once you get there, next step is update the `NS` records to the ones that you have just created with the terraform in AWS.
 
 ### Update DNS NameSpace records in your DNS registrar
 
 The new Route53 zone that we created using terraform above can be found in the [Hosted Zones](https://us-east-1.console.aws.amazon.com/route53/v2/hostedzones#). Open the zone and find the `NS` records.
 
-Next step is to copy those `NS` records and add them one by one into DNS registrar of your choice. These `NS` records essentially are addresses that will know how to find that DNS records of Route53.
+Next step is to copy those `NS` records and add them one by one into DNS registrar of your choice (e.g. GoDaddy). These `NS` records essentially are addresses that will know how to find that DNS records of Route53.
 
 ### Add new DNS record
 
@@ -114,7 +106,7 @@ Above we are creating a DNS record of type `A` which is a type that assigns DNS 
 dig +short NS your-domain.com
 ```
 
-And compare the name servers if they are correct. Once they are correct, your DNS should be applied. Visit `www.your-domain.com` and see it showing our demo app!
+And compare the name servers if they are correct. Once they are correct, your DNS should be applied. Visit `http://www.your-domain.com` and see it showing our demo app!
 
 ## Conclusion
 

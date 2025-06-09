@@ -1,12 +1,122 @@
-# Provision SSL and HTTPS with Terraform using Cloudfront, ACM, Route53 and Ec2
+# Provision CloudFront CDN with Terraform
 
 Previously we have seen how to setup an EC-2 instance, run a simple web server and expose it at your domain using Route53. This allows us to access our web server using HTTP at port 80. The natural next step in that setup is to use HTTPS (HTTP + SSL) and enforce access at port 443 instead. We will do it here by adding Cloudfront and ACM to our terraform setup. Let's dive in.
 
 ## Disclaimer
 
-It is a good practice to place HTTPS termination in different place in architecture than a server itself due to good software design practices such as separation of concerns. In this approach, I chose to work with Cloudfront because it works and it is free (the SSL part), however for production it is recommended to setup a load balancer as HTTPS termination. Not only it adds SSL but it also enables your infra to be more resilient due to automatic scaling (at an extra cost). However, running ALB (AWS Load Balancer) incurs extra costs, and in our setup we have only 1 instance so far, so load balancer is not necessary.
+It is a good practice to place HTTPS termination in different place in architecture than a server itself due to good software design practices such as separation of concerns. In this approach, I chose to work with Cloudfront, however you can use other options as HTTPS termination like AWS Load Balancer (ALB) or AWS API Gateway. Since we have only 1 instance so far, Cloudfront will work great.
 
-## Adding SSL using Terraform
+## Adding Cloudfront distribution
+
+I will confess that it is not super easy to add CloudFront + ACM for HTTPS for a beginner, so I will break down the steps from simplest cloud architecture to most complicated one hopefully clarifying the steps and the reason for taking them.
+
+First step to add an HTTPS using Cloudfront is naturally to create a Cloudfront distribution. Cloudfront distribution is a CDN network that expands copies of your data towards other geografical locations. From the programmer point of view, Cloudfront is a URL - the distribution URL that uses the content from the `origin`. Hence these are the two fundamental pieces that we need for now to make sure the distribution works. So let's dive in.
+
+### Adding Cloudfront - Creating Origin Server
+
+First thing is to define our origin endpoint. We can do it using Route53, where the origin is a URL pointing to our Ec-2 instance. Let's do it
+
+```tf
+# Route53.tf
+
+resource "aws_route53_zone" "main" {
+  name = "vvasylkovskyi.com"
+}
+
+resource "aws_route53_record" "origin" {
+  zone_id = aws_route53_zone.main.zone_id
+  name    = "origin.your-domain.com"
+  type    = "A"
+  ttl     = 300
+
+  records = [aws_eip.portfolio.public_ip]
+}
+```
+
+You can test now by running `terraform apply`. Note, this `origin.your-domain.com` is going to be available on HTTP now.
+
+### Adding Cloudfront - Define Distribution
+
+Now that we have an origin, we can create distribution:
+
+```tf
+# cloud_front.tf
+
+resource "aws_cloudfront_distribution" "cdn" {
+  enabled             = true
+  default_root_object = "index.html"
+
+  origin {
+    domain_name = aws_route53_record.origin.fqdn
+    origin_id   = aws_route53_record.origin.fqdn
+
+    custom_origin_config {
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "http-only"
+      origin_ssl_protocols   = ["TLSv1.2"]
+    }
+  }
+
+  default_cache_behavior {
+    allowed_methods  = ["GET", "HEAD"]
+    cached_methods   = ["GET", "HEAD"]
+    target_origin_id = aws_route53_record.origin.fqdn
+
+    forwarded_values {
+      query_string = false
+      cookies {
+        forward = "none"
+      }
+    }
+
+    viewer_protocol_policy = "redirect-to-https"
+    min_ttl                = 0
+    default_ttl            = 3600
+    max_ttl                = 86400
+  }
+
+  price_class = "PriceClass_100"
+
+  viewer_certificate {
+    cloudfront_default_certificate = true
+  }
+
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
+    }
+  }
+}
+```
+
+Whoa! that is alot of configs. One of the main pieces there is the `target_origin_id`. This will be pointing to our `origin.your-domain.com`. For now we will use `cloudfront_default_certificate` which is CloudFront certificate.
+
+Let's add a test output:
+
+```tf
+# output.tf
+
+output "cloudfront_distribution_domain_name" {
+  value = aws_cloudfront_distribution.cdn.domain_name
+}
+```
+
+We will use this to test.
+
+## Apply changes
+
+Run `terraform apply` and observe the `cloudfront_distribution_domain_name` output. It should return something like
+
+```sh
+d123456789abcdef.cloudfront.net.
+```
+
+If everything went well then you should be able to open the URL in the browser.
+
+## Conclusion
+
+I started this notes explaining how to add HTTPS using CloudFront, but I ended-up realizing that two concepts at the same time can be confusing so I decided to split them in two. This way, we can test things in sequence, and ensure that all the preconditions work for SSL. Next let's explore about how to add SSL certificate to our CloudFront distribution.
 
 ### ACM Certificate for HTTPS
 
@@ -28,8 +138,10 @@ Note, even if your original provider is `us-east-1`, we need to define the alias
 ```tf
 # ssl.tf
 resource "aws_acm_certificate" "cert" {
-  domain_name       = "your-domain.com"
-  validation_method = "DNS"
+  provider                  = aws.us_east_1
+  domain_name               = "your-domain.com"
+  validation_method         = "DNS"
+  subject_alternative_names = ["www.your-domain.com", "your-domain.com"]
 
   lifecycle {
     create_before_destroy = true
@@ -318,12 +430,6 @@ Run:
 
 ```sh
 dig www.your-domain.com +short
-```
-
-It should return something like
-
-```sh
-d123456789abcdef.cloudfront.net.
 ```
 
 If it still returns an IP address, it means the A record is pointing directly to EC2 and not CloudFront — which won't support HTTPS directly.
