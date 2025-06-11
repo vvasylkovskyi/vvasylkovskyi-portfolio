@@ -1,0 +1,10 @@
+{
+    "title": "Provision CloudFront CDN with Terraform",
+    "filename": "provisioning-cloudfront-with-terraform",
+    "date": "June 8, 2025",
+    "metaText": "Provision HTTPS with CloudFront and ACM using Terraform. Set up a CloudFront distribution with an EC2 origin, generate an SSL certificate via ACM in us-east-1, validate via Route53, and enforce secure access to your site over HTTPS.",
+    "categories": [
+        "AWS",
+        "Terraform"
+    ]
+}

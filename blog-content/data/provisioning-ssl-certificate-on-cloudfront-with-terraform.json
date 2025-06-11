@@ -1,0 +1,10 @@
+{
+    "title": "Provision SSL and HTTPS with Terraform using Cloudfront, ACM, Route53 and Ec2",
+    "filename": "provisioning-ssl-certificate-on-cloudfront-with-terraform",
+    "date": "June 8, 2025",
+    "metaText": "Set up HTTPS for your EC2 app using Terraform with ACM, CloudFront, and Route53. You’ll provision an SSL certificate in us-east-1, validate it via DNS, and configure CloudFront to serve traffic securely over HTTPS using your custom domain.",
+    "categories": [
+        "AWS",
+        "Terraform"
+    ]
+}

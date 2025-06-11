@@ -1,0 +1,10 @@
+{
+    "title": "Provision DNS records with Terraform",
+    "filename": "provisioning-dns-records-with-terraform",
+    "date": "June 8, 2025",
+    "metaText": "Learn how to expose your EC2-hosted app via a custom domain using Terraform and AWS Route 53. This guide walks through setting up an HTTP server, creating DNS records, and pointing your domain to a static IP.",
+    "categories": [
+        "AWS",
+        "Terraform"
+    ]
+}
