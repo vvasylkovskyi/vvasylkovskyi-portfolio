@@ -265,7 +265,7 @@ Let's go ahead and define Alert in Datadog using terraform. We will define a sim
 resource "datadog_monitor" "cpu_high" {
   name  = "High CPU Usage"
   type  = "metric alert"
-  query = "avg(last_5m):avg:system.cpu.user{*} > 0.2"
+  query = "avg(last_5m):avg:system.cpu.user{*} > 0.8"
 
   message = <<-EOT
     CPU usage is above 80% on host {{host.name}}.
