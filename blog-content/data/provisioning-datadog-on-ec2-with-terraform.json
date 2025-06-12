@@ -1,0 +1,10 @@
+{
+    "title": "Provision Datadog Observability on Ec-2 with Terraform",
+    "filename": "provisioning-datadog-on-ec2-with-terraform",
+    "date": "June 11, 2025",
+    "metaText": "Learn how to provision observability on an AWS EC2 instance using Terraform and the Datadog Agent. This guide walks through automating Datadog agent installation via EC2 user_data, securely managing API keys, and verifying the setup through logs and the Datadog dashboard.",
+    "categories": [
+        "Datadog",
+        "Terraform"
+    ]
+}

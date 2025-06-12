@@ -27,3 +27,7 @@ output "cloudfront_origin_route53_fqdn" {
 output "aws_acm_certificate_cert_arn" {
   value = aws_acm_certificate.cert.arn
 }
+
+output "datadog_integration_key" {
+  value = pagerduty_service_integration.datadog_integration.integration_key
+}
