@@ -41,3 +41,23 @@ output "s3_bucket_url" {
   value       = "https://s3.console.aws.amazon.com/s3/buckets/${aws_s3_bucket.terraform_state.id}?region=${var.aws_region}&tab=objects"
   description = "Console URL for the S3 bucket storing Terraform state."
 }
+
+output "iam_role_arn" {
+  description = "ARN of the IAM role for Secrets Manager access"
+  value       = aws_iam_role.secrets_manager_role.arn
+}
+
+output "iam_role_name" {
+  description = "Name of the IAM role for Secrets Manager access"
+  value       = aws_iam_role.secrets_manager_role.name
+}
+
+output "instance_profile_arn" {
+  description = "ARN of the instance profile"
+  value       = aws_iam_instance_profile.secrets_manager_profile.arn
+}
+
+output "instance_iam_profile" {
+  description = "IAM instance profile attached to the EC2 instance"
+  value       = aws_instance.portfolio.iam_instance_profile
+}

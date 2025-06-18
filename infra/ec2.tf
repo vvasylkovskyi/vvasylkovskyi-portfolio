@@ -1,6 +1,6 @@
 resource "aws_key_pair" "ssh-key" {
   key_name   = "ssh-key"
-  public_key = var.ssh_public_key
+  public_key = local.secrets.ssh_public_key
 }
 
 resource "aws_instance" "portfolio" {
@@ -13,18 +13,20 @@ resource "aws_instance" "portfolio" {
 
   key_name = "ssh-key"
 
-  user_data = <<-EOF
-              #!/bin/bash
-              sudo yum update -y || sudo apt-get update -y
-              sudo yum install -y python3 || sudo apt-get install -y python3
-              DD_API_KEY=${var.datadog_api_key} DD_SITE="datadoghq.eu"  bash -c "$(curl -L https://install.datadoghq.com/scripts/install_script_agent7.sh)" &
-              echo "<html><body><h1>Hello from Terraform EC2!</h1></body></html>" > index.html
-              nohup python3 -m http.server 80 &
-              EOF
+  user_data = templatefile("${path.module}/user_data.tpl", {
+    datadog_api_key = local.secrets.datadog_api_key
+  })
+
+  iam_instance_profile = aws_iam_instance_profile.secrets_manager_profile.name
 
   user_data_replace_on_change = true
 
   tags = {
     Name = "portfolio"
   }
+}
+
+resource "aws_iam_instance_profile" "secrets_manager_profile" {
+  name = "secrets_manager_profile"
+  role = aws_iam_role.secrets_manager_role.name
 }

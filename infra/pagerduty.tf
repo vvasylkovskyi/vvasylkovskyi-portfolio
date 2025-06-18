@@ -35,7 +35,7 @@ resource "pagerduty_service_integration" "datadog_integration" {
 
 resource "datadog_integration_pagerduty" "pagerduty" {
   depends_on = [pagerduty_service_integration.datadog_integration]
-  subdomain  = var.pagerduty_subdomain
+  subdomain  = local.secrets.pagerduty_subdomain
 }
 
 resource "datadog_integration_pagerduty_service_object" "main" {
