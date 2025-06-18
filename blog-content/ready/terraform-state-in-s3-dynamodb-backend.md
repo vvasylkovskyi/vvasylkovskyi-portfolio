@@ -1,28 +1,37 @@
-# Saving Terraform State in Remote Backend on AWS with S3 and DynamoDB
+# Saving Terraform State in a Remote Backend on AWS with S3 and DynamoDB
 
-I have been writing quite a bit of infrastructure as code with terraform now and noticed an interesting property of terraform. Whenever I run `terraform apply` the changes are propagated to the cloud (AWS in my case), but when I switch my laptop, and pull my code, I cannot perform `terraform apply` on the other machine because the state is not in sync.
+I've been writing quite a bit of infrastructure as code using Terraform recently, and I've noticed an important behavior. Whenever I run terraform apply, the changes are applied to the cloud (AWS, in my case). However, if I switch to a different laptop and pull the code repository, I can't run terraform apply there—the Terraform state isn't synchronized across machines.
 
-You may have noticed that everytime a change is applied, terraform updates the `terraform.tfstate` JSON file which is a file that contains current cloud state. This file is local, so to trully start collaborating with the team (or like in my case, work on two laptops), we need to move the terraform state into a shared location. So the key to solving our problem is now reduced to finding an optimal way of sharing terraform state.
+As you may have noticed, each time Terraform applies changes, it updates the terraform.tfstate file, which contains a JSON representation of the current infrastructure state. By default, this file is stored locally. To collaborate effectively with teammates—or, as in my case, to work across multiple laptops—we need to store the Terraform state in a shared location. In other words, the key to solving our problem is to find a reliable way to share Terraform state.
 
 ## Pre-requisites
 
-Note this article assumes that you already have a VPC provided with terraform and AWS setup. Adding remote state requires to store it remotely in a VPC, so if you haven't done so yet, I recommend reading this article to set it up: [Deploying EC2 instance on AWS with Terraform](https://www.vvasylkovskyi.com/posts/provisioning-ec2-on-aws-with-terraform).
+This article assumes that you already have a VPC provisioned using Terraform and that your AWS environment is properly configured. Since remote state storage requires provisioning resources within AWS, I recommend reading this article to set that up first: [Deploying EC2 instance on AWS with Terraform](https://www.vvasylkovskyi.com/posts/provisioning-ec2-on-aws-with-terraform).
 
-## Adding Terraform State into remote location in AWS - how it works
+## How Remote State in AWS Works
 
-The industry seems to have converged on the practicce of storing terraform state in DynamoDB and S3. Now at first I was confused about why do we need both DynamoDB and S3? In practice, terraform state is stored in S3, and DynamoDB is used only for state locking. Terraform manages infrastructure as a single state file. If two people (or processes, like CI pipelines) run terraform apply at the same time, it can corrupt the state. To avoid this, Terraform uses a lock — it marks the state as "in use" before making changes and releases it afterward. Terraform needs a shared, highly available, and atomic locking mechanism that works across machines/users - which DynamoDB happens to provide. There is an even better explanation in [official terraform docs](https://developer.hashicorp.com/terraform/language/state/backends).
+The industry standard for storing remote Terraform state on AWS is to use a combination of S3 and DynamoDB. At first, I wondered: why both? In practice, S3 stores the actual state file, while DynamoDB is used for state locking.
 
-## Adding Terraform backend
+Terraform maintains infrastructure as a single state file. If two people (or automated pipelines) run terraform apply at the same time, it can result in a corrupted state. To avoid this, Terraform implements locking—it marks the state as "in use" during updates and releases the lock afterward. It requires a shared, highly available, atomic locking mechanism, which DynamoDB provides.
 
-Alright, so we know that we need both S3 and DynamoDB to enable remote state in terraform. Now, if we provision those with terraform, terraform will not know that it is supposed to use them for locking and storing state - they would be just resources waiting to be used. Here enters [terraform backend](https://developer.hashicorp.com/terraform/language/backend#available-backends).
+There's an excellent explanation of this concept in the [official terraform docs](https://developer.hashicorp.com/terraform/language/state/backends).
+
+## Introducing the Terraform Backend
+
+With S3 and DynamoDB identified as our storage and locking mechanisms, we need to configure Terraform to use them explicitly. This is where [terraform backends](https://developer.hashicorp.com/terraform/language/backend#available-backends) come in. A backend in Terraform defines where and how state is loaded and how an operation such as `apply` is executed.
 
 Backend is an instruction that tells terraform where to store the state.
 
-## Adding Terraform Backend with code
+## Writing the Terraform Backend Configuration
 
-Terraform backend assumes the dynamoDB and S3 already exist. So we need to make apply in two phases: first provision S3 and DynamoDB, and then provision terraform backend that will use S3 and DynamoDB. Let's begin:
+Terraform expects that the backend resources (S3 and DynamoDB) already exist before it can use them. This means we'll perform our setup in two phases:
 
-### Provisioning S3 and DynamoDB
+1. Provision the S3 bucket and DynamoDB table.
+2. Configure and initialize the backend.
+
+Let's walk through both steps.
+
+### Step 1: Provisioning S3 and DynamoDB
 
 Lets create a `backend.tf` where we will store all the related code. Let's begin by adding S3 bucket.
 
@@ -86,7 +95,7 @@ dynamodb_table_url =
 s3_bucket_url =
 ```
 
-### Provisioning terraform backend
+### Step 2: Configuring the Terraform Backend
 
 Now that we have the resources used for backend, we can begin instructing terraform to use them to store the state file. Let's define that:
 
@@ -139,4 +148,4 @@ Which is a good indication that our lock is working correctly. Also, you may not
 
 # Conclusion
 
-And that is a wrap! We now have a terraform state remote - a step closer to collaborate. Hope you found this note insightful. Happy coding!
+And that’s a wrap! With Terraform state now stored remotely in AWS S3 and locked via DynamoDB, you’re one step closer to effective collaboration across machines and teams. Hope you found this guide helpful. Happy coding!
