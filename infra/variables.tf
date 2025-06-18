@@ -53,3 +53,9 @@ variable "pagerduty_datadog_integration_key" {
   type        = string
   description = "PagerDuty service integration key with datadog"
 }
+
+variable "aws_region" {
+  description = "AWS region to deploy resources"
+  type        = string
+  default     = "us-east-1" # Default AWS region
+}

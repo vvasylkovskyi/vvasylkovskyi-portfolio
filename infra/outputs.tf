@@ -31,3 +31,13 @@ output "aws_acm_certificate_cert_arn" {
 output "datadog_integration_key" {
   value = pagerduty_service_integration.datadog_integration.integration_key
 }
+
+output "dynamodb_table_url" {
+  value       = "https://console.aws.amazon.com/dynamodb/home?region=${var.aws_region}#tables:selected=${aws_dynamodb_table.terraform_lock.name};tab=overview"
+  description = "Console URL for the DynamoDB table used for Terraform state locking."
+}
+
+output "s3_bucket_url" {
+  value       = "https://s3.console.aws.amazon.com/s3/buckets/${aws_s3_bucket.terraform_state.id}?region=${var.aws_region}&tab=objects"
+  description = "Console URL for the S3 bucket storing Terraform state."
+}
