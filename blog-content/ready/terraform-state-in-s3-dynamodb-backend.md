@@ -108,11 +108,12 @@ terraform {
     key            = "terraform.tfstate"
     region         = "us-east-1"
     dynamodb_table = "terraform_state"
+    profile        = "<your-aws-credentials-profile>"
   }
 }
 ```
 
-We need to initialize backend with `terraform init` first. We get the message:
+Note, we are using `profile` in this backend. This is important to prevent an error occuring during backend initialization (S3 backend), before the `provider` block is applied. Provider block usually initialized `aws` with credentials at `profile`, but if backend is initialized first, then there will be no credentials. To avoid this race condition, and so your provider config does NOT affect backend auth, we are adding profile to the backend as well. Let's initialize backend with `terraform init` first. We get the message:
 
 ```sh
 Initializing the backend...

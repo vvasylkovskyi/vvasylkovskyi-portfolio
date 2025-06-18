@@ -1,7 +1,7 @@
 provider "aws" {
   region                   = var.aws_region
-  shared_credentials_files = ["./.aws-credentials"]
-  profile                  = "terraform"
+  shared_credentials_files = ["~/.aws/credentials"]
+  profile                  = "vvasylkovskyi"
 }
 
 provider "pagerduty" {
