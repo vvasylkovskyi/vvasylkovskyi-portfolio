@@ -1,0 +1,10 @@
+{
+    "title": "Saving Terraform State in a Remote Backend on AWS with S3 and DynamoDB",
+    "filename": "terraform-state-in-s3-dynamodb-backend",
+    "date": "June 18, 2025",
+    "metaText": "Learn how to set up remote state storage for Terraform using AWS S3 and DynamoDB. This guide walks through backend provisioning, configuration, and best practices for safe, collaborative IaC workflows.",
+    "categories": [
+        "AWS",
+        "Terraform"
+    ]
+}

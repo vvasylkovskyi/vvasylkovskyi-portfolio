@@ -1,7 +1,7 @@
 resource "datadog_monitor" "cpu_high" {
   name  = "High CPU Usage"
   type  = "metric alert"
-  query = "avg(last_5m):avg:system.cpu.user{*} > 0.9"
+  query = "avg(last_5m):avg:system.cpu.user{*} > 80"
 
   message = <<-EOT
     CPU usage is above 80% on host {{host.name}}.
