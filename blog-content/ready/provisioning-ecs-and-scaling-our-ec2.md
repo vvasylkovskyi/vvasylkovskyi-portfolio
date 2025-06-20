@@ -190,6 +190,16 @@ output "ecs_task_definition_arn" {
 
 Run `terraform apply --auto-approve` and see the results. If you navigate to `www.your-domain.com` then you should see you app from the docker container running. Remember, our setup remains to be `DNS -> CloudFront -> SSL -> Instance Hostname -> Fixed IP address of EC2 instance`. Even though we created a cluster here, we are not using it yet in our DNS configuration!
 
+### Fixing the CloudFront Default root object
+
+In our previous notes on setting up Cloudfront we had defined the `cloud_front.tf` where we were serving static asset `index.html` at the root. 
+
+```hcl
+  default_root_object = "index.html"
+```
+
+Since we are moving to the conteinerized solution, when a user visits `/` if our app does not serve a static `index.html` at the root path which is the case for server side rendered apps (Next, Node.js, Express), CloudFront will return a 404. Thus to reconcile things we need to remove the above line so that cloudfront proxies `/` request down to the container. 
+
 ## Conclusion
 
 Whoa! We just moved from serving a static website to serving an actual application from docker image. We had to create an ECS cluster managed by AWS. Even though, we have a cluster in our infrastructure, we are still not taking advantage of it since we are using a static IP address for the EC-2 instance directly. To improve this, we will add a load balancer in the next notes, and make sure that our DNS points to it. You can find the notes about it in [Provisioning AWS Load Balancer and connecting it to ECS cluster](https://www.vvasylkovskyi.com/posts/provisioning-alb-and-connecting-to-ecs). Happy hacking!

@@ -13,7 +13,9 @@ table {
   overflow: hidden;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 
-  span, td, tr {
+  span,
+  td,
+  tr {
     color: var(--primary-code-text-color);
   }
 
@@ -46,15 +48,21 @@ table {
 }
 
 pre {
-  background-color: var(--background-code-color); /* Light grey background */
-  border: 1px solid var(--background-code-border-color); /* Define a border */
+  background-color: var(--background-code-color);
+  /* Light grey background */
+  border: 1px solid var(--background-code-border-color);
+  /* Define a border */
   border-radius: $radii-md;
-  padding: 10px; /* Inner spacing */
-  overflow-x: hidden; /* Allow horizontal scrolling if necessary */
+  padding: 10px;
+  /* Inner spacing */
+  overflow-x: hidden;
+  /* Allow horizontal scrolling if necessary */
   margin: 10px 0;
   width: 100%;
 
-  span, td, tr {
+  span,
+  td,
+  tr {
     color: var(--primary-code-text-color);
   }
 }
@@ -122,6 +130,7 @@ pre {
   .hljs-params {
     color: #9cdcfe;
   }
+
   .hljs-property {
     color: #d4d4d4;
   }
@@ -218,6 +227,7 @@ pre {
     .hljs-comment {
       color: #6a9955;
     }
+
     .hljs-keyword {
       color: #c586c0;
     }
@@ -246,6 +256,7 @@ pre {
   .hljs-comment {
     color: #6a9955;
   }
+
   .hljs-keyword {
     color: #c586c0;
   }
@@ -275,6 +286,7 @@ pre {
   .hljs-comment {
     color: #608b4e;
   }
+
   .hljs-punctuation {
     color: #d4d4d4;
   }
@@ -328,6 +340,7 @@ pre {
   .hljs-comment {
     color: #6a9955;
   }
+
   .hljs-keyword {
     color: #c586c0;
   }
@@ -352,6 +365,7 @@ pre {
     .hljs-tag {
       color: #d4d4d4;
     }
+
     .hljs-name {
       color: #4ec9b0;
     }
@@ -362,12 +376,16 @@ pre {
   }
 }
 
-.hljs.dockerfile, .hljs.tf, .hljs.tfvars {
+.hljs.dockerfile,
+.hljs.tf,
+.hljs.tfvars,
+.hljs.hcl {
   color: #4ec9b0;
 
   .hljs-comment {
     color: #608b4e;
   }
+
   .hljs-keyword {
     color: #c586c0;
   }
@@ -385,10 +403,10 @@ pre {
   }
 }
 
-p > code,
-li > code,
-strong > code,
-h2 > code {
+p>code,
+li>code,
+strong>code,
+h2>code {
   background: var(--background-code-inline-color);
   color: var(--primary-color);
 }
@@ -396,10 +414,14 @@ h2 > code {
 code {
   // font-family: 'Courier New', Courier, monospace; /* Monospace font for the consistency of code styling */
   font-family: Menlo, 'IBM Plex Mono', Menlo, monospace;
-  color: #333; /* Slightly darker text color for better readability */
-  white-space: pre-wrap; /* This will wrap texts to the next line while preserving white spaces and line breaks */
-  word-break: break-all; /* This will break a word in half if it's too long for its container */
-  overflow-wrap: break-word; /* Similar to word-break but it tries to break on word boundaries */
+  color: #333;
+  /* Slightly darker text color for better readability */
+  white-space: pre-wrap;
+  /* This will wrap texts to the next line while preserving white spaces and line breaks */
+  word-break: break-all;
+  /* This will break a word in half if it's too long for its container */
+  overflow-wrap: break-word;
+  /* Similar to word-break but it tries to break on word boundaries */
 }
 
 /* Specific style adjustments for 'sh' or 'bash' scripting to distinguish it */

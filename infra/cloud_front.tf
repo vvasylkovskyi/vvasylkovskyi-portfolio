@@ -4,7 +4,6 @@ resource "aws_cloudfront_distribution" "cdn" {
   aliases = ["www.vvasylkovskyi.com"]
 
   enabled             = true
-  default_root_object = "index.html"
 
   origin {
     domain_name = aws_route53_record.origin.fqdn
