@@ -4,7 +4,7 @@ resource "aws_key_pair" "ssh-key" {
 }
 
 resource "aws_instance" "portfolio" {
-  ami                         = var.instance_ami
+  ami           = data.aws_ami.ecs.id
   instance_type               = var.instance_type
   availability_zone           = var.availability_zone
   security_groups             = [aws_security_group.portfolio.id]
@@ -13,11 +13,12 @@ resource "aws_instance" "portfolio" {
 
   key_name = "ssh-key"
 
-  user_data = templatefile("${path.module}/user_data.tpl", {
-    datadog_api_key = local.secrets.datadog_api_key
-  })
+  user_data = <<-EOF
+              #!/bin/bash
+              echo ECS_CLUSTER=${aws_ecs_cluster.portfolio.name} >> /etc/ecs/ecs.config
+              EOF
 
-  iam_instance_profile = aws_iam_instance_profile.secrets_manager_profile.name
+  iam_instance_profile = aws_iam_instance_profile.ec2_instance_profile.name
 
   user_data_replace_on_change = true
 
@@ -26,7 +27,7 @@ resource "aws_instance" "portfolio" {
   }
 }
 
-resource "aws_iam_instance_profile" "secrets_manager_profile" {
-  name = "secrets_manager_profile"
-  role = aws_iam_role.secrets_manager_role.name
+resource "aws_iam_instance_profile" "ec2_instance_profile" {
+  name = "ec2_instance_profile"
+  role = aws_iam_role.ec2_instance_role.name
 }

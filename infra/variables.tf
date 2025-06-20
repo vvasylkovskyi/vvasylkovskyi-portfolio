@@ -3,11 +3,6 @@ variable "availability_zone" {
   type        = string
 }
 
-variable "instance_ami" {
-  description = "ID of the AMI used"
-  type        = string
-}
-
 variable "instance_type" {
   description = "Type of the instance"
   type        = string

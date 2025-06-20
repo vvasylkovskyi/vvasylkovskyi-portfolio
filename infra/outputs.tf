@@ -44,20 +44,40 @@ output "s3_bucket_url" {
 
 output "iam_role_arn" {
   description = "ARN of the IAM role for Secrets Manager access"
-  value       = aws_iam_role.secrets_manager_role.arn
+  value       = aws_iam_role.ec2_instance_role.arn
 }
 
 output "iam_role_name" {
   description = "Name of the IAM role for Secrets Manager access"
-  value       = aws_iam_role.secrets_manager_role.name
+  value       = aws_iam_role.ec2_instance_role.name
 }
 
 output "instance_profile_arn" {
   description = "ARN of the instance profile"
-  value       = aws_iam_instance_profile.secrets_manager_profile.arn
+  value       = aws_iam_instance_profile.ec2_instance_profile.arn
 }
 
 output "instance_iam_profile" {
   description = "IAM instance profile attached to the EC2 instance"
   value       = aws_instance.portfolio.iam_instance_profile
+}
+
+output "ecs_cluster_id" {
+  value       = aws_ecs_cluster.portfolio.id
+  description = "The ECS Cluster ID"
+}
+
+output "ecs_cluster_arn" {
+  value       = aws_ecs_cluster.portfolio.arn
+  description = "The ECS Cluster ARN"
+}
+
+output "ecs_service_name" {
+  value       = aws_ecs_service.portfolio.name
+  description = "The ECS Service Name"
+}
+
+output "ecs_task_definition_arn" {
+  value       = aws_ecs_task_definition.portfolio.arn
+  description = "The ECS Task Definition ARN"
 }

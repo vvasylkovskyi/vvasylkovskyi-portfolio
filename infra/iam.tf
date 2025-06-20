@@ -1,5 +1,6 @@
-resource "aws_iam_role" "secrets_manager_role" {
-  name = "secrets_manager_access"
+### Access to AWS Secrets Manager
+resource "aws_iam_role" "ec2_instance_role" {
+  name = "ec2_instance_role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -17,7 +18,7 @@ resource "aws_iam_role" "secrets_manager_role" {
 
 resource "aws_iam_role_policy" "secrets_manager_policy" {
   name = "secrets_manager_policy"
-  role = aws_iam_role.secrets_manager_role.id
+  role = aws_iam_role.ec2_instance_role.id
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -34,4 +35,9 @@ resource "aws_iam_role_policy" "secrets_manager_policy" {
       }
     ]
   })
+}
+
+resource "aws_iam_role_policy_attachment" "ec2_instance_ecs_policy" {
+  role       = aws_iam_role.ec2_instance_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
 }

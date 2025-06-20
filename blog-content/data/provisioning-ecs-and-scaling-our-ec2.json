@@ -1,0 +1,10 @@
+{
+    "title": "Scaling our infra - from 1 EC-2 to ECS",
+    "filename": "provisioning-ecs-and-scaling-our-ec2",
+    "date": "June 20, 2025",
+    "metaText": "Learn how to scale your infrastructure from a single EC2 instance to an ECS-managed cluster using Terraform. This guide covers ECS clusters, task definitions, and services — setting the stage for rolling updates and higher availability. Perfect for devs leveling up their AWS game.",
+    "categories": [
+        "AWS",
+        "Terraform"
+    ]
+}
