@@ -15,7 +15,7 @@ on:
 
 jobs:
   build_and_push:
-    runs-on: [self-hosted, ARM64]
+    runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
