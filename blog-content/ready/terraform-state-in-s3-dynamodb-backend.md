@@ -147,6 +147,47 @@ Acquiring state lock. This may take a few moments...
 
 Which is a good indication that our lock is working correctly. Also, you may notice that `terraform.tfstate` is now empty, which means that the terraform state has been migrated into remote location - our s3. You can check the outputs and see that now you have a new object in AWS S3.
 
+## Force Unlocking and skip lock
+
+Although not recommended, sometimes the lock may get locked forever in which case we either have to unlock it forcefully or skip lock and apply terraform changes regardless. Here we will explain how to do that: 
+
+### Unlock DynamoDB lock
+
+When getting an error of a sort
+
+```sh
+Acquiring state lock. This may take a few moments...
+╷
+│ Error: Error acquiring the state lock
+│ 
+│ Error message: operation error DynamoDB: PutItem, https response error StatusCode: 400, RequestID:
+│ 8CN0614VBTID09CR9GNKFQNUGJVV4KQNSO5AEMVJF66Q9ASUAAJG, ConditionalCheckFailedException: The conditional
+│ request failed
+│ Lock Info:
+│   ID:        <lock-id>
+│   Path:      <your-path>/terraform.tfstate
+│   Operation: OperationTypeApply
+│   Who:       you@your-user
+│   Version:   1.6.4
+│   Created:   2025-06-20 14:30:45.664356 +0000 UTC
+│   Info:      
+```
+
+You can extract the `ID` of the lock above and forcefully unlock: 
+
+```sh
+terraform force-unlock <lock-id>
+```
+
+### Skip lock
+
+Alternatively, you may apply with locking: 
+
+
+```sh
+terraform apply --auto-approve -lock=false
+```
+
 # Conclusion
 
 And that’s a wrap! With Terraform state now stored remotely in AWS S3 and locked via DynamoDB, you’re one step closer to effective collaboration across machines and teams. Hope you found this guide helpful. Happy coding!

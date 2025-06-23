@@ -17,6 +17,7 @@ resource "aws_ecs_task_definition" "portfolio" {
   requires_compatibilities = ["EC2"]
   cpu                      = "256"
   memory                   = "512"
+  task_role_arn = aws_iam_role.ecs_task_role.arn
 
   container_definitions = jsonencode([
     {
@@ -29,6 +30,37 @@ resource "aws_ecs_task_definition" "portfolio" {
           hostPort      = 80
         }
       ]
+    },
+    {
+      name      = "datadog-agent"
+      image     = "gcr.io/datadoghq/agent:latest"
+      essential = false
+      environment = [
+        {
+          name  = "DD_API_KEY"
+          value = local.secrets.datadog_api_key
+        },
+        {
+          name  = "DD_SITE"
+          value = "datadoghq.eu"
+        },
+        {
+          name  = "ECS_FARGATE"
+          value = "false"
+        },
+        {
+          name  = "DD_ECS_AGENT_CONTAINER_INSTANCE_METADATA_ENABLED"
+          value = "true"
+        }
+      ]
+      # logConfiguration = {
+      #   logDriver = "awslogs"
+      #   options = {
+      #     "awslogs-group"         = "/ecs/datadog-agent"
+      #     "awslogs-region"        = var.aws_region
+      #     "awslogs-stream-prefix" = "ecs"
+      #   }
+      # }
     }
   ])
 }
