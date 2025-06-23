@@ -1,10 +1,10 @@
 output "ec2_ip_address" {
-  value       = aws_eip.portfolio.public_ip
+  value       = aws_eip.portfolio_1.public_ip
   description = "The Elastic IP address allocated to the EC2 instance."
 }
 
 output "ec2_http_url" {
-  value       = "http://${aws_instance.portfolio.public_dns}"
+  value       = "http://${aws_instance.portfolio_1.public_dns}"
   description = "The public DNS-based HTTP URL to access the EC2 instance."
 }
 
@@ -13,20 +13,20 @@ output "ec2_http_url" {
 #   description = "The domain name pointing to your EC2 instance."
 # }
 
-output "cloudfront_distribution_arn" {
-  value = aws_cloudfront_distribution.cdn.arn
-}
-output "cloudfront_distribution_domain_name" {
-  value = aws_cloudfront_distribution.cdn.domain_name
-}
+# output "cloudfront_distribution_arn" {
+#   value = aws_cloudfront_distribution.cdn.arn
+# }
+# output "cloudfront_distribution_domain_name" {
+#   value = aws_cloudfront_distribution.cdn.domain_name
+# }
 
-output "cloudfront_origin_route53_fqdn" {
-  value = aws_route53_record.origin.fqdn
-}
+# output "cloudfront_origin_route53_fqdn" {
+#   value = aws_route53_record.origin.fqdn
+# }
 
-output "aws_acm_certificate_cert_arn" {
-  value = aws_acm_certificate.cert.arn
-}
+# output "aws_acm_certificate_cert_arn" {
+#   value = aws_acm_certificate.cert.arn
+# }
 
 output "datadog_integration_key" {
   value = pagerduty_service_integration.datadog_integration.integration_key
@@ -59,7 +59,7 @@ output "instance_profile_arn" {
 
 output "instance_iam_profile" {
   description = "IAM instance profile attached to the EC2 instance"
-  value       = aws_instance.portfolio.iam_instance_profile
+  value       = aws_instance.portfolio_1.iam_instance_profile
 }
 
 output "ecs_cluster_id" {
@@ -80,4 +80,29 @@ output "ecs_service_name" {
 output "ecs_task_definition_arn" {
   value       = aws_ecs_task_definition.portfolio.arn
   description = "The ECS Task Definition ARN"
+}
+
+output "alb_dns_name" {
+  value       = aws_lb.portfolio.dns_name
+  description = "The DNS name of the Application Load Balancer"
+}
+
+output "alb_arn" {
+  value       = aws_lb.portfolio.arn
+  description = "The ARN of the Application Load Balancer"
+}
+
+output "alb_listener_arn" {
+  value       = aws_lb_listener.https.arn
+  description = "The ARN of the ALB HTTPS listener"
+}
+
+output "alb_target_group_arn" {
+  value       = aws_lb_target_group.portfolio.arn
+  description = "The ARN of the ALB Target Group"
+}
+
+output "route53_www_record" {
+  value       = aws_route53_record.www_https.fqdn
+  description = "The FQDN of the www Route53 record"
 }

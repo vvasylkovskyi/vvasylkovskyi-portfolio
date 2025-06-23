@@ -26,42 +26,42 @@ resource "aws_ecs_task_definition" "portfolio" {
       essential = true
       portMappings = [
         {
-          containerPort = 3000
+          containerPort = 80
           hostPort      = 80
         }
       ]
     },
-    {
-      name      = "datadog-agent"
-      image     = "gcr.io/datadoghq/agent:latest"
-      essential = false
-      environment = [
-        {
-          name  = "DD_API_KEY"
-          value = local.secrets.datadog_api_key
-        },
-        {
-          name  = "DD_SITE"
-          value = "datadoghq.eu"
-        },
-        {
-          name  = "ECS_FARGATE"
-          value = "false"
-        },
-        {
-          name  = "DD_ECS_AGENT_CONTAINER_INSTANCE_METADATA_ENABLED"
-          value = "true"
-        }
-      ]
-      # logConfiguration = {
-      #   logDriver = "awslogs"
-      #   options = {
-      #     "awslogs-group"         = "/ecs/datadog-agent"
-      #     "awslogs-region"        = var.aws_region
-      #     "awslogs-stream-prefix" = "ecs"
-      #   }
-      # }
-    }
+    # {
+    #   name      = "datadog-agent"
+    #   image     = "gcr.io/datadoghq/agent:latest"
+    #   essential = false
+    #   environment = [
+    #     {
+    #       name  = "DD_API_KEY"
+    #       value = local.secrets.datadog_api_key
+    #     },
+    #     {
+    #       name  = "DD_SITE"
+    #       value = "datadoghq.eu"
+    #     },
+    #     {
+    #       name  = "ECS_FARGATE"
+    #       value = "false"
+    #     },
+    #     {
+    #       name  = "DD_ECS_AGENT_CONTAINER_INSTANCE_METADATA_ENABLED"
+    #       value = "true"
+    #     }
+    #   ]
+    #   # logConfiguration = {
+    #   #   logDriver = "awslogs"
+    #   #   options = {
+    #   #     "awslogs-group"         = "/ecs/datadog-agent"
+    #   #     "awslogs-region"        = var.aws_region
+    #   #     "awslogs-stream-prefix" = "ecs"
+    #   #   }
+    #   # }
+    # }
   ])
 }
 
@@ -69,8 +69,14 @@ resource "aws_ecs_service" "portfolio" {
   name            = "portfolio-service"
   cluster         = aws_ecs_cluster.portfolio.id
   task_definition = aws_ecs_task_definition.portfolio.arn
-  desired_count   = 1
+  desired_count   = 2
   launch_type     = "EC2"
+
+  load_balancer {
+    target_group_arn = aws_lb_target_group.portfolio.arn
+    container_name   = "portfolio"
+    container_port   = 80
+  }
 
   deployment_minimum_healthy_percent = 0
   deployment_maximum_percent         = 100
