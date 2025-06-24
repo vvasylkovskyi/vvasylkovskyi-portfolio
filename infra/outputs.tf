@@ -1,12 +1,12 @@
-output "ec2_ip_address" {
-  value       = aws_eip.portfolio_1.public_ip
-  description = "The Elastic IP address allocated to the EC2 instance."
-}
+# output "ec2_ip_address" {
+#   value       = aws_eip.portfolio.public_ip
+#   description = "The Elastic IP address allocated to the EC2 instance."
+# }
 
-output "ec2_http_url" {
-  value       = "http://${aws_instance.portfolio_1.public_dns}"
-  description = "The public DNS-based HTTP URL to access the EC2 instance."
-}
+# output "ec2_http_url" {
+#   value       = "http://${aws_instance.portfolio.public_dns}"
+#   description = "The public DNS-based HTTP URL to access the EC2 instance."
+# }
 
 # output "ec2_https_domain" {
 #   value       = "https://${aws_route53_record.notes_https.name}"
@@ -55,11 +55,6 @@ output "iam_role_name" {
 output "instance_profile_arn" {
   description = "ARN of the instance profile"
   value       = aws_iam_instance_profile.ec2_instance_profile.arn
-}
-
-output "instance_iam_profile" {
-  description = "IAM instance profile attached to the EC2 instance"
-  value       = aws_instance.portfolio_1.iam_instance_profile
 }
 
 output "ecs_cluster_id" {

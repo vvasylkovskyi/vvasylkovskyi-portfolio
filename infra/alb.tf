@@ -28,7 +28,7 @@ resource "aws_lb_target_group" "portfolio" {
   vpc_id   = aws_vpc.main.id
 
   health_check {
-    path                = "/about"
+    path                = "/"
     protocol            = "HTTP"
     matcher             = "200-399"
     interval            = 30

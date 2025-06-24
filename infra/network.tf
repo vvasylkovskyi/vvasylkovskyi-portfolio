@@ -4,7 +4,7 @@ resource "aws_vpc" "main" {
   enable_dns_support   = true
 }
 
-resource "aws_eip" "portfolio_1" {
-  instance = aws_instance.portfolio_1.id
-  domain   = "vpc"
-}
+# resource "aws_eip" "portfolio" {
+#   instance = aws_instance.portfolio[0].id
+#   domain   = "vpc"
+# }

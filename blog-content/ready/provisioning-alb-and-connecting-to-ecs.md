@@ -2,7 +2,7 @@
 
 So in the previous notes we have added ECS to our infrastructure in [Scaling our infra - from 1 EC-2 to ECS](https://www.vvasylkovskyi.com/posts/provisioning-ecs-and-scaling-our-ec2). The one only caveat in this architecture is that our DNS mapping still uses CloudFront which then points to the origin and the origin is our EC-2 instance. This obviously doesn't provide the advantages of using cluster or machines, since we still only use 1 single EC-2 instance, there will be other instances that are not utilized. 
 
-In this notes, we will introduct the Application Load Balancer (ALB) which is the server that takes over the task of load balancing, i.e., distribution of requests to the available Container Instances and ECS tasks.
+In this notes, we will introduce the Application Load Balancer (ALB) which is the server that takes over the task of load balancing, i.e., distribution of requests to the available Container Instances and ECS tasks.
 
 ## Prerequisites
 
@@ -10,6 +10,19 @@ I highly recommend that you get familiar with my series of notes about how to se
 
   - [Provision SSL and HTTPS with Terraform using Cloudfront, ACM, Route53 and Ec2](https://www.vvasylkovskyi.com/posts/provisioning-ssl-certificate-on-cloudfront-with-terraform)
   - [Scaling our infra - from 1 EC-2 to ECS](https://www.vvasylkovskyi.com/posts/provisioning-ecs-and-scaling-our-ec2)
+
+## Overview
+
+Adding load balancer has a few requirements from the cloud provider which makes adding load balancer task not "just adding load balancer". One of the hard requirements of load balancer is existence of at least two different subnets in two availability zones. Besides, for it to make sense we will create two machines where load balancer will distribute traffic to (although tecnically only one machine is enough). 
+
+So here is the list of tasks we will perform to successfully add a load balancer: 
+
+  - Add two subnets in different availability zones
+  - Create a load balancer pointing to those two subnets
+  - A Load Balancer Listener that will accept traffic from HTTPS
+  - A SSL Certificate for HTTPS to use on load balancer
+  - A Target Group - the VPC where load balancer will send traffic to and port 80
+  - Add Load Balancer to the ECS
 
 ## Creating ALB with terraform
 
@@ -297,3 +310,43 @@ resource "aws_lb" "my_app" {
 ```
 
 This will pass all public subnet IDs (created with `count = 2`) to the ALB, satisfying the requirement for subnets in multiple AZs.
+
+### Scaling - moving to 2 EC-2 instances
+
+Now, we are going to do something that is not the best practice, but since this article is already complex enough, and for the demo purpose, we will manually increate the EC-2 instances count. Let's modify the `aws_instance.my_app`: 
+
+```hcl
+resource "aws_instance" "my_app" {
+  count = 2
+  ... rest of code ...
+  availability_zone           = data.aws_availability_zones.available.names[count.index]
+  subnet_id                   = aws_subnet.public[count.index].id
+
+
+  user_data = <<-EOF
+              #!/bin/bash
+              echo ECS_CLUSTER=${aws_ecs_cluster.portfolio.name} >> /etc/ecs/ecs.config
+              EOF
+}
+```
+
+Note, now we are using `count` to describe how many instances we want to create. These two instances will be used by the ECS cluster which will deploy the docker images on them. Further, the load balancer will be distrubiting traffic on them. 
+
+Finally update the `desired_count` on ECS Cluster. 
+
+```hcl
+
+resource "aws_ecs_service" "my_app" {
+  desired_count   = 2
+...
+
+}
+
+```
+
+Test everything with `terraform apply --auto-approve`.
+
+## Conclusion 
+
+And that is it! Here we have successfully added a load balancer that distributes the traffic across two instances of our app. This is great scalability improvement. However, there is a catch. We are not taking the full advantage of cloud resources management, since now we have 2 EC-2 instances, we are going to spend double $$. Even when resources are not utilized. The cloud platforms are great especially for the ability to scale the servers up and down based on demand. This is accomplished using Auto Scaling Group and we are going to look into it in the next note: 
+  - [Provisioning Auto Scaling Group with Terraform and connecting it to our Load Balancer and ECS](https://www.vvasylkovskyi.com/posts/provisioning-auto-scaling-group)
