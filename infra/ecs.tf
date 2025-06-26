@@ -69,7 +69,7 @@ resource "aws_ecs_service" "portfolio" {
   name            = "portfolio-service"
   cluster         = aws_ecs_cluster.portfolio.id
   task_definition = aws_ecs_task_definition.portfolio.arn
-  desired_count   = 2
+  desired_count   = 1
   launch_type     = "EC2"
 
   load_balancer {

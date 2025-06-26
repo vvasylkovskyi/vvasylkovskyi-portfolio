@@ -1,0 +1,13 @@
+{
+    "title": "Provisioning Application Load Balancer and connecting it to Ec-2 instance using Terraform",
+    "filename": "provisioning-alb-as-ssl-termination-and-ec2",
+    "date": "June 26, 2025",
+    "metaText": "Learn how to provision an HTTPS-enabled Application Load Balancer in AWS using Terraform and connect it to a single EC2 instance. Ideal for personal projects or early-stage startups avoiding full cluster complexity. Full code and modular best practices included.",
+    "categories": [
+        "AWS",
+        "Terraform",
+        "SSL",
+        "AWS Load Balancer",
+        "EC2"
+    ]
+}

@@ -1,8 +1,8 @@
 resource "aws_autoscaling_group" "ecs" {
   name                      = "ecs-asg"
   min_size                  = 1
-  max_size                  = 4
-  desired_capacity          = 2
+  max_size                  = 1
+  desired_capacity          = 1
   vpc_zone_identifier       = aws_subnet.public[*].id
   launch_template {
     id      = aws_launch_template.ecs.id
@@ -28,7 +28,7 @@ resource "aws_ecs_capacity_provider" "asg" {
       status                    = "ENABLED"
       target_capacity           = 100
       minimum_scaling_step_size = 1
-      maximum_scaling_step_size = 4
+      maximum_scaling_step_size = 1
       instance_warmup_period    = 300
     }
   }
