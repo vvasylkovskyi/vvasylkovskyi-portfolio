@@ -1,6 +1,6 @@
 # End-to-End Local PostgreSQL Workflow for Full-Stack Development
 
-Here in this notes we will describe high-level instructions required to connect our frontend NextJS application to the PostgresSQL database. We will a database as a docker container. Note, these notes are for the local development and assume that the database is running next to the web server using `docker-compose.yaml`. For production example, please refer to the notes about setting up remote database on AWS at [Provisioning PostgresSQL RDBMS on AWS with Terraform](tbd).
+Here in this notes we will describe high-level instructions required to connect our frontend NextJS application to the PostgresSQL database. We will a database as a docker container. Note, these notes are for the local development and assume that the database is running next to the web server using `docker-compose.yaml`. For production example, please refer to the notes about setting up remote database on AWS at [Provisioning PostgresSQL RDBMS on AWS with Terraform](https://www.vvasylkovskyi.com/posts/provisioning-postgresql-on-aws-terraform).
 
 ## Starting PostgreSQL Docker Image
 
@@ -81,7 +81,7 @@ CREATE TABLE blogs (
 );
 ```
 
-Note, since we have started the PostgresSQL docker image with environment variables, the postgresSQL already created the database and gave permissions to the user defined in `${DB_USER}` in database `${DB_DATABASE_NAME`. 
+Note, since we have started the PostgresSQL docker image with environment variables, the postgresSQL already created the database and gave permissions to the user defined in `${DB_USER}` in database `${DB_DATABASE_NAME}`. Note, for more production setup we could use `CREATE TABLE IF NOT EXISTS` instead of `CREATE TABLE`.
 
 ### Test new tables 
 

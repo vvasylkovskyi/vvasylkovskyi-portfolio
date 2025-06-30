@@ -1,5 +1,5 @@
 
-CREATE TABLE blogs (
+CREATE TABLE IF NOT EXISTS blogs (
   id SERIAL PRIMARY KEY,
   slug TEXT UNIQUE NOT NULL,
   title TEXT NOT NULL,
@@ -8,7 +8,7 @@ CREATE TABLE blogs (
   categories TEXT[]
 );
 
-CREATE TABLE blog_contents (
+CREATE TABLE IF NOT EXISTS blog_contents (
   id SERIAL PRIMARY KEY,
   blog_id INTEGER NOT NULL REFERENCES blogs(id) ON DELETE CASCADE,
   slug TEXT NOT NULL,

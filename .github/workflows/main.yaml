@@ -31,7 +31,7 @@ jobs:
           docker build -f ./deploy/Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/vvasylkovskyi-portfolio .
           docker push ${{ secrets.DOCKER_USERNAME }}/vvasylkovskyi-portfolio
 
-  deploy_to_rpi:
+  deploy:
     runs-on: ubuntu-latest
     needs: build_and_push
     steps:

@@ -1,0 +1,25 @@
+name: Initialize RDS Schema
+
+on:
+  workflow_dispatch: # manually triggered
+
+jobs:
+  apply-schema:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Install PostgreSQL client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
+      - name: Apply schema.sql to RDS
+        env:
+          PGHOST: ${{ secrets.RDS_HOST }}
+          PGPORT: ${{ secrets.RDS_PORT }}
+          PGUSER: ${{ secrets.RDS_USER }}
+          PGPASSWORD: ${{ secrets.RDS_PASSWORD }}
+          PGDATABASE: ${{ secrets.RDS_DB }}
+        run: |
+          psql --no-password --file=schema.sql
