@@ -1,0 +1,11 @@
+{
+    "title": "End-to-End Local PostgreSQL Workflow for Full-Stack Development",
+    "filename": "postgres-sql-local-database",
+    "date": "June 30, 2025",
+    "metaText": "Learn how to set up a local PostgreSQL database using Docker for your Next.js project. This guide covers everything from container setup and schema initialization to seeding data and connecting from the frontend—ideal for smooth local development.",
+    "categories": [
+        "Typescript",
+        "Docker",
+        "PostgresSQL"
+    ]
+}

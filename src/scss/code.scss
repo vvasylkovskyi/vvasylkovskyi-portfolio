@@ -376,6 +376,20 @@ pre {
   }
 }
 
+.hljs.sql {
+  color: #d4d4d4;
+
+
+  .hljs-comment {
+    color: #608b4e;
+  }
+
+  .hljs-keyword,
+  .hljs-type {
+    color: #569cd6;
+  }
+}
+
 .hljs.dockerfile,
 .hljs.tf,
 .hljs.tfvars,

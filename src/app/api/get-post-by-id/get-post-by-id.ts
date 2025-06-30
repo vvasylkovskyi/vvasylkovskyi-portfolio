@@ -1,34 +1,23 @@
-import type { PostType } from '@/types/post';
-import fs from 'fs';
-import path from 'path';
-import getMarkedHTML from './get-marked-html';
+import { PostType } from '@/types/post';
+import { pool } from '../database/pool';
 
-export const getBlogById = (id: string) => {
-  const filePathBlogPostTextDataPath = path.join(process.cwd(), `./blog-content/ready/${id}.md`);
-
-  const filePathForBlogPostJsonDataPath = path.join(
-    process.cwd(),
-    `./blog-content/data/${id}.json`,
-  );
-
-  let blogText: string;
+export const getBlogById = async (url: string): Promise<PostType> => {
   try {
-    blogText = fs.readFileSync(filePathBlogPostTextDataPath, 'utf8');
-  } catch (err) {
-    throw new Error(`Error fetching blog: ${err}`);
+    const result = await pool.query(
+      `SELECT 
+        b.slug AS url, 
+        b.title, 
+        b.meta_text AS "metaText", 
+        b.date, 
+        b.categories,
+        p.content
+      FROM blogs b
+      JOIN blog_contents p ON b.id = p.blog_id
+      WHERE b.slug = $1`,
+      [url]
+    );
+    return result.rows[0] as PostType;
+  } catch (e) {
+    throw new Error(`Error While Fetching Posts: ${e}`);
   }
-
-  let blogJsonData: PostType;
-  try {
-    blogJsonData = JSON.parse(fs.readFileSync(filePathForBlogPostJsonDataPath, 'utf8')) as PostType;
-  } catch (err) {
-    throw new Error(`Error fetching blog data: ${err}`);
-  }
-
-  return {
-    content: getMarkedHTML(blogText),
-    date: blogJsonData.date,
-    meta: blogJsonData.metaText,
-    title: blogJsonData.title,
-  };
 };
