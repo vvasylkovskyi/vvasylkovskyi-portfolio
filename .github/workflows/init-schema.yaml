@@ -36,7 +36,7 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm i
 
       - name: Run seed script
-        run: npm run seed-notes 
+        run: pnpm run seed-notes 
