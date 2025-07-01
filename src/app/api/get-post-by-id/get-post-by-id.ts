@@ -1,4 +1,4 @@
-import { PostType } from '@/types/post';
+import type { PostType } from '@/types/post';
 import { pool } from '../database/pool';
 
 export const getBlogById = async (url: string): Promise<PostType> => {

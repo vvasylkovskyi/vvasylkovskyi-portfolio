@@ -157,6 +157,9 @@ resource "aws_db_instance" "postgres" {
 
 Note the `allocated_storage` means 20GB allocated for this database, and we are using PostgresSQL database here. 
 
+The `skip_final_snapshot` is a parameter used in AWS RDS (Relational Database Service) operations, such as when deleting a database instance with Terraform or the AWS CLI. If `skip_final_snapshot = true`, AWS will not create a final backup (snapshot) of your RDS instance before deleting it. We will keep it as is for our testing purpose, but it is recommended to set it to false for production use.
+
+
 ## Provide those secrets to the EC-2 instance so that the app can connect
 
 Finally, we will update our EC-2 `user_data` so that it can start with the right environment variables that our app will use to connect to the database. The environment variables were defined here: [End-to-End Local PostgreSQL Workflow for Full-Stack Development](https://www.vvasylkovskyi.com/posts/postgres-sql-local-database). 
@@ -201,6 +204,23 @@ resource "aws_instance" "portfolio" {
 ```
 
 Adding environment variables in the `user_data` is simple - using same linux commands for docker as usual. Note that database `database_username`, `database_password` and `database_name` should come from your `secrets` via variables into modules. The `database_host` and `database_port` are the outputs of the `RDS` module. 
+
+
+## Add Outputs
+
+We will add outputs to know what is the database host: 
+
+```hcl
+output "database_host" {
+  description = "The hostname of the RDS instance"
+  value       = aws_db_instance.postgres.address
+}
+
+output "database_port" {
+  description = "The port of the RDS instance"
+  value       = aws_db_instance.postgres.port
+}
+```
 
 ## Test infra
 
