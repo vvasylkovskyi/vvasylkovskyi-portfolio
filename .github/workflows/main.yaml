@@ -45,7 +45,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: vvasylkovskyi/vvasylkovskyi-infra
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GIT_TOKEN }}
 
       - name: Update docker_image_hash in terraform.tfvars
         run: |
