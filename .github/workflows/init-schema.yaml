@@ -1,7 +1,13 @@
 name: Migrate & Seed DB
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [main]
+    workflow_dispatch:
+      inputs:
+      version:
+        description: 'Migrate & Seed DB with notes'
+        required: true
 
 jobs:
   migrate-seed:
