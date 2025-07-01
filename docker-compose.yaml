@@ -2,12 +2,12 @@ services:
   # frontend:
   #   container_name: nextjs-frontend
   #   build:
-  #     context: ./frontend
+  #     context: .
   #     dockerfile: ./deploy/Dockerfile
-  #   # image: vvasylkovskyi1/vvasylkovskyi-portfolio:latest
-  #   # restart: '${DOCKER_RESTART_POLICY:-unless-stopped}'
-  #   # env_file:
-  #   #   - .env
+  # #   # image: vvasylkovskyi1/vvasylkovskyi-portfolio:latest
+  # #   # restart: '${DOCKER_RESTART_POLICY:-unless-stopped}'
+  #   env_file:
+  #     - .env
   #   ports:
   #     - '80:80'
   #   networks:
@@ -15,20 +15,20 @@ services:
   #   environment:
   #     - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
 
-  db:
-    image: postgres:16
-    container_name: postgres-db
-    restart: unless-stopped
-    environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_DATABASE_NAME}
-    ports:
-      - '5432:5432'
-    networks:
-      - app-network
-    volumes:
-      - ./initdb:/docker-entrypoint-initdb.d
+  # db:
+  #   image: postgres:16
+  #   container_name: postgres-db
+  #   restart: unless-stopped
+  #   environment:
+  #     POSTGRES_USER: ${DB_USER}
+  #     POSTGRES_PASSWORD: ${DB_PASSWORD}
+  #     POSTGRES_DB: ${DB_DATABASE_NAME}
+  #   ports:
+  #     - '5432:5432'
+  #   networks:
+  #     - app-network
+  #   volumes:
+  #     - ./initdb:/docker-entrypoint-initdb.d
       
 networks:
   app-network:

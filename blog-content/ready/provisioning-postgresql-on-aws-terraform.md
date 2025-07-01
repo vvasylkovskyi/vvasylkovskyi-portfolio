@@ -6,7 +6,7 @@ We have also advanced into making our servers stateless, by removing the data fr
 
 ## Github Code
 
-Full code available on `https://github.com/vvasylkovskyi/vvasylkovskyi-infra/tree/vv-https-server-ec2-and-load-balancer-v2`. You can clone that and apply the infra yourself, all you need to do is to modify the variables for your domain.
+Full code available on `https://github.com/vvasylkovskyi/vvasylkovskyi-infra/tree/vv-rds-with-ec2-v3`. You can clone that and apply the infra yourself, all you need to do is to modify the variables for your domain.
 
 ## Overview 
 
@@ -191,6 +191,10 @@ resource "aws_instance" "portfolio" {
             sudo yum install -y docker || sudo apt-get install -y docker.io
             sudo systemctl start docker
             sudo systemctl enable docker
+
+            # Add user to docker group
+            sudo usermod -aG docker $USERNAME
+
             sudo docker run -d -p 80:80 \
               -e DB_USER=${var.database_username} \
               -e DB_PASSWORD=${var.database_password} \
