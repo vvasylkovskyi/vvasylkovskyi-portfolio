@@ -10,6 +10,15 @@ This portfolio serves multiple purposes:
 - **Personal Notes Collection:** A curated library of notes I maintain, authored in Markdown and version controlled.
 - **Technical Showcase:** Demonstrates how a full-stack developer can structure and manage code across frontend, backend, database, infrastructure, and CI/CD.
 
+
+## 🚦 Get Started
+
+Feel free to explore the project source code and infrastructure:
+
+- Portfolio application: [github.com/vvasylkovskyi/vvasylkovskyi-portfolio](https://github.com/vvasylkovskyi/vvasylkovskyi-portfolio)
+- Infrastructure as Code: [github.com/vvasylkovskyi/vvasylkovskyi-infra](https://github.com/vvasylkovskyi/vvasylkovskyi-infra)
+- Live website: [vvasylkovskyi.com](https://www.vvasylkovskyi.com/)
+
 ## 🛠 Technology Stack
 
 - **Frontend & Backend:** Next.js (React) with TypeScript — server-side rendered pages and reusable React components.
@@ -30,16 +39,6 @@ This portfolio serves multiple purposes:
 - **Infrastructure-as-Code:** Terraform scripts live in a separate repository, allowing clean version control, review, and reuse for infrastructure deployments.
 - **Cost-Effective Deployment:** Single EC2 instance deployment avoids unnecessary overhead and complexity while maintaining reliability.
 - **Automated Deployment:** GitHub Actions enable seamless CI/CD workflows, promoting rapid and reliable releases.
-
----
-
-## 🚦 Get Started
-
-Feel free to explore the project source code and infrastructure:
-
-- Portfolio application: [github.com/vvasylkovskyi/vvasylkovskyi-portfolio](https://github.com/vvasylkovskyi/vvasylkovskyi-portfolio)
-- Infrastructure as Code: [github.com/vvasylkovskyi/vvasylkovskyi-infra](https://github.com/vvasylkovskyi/vvasylkovskyi-infra)
-- Live website: [vvasylkovskyi.com](https://www.vvasylkovskyi.com/)
 
 ## 🤝 Contribution & Community
 
