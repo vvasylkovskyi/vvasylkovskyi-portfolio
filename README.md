@@ -61,5 +61,5 @@ Thank you for checking out my portfolio — I hope it inspires your next project
 Senior Product Engineer  
 Lisbon, Portugal (Remote)
 
-<div style="display: flex; justify-content: center; margin-bottom: 10px; "><img src="./background-rockets.png" alt="Raspberry pi device"/></div>
+<div style="display: flex; justify-content: flex-start; margin-bottom: 10px; "><img src="./background-rockets.png" width="125" height="75" alt="Raspberry pi device"/></div>
 
