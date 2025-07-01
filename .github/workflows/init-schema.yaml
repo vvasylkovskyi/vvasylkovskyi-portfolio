@@ -1,25 +1,41 @@
-name: Initialize RDS Schema
+name: Migrate & Seed DB
 
 on:
-  workflow_dispatch: # manually triggered
+  workflow_dispatch:
 
 jobs:
-  apply-schema:
+  migrate-seed:
     runs-on: ubuntu-latest
 
+    env:
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_DATABASE_NAME: ${{ secrets.DB_DATABASE_NAME }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+      PGHOST: ${{ secrets.DB_HOST }}
+      PGUSER: ${{ secrets.DB_USER }}
+      PGPASSWORD: ${{ secrets.DB_PASSWORD }}
+      PGDATABASE: ${{ secrets.DB_DATABASE_NAME }}
+      PGPORT: ${{ secrets.DB_PORT }}
+
     steps:
-      - name: Checkout repo
+      - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Install PostgreSQL client
         run: sudo apt-get update && sudo apt-get install -y postgresql-client
 
-      - name: Apply schema.sql to RDS
-        env:
-          PGHOST: ${{ secrets.RDS_HOST }}
-          PGPORT: ${{ secrets.RDS_PORT }}
-          PGUSER: ${{ secrets.RDS_USER }}
-          PGPASSWORD: ${{ secrets.RDS_PASSWORD }}
-          PGDATABASE: ${{ secrets.RDS_DB }}
-        run: |
-          psql --no-password --file=schema.sql
+      - name: Run schema.sql
+        run: psql -f initdb/schema.sql
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run seed script
+        run: npm run seed-notes 

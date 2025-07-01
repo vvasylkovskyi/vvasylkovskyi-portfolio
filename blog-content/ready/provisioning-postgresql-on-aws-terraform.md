@@ -224,4 +224,79 @@ output "database_port" {
 
 ## Test infra
 
-Run `terraform init` and `terraform apply --auto-approve` to see the changes reflected.
+Run `terraform init` and `terraform apply --auto-approve` to see the changes reflected. Navigate to your AWS console to find your database. For me it was here - https://us-east-1.console.aws.amazon.com/rds/home?region=us-east-1. 
+
+## Applying Schema and Seeding Database
+
+For now our database is empty and doesn't have the tables that we need. For simplicity in this notes, we will temporarily expose our database into the public network, log into using ssh and apply our seeding. Note, this is not recommended for production environment. 
+
+### Change to database to public
+
+We need to change our database to use public network like follows: 
+
+```hcl
+resource "aws_db_instance" "postgres" {
+  ...
+  db_subnet_group_name = aws_db_subnet_group.public.name
+  publicly_accessible = true
+}
+```
+
+Now, we can connect using `psql` like follows: 
+
+```sh
+psql \
+  --host=<database-url>.rds.amazonaws.com \
+  --port=<database-port> \
+  --username=<username> \     
+  --dbname=<db-name>
+```
+
+And from there we can run the scripts. We can do it like follows from github actions (note you need to define the right secrets): 
+
+```yml
+name: Migrate & Seed DB
+
+on:
+  workflow_dispatch:
+
+jobs:
+  migrate-seed:
+    runs-on: ubuntu-latest
+
+    env:
+      PGHOST: ${{ secrets.PGHOST }}
+      PGUSER: ${{ secrets.PGUSER }}
+      PGPASSWORD: ${{ secrets.PGPASSWORD }}
+      PGDATABASE: ${{ secrets.PGDATABASE }}
+      PGPORT: ${{ secrets.PGPORT }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install PostgreSQL client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
+      - name: Run schema.sql
+        run: psql -f path/to/schema.sql
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # or whatever you use
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run seed script
+        run: npm run seed # or whatever command runs your TypeScript script
+
+      # Optional: If your seed script is raw .ts
+      - name: Run TypeScript seed directly
+        run: npx tsx path/to/seed.ts
+```
+
+## Conclusion
+
+We have successfully provisioned PostgreSQL database using terraform! There is a catch though, this database is empty and needs to have some tables and seed data, similarly to what we did for the local database here: [End-to-End Local PostgreSQL Workflow for Full-Stack Development](https://www.vvasylkovskyi.com/posts/postgres-sql-local-database).
