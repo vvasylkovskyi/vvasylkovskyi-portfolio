@@ -2,7 +2,7 @@
 
 Welcome to my personal full-stack portfolio project — a professional showcase and a practical example of how to architect, develop, and maintain a modern full-stack application with a clean separation of concerns and best practices.
 
-## Overview
+## 🚀 Overview
 
 This portfolio serves multiple purposes:
 
@@ -10,7 +10,7 @@ This portfolio serves multiple purposes:
 - **Personal Notes Collection:** A curated library of notes I maintain, authored in Markdown and version controlled.
 - **Technical Showcase:** Demonstrates how a full-stack developer can structure and manage code across frontend, backend, database, infrastructure, and CI/CD.
 
-## Technology Stack
+## 🛠 Technology Stack
 
 - **Frontend & Backend:** Next.js (React) with TypeScript — server-side rendered pages and reusable React components.
 - **Styling:** SCSS supporting dynamic theming (light/dark modes).
@@ -22,7 +22,7 @@ This portfolio serves multiple purposes:
   - Building and pushing Docker images to Docker Hub
   - Deploying infrastructure updates via Terraform using `terraform apply` in a dedicated repository
 
-## Architecture Highlights
+## 🏗 Architecture Highlights
 
 - **Separation of Concerns:** Notes content is managed as code (Markdown) independently from the application, then stored in PostgreSQL. This approach enables flexibility and versioning for content updates.
 - **SSR with Next.js:** Pages render server-side with TypeScript, fetching data directly from PostgreSQL for improved SEO and performance.
@@ -33,7 +33,7 @@ This portfolio serves multiple purposes:
 
 ---
 
-## Get Started
+## 🚦 Get Started
 
 Feel free to explore the project source code and infrastructure:
 
@@ -41,13 +41,13 @@ Feel free to explore the project source code and infrastructure:
 - Infrastructure as Code: [github.com/vvasylkovskyi/vvasylkovskyi-infra](https://github.com/vvasylkovskyi/vvasylkovskyi-infra)
 - Live website: [vvasylkovskyi.com](https://www.vvasylkovskyi.com/)
 
-## Contribution & Community
+## 🤝 Contribution & Community
 
 This project is open source and community-oriented. Whether you are a fellow developer interested in full-stack best practices, or just curious about how to combine Markdown-based content management with a relational database backend — feel free to explore, fork, and contribute.
 
 If you have ideas, suggestions, or improvements, please open issues or submit pull requests. I’m eager to foster a collaborative environment where knowledge is shared and quality software is built.
 
-## Contact
+## 📬 Contact
 
 For any questions, collaboration ideas, or professional inquiries, you can reach me via GitHub or through the contact details available on my website.
 
@@ -60,3 +60,6 @@ Thank you for checking out my portfolio — I hope it inspires your next project
 *Viktor Vasylkovskyi*  
 Senior Product Engineer  
 Lisbon, Portugal (Remote)
+
+<div style="display: flex; justify-content: center; margin-bottom: 10px; "><img src="./background-rockets.png" alt="Raspberry pi device"/></div>
+
