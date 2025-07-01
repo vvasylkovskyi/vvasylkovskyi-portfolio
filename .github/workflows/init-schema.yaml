@@ -27,7 +27,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y postgresql-client
 
       - name: Run schema.sql
-        run: psql -f initdb/schema.sql
+        run: PGPASSWORD="${{ secrets.DATABASE_PASSWORD }}" psql -f initdb/schema.sql
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
