@@ -1,0 +1,11 @@
+{
+    "title": "Provision Pagerduty with Terraform",
+    "filename": "provisioning-pagerduty-terraform",
+    "date": "June 20, 2025",
+    "metaText": "Learn how to provision and automate PagerDuty incident management using Terraform. This step-by-step guide covers setting up PagerDuty provider, creating services and escalation policies, integrating with Datadog for monitoring, and automating alerts and incident creation. Perfect for developers and DevOps teams wanting proactive incident response and seamless cloud alerting.",
+    "categories": [
+        "AWS",
+        "Terraform",
+        "PagerDuty"
+    ]
+}
