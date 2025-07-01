@@ -1,6 +1,4 @@
-# Viktor's Portfolio
-
-<div style="display: flex; justify-content: center; font-size: 4rem;">🚀🚀🚀</div>
+# Viktor's Portfolio 🚀🚀🚀
 
 Welcome to my personal full-stack portfolio project — a professional showcase and a practical example of how to architect, develop, and maintain a modern full-stack application with a clean separation of concerns and best practices.
 
