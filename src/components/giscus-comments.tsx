@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import { useTheme } from "@/hooks/useTheme"
+import { useTheme } from '@/hooks/useTheme'
 
 
 export const GiscusComments = () => {
