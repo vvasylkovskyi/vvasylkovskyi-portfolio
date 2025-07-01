@@ -19,11 +19,6 @@ jobs:
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       DB_DATABASE_NAME: ${{ secrets.DB_DATABASE_NAME }}
       DB_PORT: ${{ secrets.DB_PORT }}
-      PGHOST: ${{ secrets.DB_HOST }}
-      PGUSER: ${{ secrets.DB_USER }}
-      PGPASSWORD: ${{ secrets.DB_PASSWORD }}
-      PGDATABASE: ${{ secrets.DB_DATABASE_NAME }}
-      PGPORT: ${{ secrets.DB_PORT }}
 
     steps:
       - name: Checkout code
@@ -33,11 +28,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y postgresql-client
 
       - name: Run schema.sql
-        run: PGPASSWORD="${{ secrets.DB_PASSWORD }}" \ 
-          PGDATABASE="${{ secrets.DB_DATABASE_NAME }}" \
-          PGUSER="${{ secrets.DB_USER }}" \
-          PGHOST="${{ secrets.DB_HOST }}" \ 
-          PGPORT="${{ secrets.DB_PORT }}" psql -f initdb/schema.sql
+        run: PGPASSWORD="${{ secrets.DB_PASSWORD }}" PGDATABASE="${{ secrets.DB_DATABASE_NAME }}" PGUSER="${{ secrets.DB_USER }}" PGHOST="${{ secrets.DB_HOST }}" PGPORT="${{ secrets.DB_PORT }}" psql -f initdb/schema.sql
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
