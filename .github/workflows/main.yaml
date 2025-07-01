@@ -17,7 +17,7 @@ jobs:
   build_and_push:
     runs-on: ubuntu-latest
     outputs:
-      image_tag: ${{ steps.set_tag.outputs.image_tag }}
+      image_tag: ${{ github.sha }}
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
@@ -29,17 +29,17 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and Push Container Image
-        id: set_tag
         run: |
-          TAG="${{ github.event.inputs.version }}"  # dynamic version input
+          TAG=${{ github.sha }}
           echo "Using tag: $TAG"
           docker build -f ./deploy/Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/vvasylkovskyi-portfolio:$TAG .
           docker push ${{ secrets.DOCKER_USERNAME }}/vvasylkovskyi-portfolio:$TAG
-          echo "::set-output name=image_tag::$TAG"
 
   deploy:
     runs-on: ubuntu-latest
     needs: build_and_push
+    env:
+      TAG: ${{ needs.build_and_push.outputs.image_tag }}
     steps:
       - name: Checkout infra repo
         uses: actions/checkout@v4
@@ -49,8 +49,8 @@ jobs:
 
       - name: Update docker_image_hash in terraform.tfvars
         run: |
-          NEW_TAG="${{ needs.build_and_push.outputs.image_tag }}"
-          sed -i -E "s|docker_image_hash\s*=\s*\"[^\"]+\"|docker_image_hash = \"$NEW_TAG\"|" terraform.tfvars
+          echo "Using tag: $TAG"
+          sed -i -E "s|docker_image_hash\s*=\s*\"[^\"]+\"|docker_image_hash = \"$TAG\"|" terraform.tfvars
 
       - name: Commit and push changes
         run: |
