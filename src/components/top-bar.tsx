@@ -15,7 +15,7 @@ import {
 
 export const TopBar = () => {
   const pathname = usePathname();
-  const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme, isResolved } = useTheme();
   const analytics = useJune();
 
   const handleToggleTheme = useCallback(() => {
@@ -55,6 +55,10 @@ export const TopBar = () => {
       analytics.track('Hamburger clicked - About');
     }
   }, [analytics]);
+
+  if (!isResolved) {
+    return null;
+  }
 
   return (
     <div className='top-bar-header z-50 w-full'>
@@ -162,9 +166,8 @@ export const TopBar = () => {
                   <Link href='/' onClick={handleHamburgerClickBlog}>
                     <DropdownMenuItem className='dropdown-menu-item'>
                       <div
-                        className={`navigation-menu-item navigation-menu-item--blog ${
-                          pathname === '/' ? 'navigation-menu-item--active' : ''
-                        }`}
+                        className={`navigation-menu-item navigation-menu-item--blog ${pathname === '/' ? 'navigation-menu-item--active' : ''
+                          }`}
                       >
                         Notes
                       </div>
@@ -173,9 +176,8 @@ export const TopBar = () => {
                   <Link href='/about' onClick={handleHamburgerClickAbout}>
                     <DropdownMenuItem className='dropdown-menu-item'>
                       <div
-                        className={`navigation-menu-item navigation-menu-item--blog ${
-                          pathname === '/about' ? 'navigation-menu-item--active' : ''
-                        }`}
+                        className={`navigation-menu-item navigation-menu-item--blog ${pathname === '/about' ? 'navigation-menu-item--active' : ''
+                          }`}
                       >
                         About
                       </div>

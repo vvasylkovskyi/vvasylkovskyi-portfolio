@@ -1,7 +1,9 @@
+import { GiscusComments } from '@/components/giscus-comments';
 import { getPostById } from '@/lib/get-post-by-id';
 
 export default async function PostItemPage({ params }: { params: Promise<{ id: string }> }) {
-  const blog = await getPostById((await params).id);
+  const id = (await params).id;
+  const blog = await getPostById(id);
 
   return (
     <div className='my-5'>
@@ -19,6 +21,7 @@ export default async function PostItemPage({ params }: { params: Promise<{ id: s
             ></div>
           </main>
         </article>
+        <GiscusComments />
       </div>
     </div>
   );
