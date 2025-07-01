@@ -1,0 +1,12 @@
+{
+    "title": "Provisioning PostgresSQL RDBMS on AWS with Terraform",
+    "filename": "provisioning-postgresql-on-aws-terraform",
+    "date": "July 1, 2025",
+    "metaText": "Provision a secure PostgreSQL database on AWS with Terraform. Set up RDS, private subnets, and secrets, then connect it to your Docker app running on EC2.",
+    "categories": [
+        "AWS",
+        "RDS",
+        "EC2",
+        "Terraform"
+    ]
+}
