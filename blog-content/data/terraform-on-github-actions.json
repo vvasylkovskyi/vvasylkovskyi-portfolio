@@ -1,0 +1,11 @@
+{
+    "title": "Terraform - AWS Deploy using Github Actions",
+    "filename": "terraform-on-github-actions",
+    "date": "July 1, 2025",
+    "metaText": "Learn how to run Terraform on GitHub Actions by using AWS credentials as environment variables instead of profiles. This guide covers setting GitHub Secrets for AWS, configuring your workflow, and automating Terraform init and apply commands for seamless AWS deployments in CI/CD.",
+    "categories": [
+        "Github",
+        "AWS",
+        "Terraform"
+    ]
+}
