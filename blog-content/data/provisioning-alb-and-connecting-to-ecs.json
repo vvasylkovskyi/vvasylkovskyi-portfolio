@@ -1,0 +1,10 @@
+{
+    "title": "Provisioning Application Load Balancer and connecting it to ECS using Terraform",
+    "filename": "provisioning-alb-and-connecting-to-ecs",
+    "date": "June 26, 2025",
+    "metaText": "Provision an AWS Application Load Balancer with Terraform and connect it to your ECS cluster, enabling secure HTTPS traffic distribution across multiple availability zones.",
+    "categories": [
+        "AWS",
+        "Terraform"
+    ]
+}

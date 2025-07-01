@@ -10,7 +10,6 @@ This portfolio serves multiple purposes:
 - **Personal Notes Collection:** A curated library of notes I maintain, authored in Markdown and version controlled.
 - **Technical Showcase:** Demonstrates how a full-stack developer can structure and manage code across frontend, backend, database, infrastructure, and CI/CD.
 
-
 ## 🚦 Get Started
 
 Feel free to explore the project source code and infrastructure:
