@@ -52,7 +52,6 @@ export const getBlogsData = async (): Promise<PostType[]> => {
             ),
         );
 
-        console.log(">>> HERE: ", arrayOfBlogPostsData)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const blogs: any[] = [];
 
