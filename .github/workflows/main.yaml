@@ -55,7 +55,6 @@ jobs:
           sed -i -E "s|docker_image_hash\s*=\s*\"[^\"]+\"|docker_image_hash = \"$TAG\"|" terraform.tfvars
 
       - name: Install Terraform
-        working-directory: ./infra/terraform
         uses: hashicorp/setup-terraform@v2
 
       - name: Terraform Init
