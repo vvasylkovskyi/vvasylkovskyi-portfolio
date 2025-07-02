@@ -1,0 +1,11 @@
+{
+  "title": "How to Effectively Integrate Custom Fonts in Web Projects: A Step-by-Step Guide",
+  "filename": "provisioning-iam-with-terraform",
+  "date": "July 2, 2025",
+  "metaText": "Provision IAM users and policies with Terraform to securely manage AWS access without using the root account. This setup ensures least-privilege permissions, automates key generation for programmatic access, and highlights the importance of securing Terraform state files to protect sensitive credentials.",
+  "categories": [
+    "Terraform",
+    "AWS",
+    "IAM"
+  ]
+}

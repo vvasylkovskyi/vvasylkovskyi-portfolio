@@ -1,0 +1,6 @@
+availability_zone = "us-east-1a"
+instance_ami      = "ami-09e67e426f25ce0d7"
+instance_type     = "t2.micro"
+domain_name       = "www.vvasylkovskyi.com"
+credentials_name = "portfolio/app/credentials"
+docker_image_hash = "2e25d9e570774e9c88858b4ca508026c406f5001"

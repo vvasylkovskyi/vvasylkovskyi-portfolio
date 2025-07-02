@@ -1,0 +1,11 @@
+{
+  "title": "Provisioning S3 with Terraform",
+  "filename": "provisioning-s3-bucket-with-terraform",
+  "date": "July 2, 2025",
+  "metaText": "Provision an encrypted, versioned S3 bucket with secure access using Terraform modules. Integrate it cleanly with IAM for automated, scoped permissions.",
+  "categories": [
+    "Terraform",
+    "AWS",
+    "S3"
+  ]
+}

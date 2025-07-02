@@ -1,9 +1,5 @@
 resource "aws_s3_bucket" "terraform_state" {
-  bucket = "vvasylkovskyi-portfolio-terraform-state-backend"
-
-  lifecycle {
-    prevent_destroy = true
-  }
+  bucket = "vvasylkovskyi-portfolio-terraform-state-backend-v2"
 }
 
 resource "aws_dynamodb_table" "terraform_lock" {
@@ -19,10 +15,9 @@ resource "aws_dynamodb_table" "terraform_lock" {
 
 terraform {
   backend "s3" {
-    bucket         = "vvasylkovskyi-portfolio-terraform-state-backend"
+    bucket         = "vvasylkovskyi-portfolio-terraform-state-backend-v2"
     key            = "terraform.tfstate"
     region         = "us-east-1"
     dynamodb_table = "terraform_state"
-    profile        = "vvasylkovskyi"
   }
 }

@@ -2,6 +2,7 @@
 
 import { useTheme } from '@/hooks/useTheme'
 
+// Powered by Giscus. Find documentation here - https://giscus.app/
 
 export const GiscusComments = () => {
     const { theme, isResolved } = useTheme();

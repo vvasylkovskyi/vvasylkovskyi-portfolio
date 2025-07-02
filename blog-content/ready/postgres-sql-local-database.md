@@ -100,6 +100,14 @@ You are now connected to database "portfolio" as user "postgres".
 
 Now you we connected to the database we created. We can start using SQL to list items like: 
 
+  - To see all the tables in the database: 
+
+```sql
+SELECT table_name FROM information_schema.tables WHERE table_schema = 'database-name';
+```
+
+  - or since we already know that we have `blogs` table: 
+  
 ```sql
 SELECT * FROM blogs;
 ```

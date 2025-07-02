@@ -20,7 +20,7 @@ security_group.tf
 terraform.tfvars
 ```
 
-There is not much code, so I will paste here the repository for us to fork from. The repository can be found [here]().
+There is not much code, so I will paste here the repository for us to fork from. The repository can be found [https://github.com/vvasylkovskyi/vvasylkovskyi-infra](https://github.com/vvasylkovskyi/vvasylkovskyi-infra).
 
 Make sure to clone it, run `terraform init` and `terraform apply --auto-approve`. Check you EIP address in console and access it via SSH using `ssh ubuntu@ip-address` to double check that the instance loaded correctly. 
 
