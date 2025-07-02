@@ -11,6 +11,10 @@ These keys can be generated via terraform and is the recommended approach. The w
 
 In this notes we will write a very small terraform code where we will provision an IAM with access to write and read into a specific S3 bucket. The result of this operation will be also the retrieval of the keys above so that we can use them in our apps for programmatic access.
 
+## Github Code
+
+Full code available on [`https://github.com/vvasylkovskyi/vvasylkovskyi-infra/tree/vv-iam-v5`](https://github.com/vvasylkovskyi/vvasylkovskyi-infra/tree/vv-iam-v5). You can clone that and apply the infra yourself, all you need to do is to modify the variables for your domain.
+
 ## Provisioning IAM for S3 access 
 
 Let's write terraform to provision `iam`: 
@@ -155,6 +159,19 @@ output "account_id" {
 ```
 
 You can now login on AWS console using your credentials created here.
+
+## Project Organization
+
+Most of the times when a programmatic access is needed for some repository to perform terraform deploy, it is a good practice to create IAM for that access and leave the project deploy via some CI/CD platform. I personally found that separating the app resources provisioning code from IAM provisioning is a convient practice because this way we can ensure that the IAM doesn't accidentally get destroyed while changing the app resourses. You can find in the code here [`https://github.com/vvasylkovskyi/vvasylkovskyi-infra/tree/vv-iam-v5`](https://github.com/vvasylkovskyi/vvasylkovskyi-infra/tree/vv-iam-v5) at the folders `iam` there are specific project IAM roles definitions (which in turn use the IAM Module from `modules`). 
+
+The general workflow for the project is:
+
+  - Provision IAM for the programmatic access
+  - Retrieve the AWS Access keys from the IAM provisions 
+  - Set the AWS Access Keys on CI/CD where terraform provisions app resources
+  - Use the CI/CD to provision app resources using the AWS access keys. 
+
+There are couple of manual steps there for now - the part of retrieving key and setting it in CI/CD. It is a one-off operation though. Feel free to comment below of a better way you could think of!
 
 ## Conclusion
 

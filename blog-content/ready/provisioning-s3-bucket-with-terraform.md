@@ -138,6 +138,30 @@ resource "aws_iam_policy" "s3_upload_policy" {
 
 Test using `terraform init` and `terraform apply --auto-approve`. Now you should have the `s3` to interact with! 
 
+## Destroying bucket
+
+When you want to destroy your resources, with remote state you need to perform couple of extra steps. Here we will describe them: 
+
+### Migrate state back to local
+
+First step is to comment the `terraform.backend` and then run `terraform init`. Terraform will detect that the remote state was removed and will suggest to migrate state back to local. Say yes and proceed. 
+
+### Destroy Infra
+
+Next you can start destroying infra: `terraform destroy`. This may take a while depending on how many resources you had. Once you reach the end you will get an error - failure to delete s3 backend bucket because it is not empty. So next step is to clear the bucket.
+
+### Empty the bucket before deleting it
+
+AWS does not allow deleting s3 buckets when they are not empty, so first we need to delete the s3 backend bucket. Note we are assuming that you don't want the contents of bucket and want a clear destruction of your infra. So to delete a bucket we run the following command on your terminal: 
+
+```sh
+aws s3 rm s3://<name-of-your-s3-backend> --recursive
+```
+
+### Final clean up
+
+Finally, you can run `terraform destroy` once again and clear all your infra. 
+
 ## Conclusion
 
 That's it — we've successfully provisioned an `S3` bucket using Terraform, wrapped it into a reusable module, and connected it to our IAM setup for secure and automated access control. This approach keeps your infrastructure clean, modular, and easy to maintain. As always, treat Terraform like code: review, version, and test it before promoting to production. In the next notes, we’ll likely expand on this foundation—maybe exploring CloudFront or integrating S3 with other AWS services. Stay tuned!
