@@ -27,3 +27,8 @@ variable "credentials_name" {
   description = "path for the secrets"
   type        = string
 }
+
+variable "iam_user" { type = string }
+variable "lock_table" { type = string }
+variable "aws_region" { type = string }
+variable "backend_bucket" { type = string }

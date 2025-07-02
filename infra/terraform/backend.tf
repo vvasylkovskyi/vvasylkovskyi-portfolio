@@ -1,9 +1,9 @@
 resource "aws_s3_bucket" "terraform_state" {
-  bucket = "vvasylkovskyi-portfolio-terraform-state-backend-v2"
+  bucket = var.backend_bucket
 }
 
 resource "aws_dynamodb_table" "terraform_lock" {
-  name         = "terraform_state"
+  name         = var.lock_table
   hash_key     = "LockID"
   billing_mode = "PAY_PER_REQUEST"
 
