@@ -1,0 +1,12 @@
+{
+    "title": "Deploying EC2 as Remote Proxy for Raspberry Pi using Terraform and Ansible",
+    "filename": "provisioning-ec2-as-remote-proxy-for-raspberry-pi",
+    "date": "July 4, 2025",
+    "metaText": "Learn how to expose your Raspberry Pi to the internet securely using an EC2-based reverse proxy — fully automated with Terraform and Ansible. This guide walks you through a modular, reproducible setup ideal for devices behind NAT or dynamic IPs.",
+    "categories": [
+        "AWS",
+        "RaspberryPi",
+        "Terraform",
+        "Ansible"
+    ]
+}

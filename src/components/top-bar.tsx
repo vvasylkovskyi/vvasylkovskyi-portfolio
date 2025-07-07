@@ -183,6 +183,16 @@ export const TopBar = () => {
                       </div>
                     </DropdownMenuItem>
                   </Link>
+                  <Link href='/camera-rpi'>
+                    <DropdownMenuItem className='dropdown-menu-item'>
+                      <div
+                        className={`navigation-menu-item navigation-menu-item--blog ${pathname === '/camera-rpi' ? 'navigation-menu-item--active' : ''
+                          }`}
+                      >
+                        Raspberry Camera Feed
+                      </div>
+                    </DropdownMenuItem>
+                  </Link>
                 </DropdownMenuContent>
               </DropdownMenu>
             </nav>

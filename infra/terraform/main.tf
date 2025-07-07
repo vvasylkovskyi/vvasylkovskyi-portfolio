@@ -12,24 +12,42 @@ module "security_group" {
 }
 
 module "ec2" {
-  source            = "git::https://github.com/vvasylkovskyi/vvasylkovskyi-infra.git//modules/ec2?ref=main"
-  instance_ami      = var.instance_ami
-  instance_type     = var.instance_type
-  availability_zone = var.availability_zone
-  security_group_id = module.security_group.security_group_ec2
-  subnet_id         = module.network.public_subnet_ids[0]
-  ssh_public_key    = module.secrets.secrets.ssh_public_key
-  database_name     = module.secrets.secrets.database_name
-  database_username = module.secrets.secrets.database_username
-  database_password = module.secrets.secrets.database_password
-  database_host     = module.rds.database_host
-  database_port     = module.rds.database_port
-  docker_image_hash = var.docker_image_hash
+  source              = "git::https://github.com/vvasylkovskyi/vvasylkovskyi-infra.git//modules/ec2?ref=main"
+  instance_ami        = var.instance_ami
+  instance_type       = var.instance_type
+  availability_zone   = var.availability_zone
+  security_group_id   = module.security_group.security_group_ec2
+  subnet_id           = module.network.public_subnet_ids[0]
+  ssh_public_key      = module.secrets.secrets.ssh_public_key
+  ssh_public_key_name = "ec2-instance-key"
+
+  depends_on = [module.rds.database_host]
+
+  user_data = <<-EOF
+            #!/bin/bash
+            sudo apt-get update -y
+            sudo apt-get install -y docker.io
+            sudo systemctl start docker
+            sudo systemctl enable docker
+
+            # Add user to docker group
+            sudo usermod -aG docker $USERNAME
+
+            sudo docker run -d -p 80:80 \
+              -e DB_USER=${module.secrets.secrets.database_username} \
+              -e DB_PASSWORD=${module.secrets.secrets.database_password} \
+              -e DB_DATABASE_NAME=${module.secrets.secrets.database_name} \
+              -e DB_HOST=${module.rds.database_host} \
+              -e DB_PORT=${module.rds.database_port} \
+              -e RASPBERRY_PI_URL=${module.secrets.secrets.raspberry_4b_url} \
+              vvasylkovskyi1/vvasylkovskyi-portfolio:${var.docker_image_hash}
+            EOF
 }
 
 module "aws_route53_record" {
   source          = "git::https://github.com/vvasylkovskyi/vvasylkovskyi-infra.git//modules/dns?ref=main"
   domain_name     = var.domain_name
+  route53_zone_id = var.route53_zone_id
   dns_record      = module.ec2.public_ip
   aws_lb_dns_name = module.alb.aws_lb_dns_name
   aws_lb_zone_id  = module.alb.aws_lb_zone_id
@@ -38,7 +56,6 @@ module "aws_route53_record" {
 module "ssl_acm" {
   source              = "git::https://github.com/vvasylkovskyi/vvasylkovskyi-infra.git//modules/acm?ref=main"
   domain_name         = var.domain_name
-  route53_zone        = module.aws_route53_record.aws_route53_zone_name
   aws_route53_zone_id = module.aws_route53_record.aws_route53_zone_id
 }
 
@@ -50,6 +67,7 @@ module "alb" {
   vpc_id                   = module.network.vpc_id
   security_group           = module.security_group.security_group_alb
   ec2_instance_id          = module.ec2.instance_id
+  alb_name                 = var.alb_name
 }
 
 module "rds" {
