@@ -114,6 +114,7 @@ export const TopBar = () => {
                 Blog
               </Link>
             </nav> */}
+
             <nav className='flex items-center gap-4 text-sm xl:gap-6 navigation-menu-item'>
               <Link
                 href='https://github.com/vvasylkovskyi'
