@@ -32,7 +32,11 @@ export default function CameraRpi() {
     // const streamUrl = `${process.env.NEXT_PUBLIC_RASPBERRY_PI_URL}/api/v1/videos/stream`;
     // const stopStreamUrl = `${process.env.NEXT_PUBLIC_RASPBERRY_PI_URL}/api/v1/videos/stop-recording`;
     const streamUrl = `https://raspberry4b.viktorvasylkovskyi.com/api/v1/videos/stream`;
-    const stopStreamUrl = `https://raspberry4b.viktorvasylkovskyi.com/api/v1/videos/stop-recording`
+    const stopStreamUrl = `https://raspberry4b.viktorvasylkovskyi.com/api/v1/videos/stop-recording`;
+
+    const isMobile = typeof navigator !== 'undefined' &&
+        /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
     const startStream = useCallback(async () => {
         const controller = new AbortController();
         controllerRef.current = controller;
@@ -88,6 +92,10 @@ export default function CameraRpi() {
     }, [streamUrl]);
 
     useEffect(() => {
+        if (isMobile) {
+            return;
+        }
+
         if (hasStartedRef.current) {
             return;
         }
@@ -102,6 +110,19 @@ export default function CameraRpi() {
             }
         };
     }, [startStream]);
+
+
+    if (isMobile) {
+        return (
+            <div>
+                <img
+                    src={streamUrl}
+                    style={{ width: '100%', height: 'auto' }}
+                    alt="Live stream"
+                />
+            </div>
+        );
+    }
 
     return (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '50vh' }}>
