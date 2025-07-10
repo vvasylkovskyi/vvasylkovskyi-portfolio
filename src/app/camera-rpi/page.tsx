@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 const mergeUint8Arrays = (chunks: Uint8Array[]) => {
     const totalLength = chunks.reduce((acc, curr) => acc + curr.length, 0);
@@ -41,11 +41,9 @@ export default function CameraRpi() {
         });
 
         if (!response.body) {
-            console.error('No response body');
             return;
         }
 
-        console.log('>>> HERE starting stream');
 
         const reader = response.body.getReader();
         const chunks: Uint8Array[] = [];
@@ -55,7 +53,9 @@ export default function CameraRpi() {
 
         while (!controller.signal.aborted) {
             const { value, done } = await reader.read();
-            if (done || !value) break;
+            if (done || !value) {
+                break;
+            }
 
             chunks.push(value);
             const merged = mergeUint8Arrays(chunks);
@@ -64,7 +64,10 @@ export default function CameraRpi() {
             let end = -1;
 
             for (let i = 0; i < merged.length - 1; i++) {
-                if (merged[i] === SOI[0] && merged[i + 1] === SOI[1]) start = i;
+                if (merged[i] === SOI[0] && merged[i + 1] === SOI[1]) {
+                    start = i;
+                }
+
                 if (merged[i] === EOI[0] && merged[i + 1] === EOI[1]) {
                     end = i + 2;
                     break;
@@ -84,14 +87,16 @@ export default function CameraRpi() {
     }, [streamUrl]);
 
     useEffect(() => {
-        if (hasStartedRef.current) return;
+        if (hasStartedRef.current) {
+            return;
+        }
+
         hasStartedRef.current = true;
 
         startStream();
 
         return () => {
             if (controllerRef.current) {
-                console.log('>>> HERE aborting stream');
                 fetch(stopStreamUrl);
             }
         };
