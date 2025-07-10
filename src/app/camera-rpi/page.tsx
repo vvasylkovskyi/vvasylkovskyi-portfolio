@@ -29,8 +29,8 @@ export default function CameraRpi() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const controllerRef = useRef<AbortController | null>(null);
     const hasStartedRef = useRef(false);
-    const streamUrl = `${process.env.RASPBERRY_PI_URL}/api/v1/videos/stream`;
-    const stopStreamUrl = `${process.env.RASPBERRY_PI_URL}/api/v1/videos/stop-recording`;
+    const streamUrl = `${process.env.NEXT_PUBLIC_RASPBERRY_PI_URL}/api/v1/videos/stream`;
+    const stopStreamUrl = `${process.env.NEXT_PUBLIC_RASPBERRY_PI_URL}/api/v1/videos/stop-recording`;
 
     const startStream = useCallback(async () => {
         const controller = new AbortController();
