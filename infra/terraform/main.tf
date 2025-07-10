@@ -39,7 +39,7 @@ module "ec2" {
               -e DB_DATABASE_NAME=${module.secrets.secrets.database_name} \
               -e DB_HOST=${module.rds.database_host} \
               -e DB_PORT=${module.rds.database_port} \
-              -e RASPBERRY_PI_URL=${module.secrets.secrets.raspberry_4b_url} \
+              -e NEXT_PUBLIC_RASPBERRY_PI_URL=${module.secrets.secrets.raspberry_4b_url} \
               vvasylkovskyi1/vvasylkovskyi-portfolio:${var.docker_image_hash}
             EOF
 }
