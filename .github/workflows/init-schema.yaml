@@ -3,10 +3,10 @@ name: Migrate & Seed DB
 on:
   push:
     branches: [main]
-    workflow_dispatch:
-      inputs:
+  workflow_dispatch:
+    inputs:
       version:
-        description: 'Migrate & Seed DB with notes'
+        description: "Migrate & Seed DB with notes"
         required: true
 
 jobs:
@@ -24,16 +24,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install PostgreSQL client
-        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+      - name: Install MySQL client
+        run: sudo apt-get update && sudo apt-get install -y mysql-client
 
       - name: Run schema.sql
-        run: PGPASSWORD="${{ secrets.DB_PASSWORD }}" PGDATABASE="${{ secrets.DB_DATABASE_NAME }}" PGUSER="${{ secrets.DB_USER }}" PGHOST="${{ secrets.DB_HOST }}" PGPORT="${{ secrets.DB_PORT }}" psql -f initdb/schema.sql
+        run: |
+          mysql --host="${{ secrets.DB_HOST }}" \
+                --user="${{ secrets.DB_USER }}" \
+                --password="${{ secrets.DB_PASSWORD }}" \
+                --port="${{ secrets.DB_PORT }}" \
+                "${{ secrets.DB_DATABASE_NAME }}" < initdb/schema.sql
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: "18"
 
       - name: Install pnpm
         run: npm install -g pnpm
@@ -42,4 +47,4 @@ jobs:
         run: pnpm i
 
       - name: Run seed script
-        run: pnpm run seed-notes 
+        run: pnpm run seed-notes

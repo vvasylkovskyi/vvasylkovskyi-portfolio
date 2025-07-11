@@ -8,12 +8,12 @@ output "ec2_domain_name" {
   description = "The Elastic IP address allocated to the EC2 instance."
 }
 
-output "postgres_database_domain" {
+output "mysql_database_domain" {
   value       = module.rds.database_host
-  description = "Postgres Database Host"
+  description = "MySQL Database Host"
 }
 
-output "postgres_database_port" {
+output "mysql_database_port" {
   value       = module.rds.database_port
   description = "Postgres Database Port"
 }

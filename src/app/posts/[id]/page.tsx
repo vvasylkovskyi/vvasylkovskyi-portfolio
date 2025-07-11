@@ -3,6 +3,7 @@ import { getPostById } from '@/lib/get-post-by-id';
 
 export default async function PostItemPage({ params }: { params: Promise<{ id: string }> }) {
   const id = (await params).id;
+
   const blog = await getPostById(id);
 
   return (

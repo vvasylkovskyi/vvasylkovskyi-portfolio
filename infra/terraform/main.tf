@@ -21,7 +21,7 @@ module "ec2" {
   ssh_public_key      = module.secrets.secrets.ssh_public_key
   ssh_public_key_name = "ec2-instance-key"
 
-  depends_on = [module.rds.database_host]
+  depends_on = []
 
   user_data = <<-EOF
             #!/bin/bash
@@ -34,9 +34,9 @@ module "ec2" {
             sudo usermod -aG docker $USERNAME
 
             sudo docker run -d -p 80:80 \
-              -e DB_USER=${module.secrets.secrets.postgres_database_username} \
-              -e DB_PASSWORD=${module.secrets.secrets.postgres_database_password} \
-              -e DB_DATABASE_NAME=${module.secrets.secrets.postgres_database_name} \
+              -e DB_USER=${module.secrets.secrets.mysql_database_username} \
+              -e DB_PASSWORD=${module.secrets.secrets.mysql_database_password} \
+              -e DB_DATABASE_NAME=${module.secrets.secrets.mysql_database_name} \
               -e DB_HOST=${module.rds.database_host} \
               -e DB_PORT=${module.rds.database_port} \
               vvasylkovskyi1/vvasylkovskyi-portfolio:${var.docker_image_hash}
@@ -45,8 +45,8 @@ module "ec2" {
               -e DB_USER=${module.secrets.secrets.mysql_database_username} \
               -e DB_PASSWORD=${module.secrets.secrets.mysql_database_password} \
               -e DB_DATABASE_NAME=${module.secrets.secrets.mysql_database_name} \
-              -e DB_HOST=${module.secrets.secrets.mysql_database_host} \
-              -e DB_PORT=${module.secrets.secrets.mysql_database_port} \
+              -e DB_HOST=${module.rds.database_host} \
+              -e DB_PORT=${module.rds.database_port} \
               vvasylkovskyi1/vvasylkovskyi-video-service-elixir:latest
             EOF
 }
@@ -80,17 +80,18 @@ module "alb" {
 module "rds" {
   source             = "git::https://github.com/vvasylkovskyi/vvasylkovskyi-infra.git//modules/rds?ref=main"
   security_group     = module.security_group.security_group_rds
-  database_name      = module.secrets.secrets.postgres_database_name
-  database_username  = module.secrets.secrets.postgres_database_username
-  database_password  = module.secrets.secrets.postgres_database_password
+  database_name      = module.secrets.secrets.mysql_database_name
+  database_username  = module.secrets.secrets.mysql_database_username
+  database_password  = module.secrets.secrets.mysql_database_password
   private_subnet_ids = module.network.private_subnet_ids
   public_subnet_ids  = module.network.public_subnet_ids
-  database_identifier = "postgres-db"
-  database_engine    = "postgres"
-  database_engine_version = "15"
-  db_private_subnet_group_name = "postgres_rds-private-subnet-group"
-  db_public_subnet_group_name = "postgres_rds-public-subnet-group"
+  database_identifier = "mysql-db"
+  database_engine    = "mysql"
+  database_engine_version = "8.0"
+  db_private_subnet_group_name = "mysql_rds-private-subnet-group"
+  db_public_subnet_group_name = "mysql_rds-public-subnet-group"
 }
+
 
 module "secrets" {
   source           = "git::https://github.com/vvasylkovskyi/vvasylkovskyi-infra.git//modules/secrets?ref=main"
