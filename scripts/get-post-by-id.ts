@@ -28,7 +28,7 @@ export const getBlogById = (id: string) => {
   return {
     content: getMarkedHTML(blogText),
     date: blogJsonData.date,
-    meta: blogJsonData.metaText,
+    metaText: blogJsonData.metaText,
     title: blogJsonData.title,
   } as Partial<PostType>;
 };

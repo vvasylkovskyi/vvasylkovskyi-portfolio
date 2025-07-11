@@ -34,6 +34,7 @@ async function main() {
         );
         const blogId = rows[0].id;
 
+        console.log(`Inserted/Updated blog: ${blog.title} (ID: ${blogId})`);
         // Insert categories and their links
         for (const cat of blog.categories || []) {
             // Insert category if not exists
@@ -58,6 +59,7 @@ async function main() {
 
         // Insert blog content
         const blogData: Partial<PostType> = getBlogById(blog.url);
+        console.log(`Inserting content for blog: ${blog.title}, ID: ${blogId}, URL: ${blog.url}, metaText: ${blogData.metaText}, date: ${blogData.date}`);
         await connection.execute(
             `INSERT INTO blog_contents (blog_id, slug, content, date, meta_text, title)
              VALUES (?, ?, ?, ?, ?, ?)
