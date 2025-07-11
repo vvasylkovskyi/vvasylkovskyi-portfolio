@@ -57,5 +57,8 @@
   "evenBetterToml.formatter.reorderKeys": true,
   "evenBetterToml.formatter.trailingNewline": true,
   "python.languageServer": "None",
-  "makefile.configureOnOpen": false
+  "makefile.configureOnOpen": false,
+  "cSpell.words": [
+    "vvasylkovskyi"
+  ]
 }

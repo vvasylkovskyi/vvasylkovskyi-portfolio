@@ -34,13 +34,20 @@ module "ec2" {
             sudo usermod -aG docker $USERNAME
 
             sudo docker run -d -p 80:80 \
-              -e DB_USER=${module.secrets.secrets.database_username} \
-              -e DB_PASSWORD=${module.secrets.secrets.database_password} \
-              -e DB_DATABASE_NAME=${module.secrets.secrets.database_name} \
+              -e DB_USER=${module.secrets.secrets.postgres_database_username} \
+              -e DB_PASSWORD=${module.secrets.secrets.postgres_database_password} \
+              -e DB_DATABASE_NAME=${module.secrets.secrets.postgres_database_name} \
               -e DB_HOST=${module.rds.database_host} \
               -e DB_PORT=${module.rds.database_port} \
-              -e NEXT_PUBLIC_RASPBERRY_PI_URL=${module.secrets.secrets.raspberry_4b_url} \
               vvasylkovskyi1/vvasylkovskyi-portfolio:${var.docker_image_hash}
+
+            sudo docker run -d -p 4000:4000 \
+              -e DB_USER=${module.secrets.secrets.mysql_database_username} \
+              -e DB_PASSWORD=${module.secrets.secrets.mysql_database_password} \
+              -e DB_DATABASE_NAME=${module.secrets.secrets.mysql_database_name} \
+              -e DB_HOST=${module.secrets.secrets.mysql_database_host} \
+              -e DB_PORT=${module.secrets.secrets.mysql_database_port} \
+              vvasylkovskyi1/vvasylkovskyi-video-service-elixir:latest
             EOF
 }
 
@@ -73,11 +80,16 @@ module "alb" {
 module "rds" {
   source             = "git::https://github.com/vvasylkovskyi/vvasylkovskyi-infra.git//modules/rds?ref=main"
   security_group     = module.security_group.security_group_rds
-  database_name      = module.secrets.secrets.database_name
-  database_username  = module.secrets.secrets.database_username
-  database_password  = module.secrets.secrets.database_password
+  database_name      = module.secrets.secrets.postgres_database_name
+  database_username  = module.secrets.secrets.postgres_database_username
+  database_password  = module.secrets.secrets.postgres_database_password
   private_subnet_ids = module.network.private_subnet_ids
   public_subnet_ids  = module.network.public_subnet_ids
+  database_identifier = "postgres-db"
+  database_engine    = "postgres"
+  database_engine_version = "15"
+  db_private_subnet_group_name = "postgres_rds-private-subnet-group"
+  db_public_subnet_group_name = "postgres_rds-public-subnet-group"
 }
 
 module "secrets" {

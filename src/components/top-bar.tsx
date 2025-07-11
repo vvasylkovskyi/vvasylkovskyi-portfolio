@@ -184,7 +184,7 @@ export const TopBar = () => {
                       </div>
                     </DropdownMenuItem>
                   </Link>
-                  <Link href='/camera-rpi'>
+                  {/* <Link href='/camera-rpi'>
                     <DropdownMenuItem className='dropdown-menu-item'>
                       <div
                         className={`navigation-menu-item navigation-menu-item--blog ${pathname === '/camera-rpi' ? 'navigation-menu-item--active' : ''
@@ -193,7 +193,7 @@ export const TopBar = () => {
                         Raspberry Camera Feed
                       </div>
                     </DropdownMenuItem>
-                  </Link>
+                  </Link> */}
                 </DropdownMenuContent>
               </DropdownMenu>
             </nav>
