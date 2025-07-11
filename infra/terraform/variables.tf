@@ -37,3 +37,4 @@ variable "lock_table" { type = string }
 variable "aws_region" { type = string }
 variable "backend_bucket" { type = string }
 variable "alb_name" { type = string }
+variable "video_service_url" { type = string }

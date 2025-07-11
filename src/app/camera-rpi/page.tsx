@@ -1,6 +1,7 @@
-'use client';
 
 // import { useCallback, useEffect, useRef } from 'react';
+
+import { getAllVideos } from "../api/get-all-videos/get-all-videos";
 
 // const mergeUint8Arrays = (chunks: Uint8Array[]) => {
 //     const totalLength = chunks.reduce((acc, curr) => acc + curr.length, 0);
@@ -25,7 +26,9 @@
 //     img.src = url;
 // };
 
-export default function CameraRpi() {
+export default async function CameraRpi() {
+    const videos = await getAllVideos();
+    console.log(">>> videos", videos);
     return null;
     // const canvasRef = useRef<HTMLCanvasElement>(null);
     // const controllerRef = useRef<AbortController | null>(null);
