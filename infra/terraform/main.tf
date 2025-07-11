@@ -33,7 +33,19 @@ module "ec2" {
             # Add user to docker group
             sudo usermod -aG docker $USERNAME
 
-            sudo docker run -d -p 80:80 \
+            docker network create docker-internal-network
+            sudo docker pull vvasylkovskyi1/vvasylkovskyi-portfolio:${var.docker_image_hash}
+            sudo docker pull vvasylkovskyi1/vvasylkovskyi-video-service-elixir:da090f1d0643f922e776be10b6ff57bacb90738f
+
+            sudo docker run -d --name video-service --network docker-internal-network -p 4000:4000 \
+              -e DB_USER=${module.secrets.secrets.mysql_database_username} \
+              -e DB_PASSWORD=${module.secrets.secrets.mysql_database_password} \
+              -e DB_DATABASE_NAME=${module.secrets.secrets.mysql_database_name} \
+              -e DB_HOST=${module.rds.database_host} \
+              -e DB_PORT=${module.rds.database_port} \
+              vvasylkovskyi1/vvasylkovskyi-video-service-elixir:da090f1d0643f922e776be10b6ff57bacb90738f
+
+            sudo docker run -d --name frontend --network docker-internal-network -p 80:80 \
               -e DB_USER=${module.secrets.secrets.mysql_database_username} \
               -e DB_PASSWORD=${module.secrets.secrets.mysql_database_password} \
               -e DB_DATABASE_NAME=${module.secrets.secrets.mysql_database_name} \
@@ -41,14 +53,6 @@ module "ec2" {
               -e DB_PORT=${module.rds.database_port} \
               -e VIDEO_SERVICE_URL=${var.video_service_url} \
               vvasylkovskyi1/vvasylkovskyi-portfolio:${var.docker_image_hash}
-
-            sudo docker run -d -p 4000:4000 \
-              -e DB_USER=${module.secrets.secrets.mysql_database_username} \
-              -e DB_PASSWORD=${module.secrets.secrets.mysql_database_password} \
-              -e DB_DATABASE_NAME=${module.secrets.secrets.mysql_database_name} \
-              -e DB_HOST=${module.rds.database_host} \
-              -e DB_PORT=${module.rds.database_port} \
-              vvasylkovskyi1/vvasylkovskyi-video-service-elixir:latest
             EOF
 }
 
