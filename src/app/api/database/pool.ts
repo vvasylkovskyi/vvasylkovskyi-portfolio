@@ -1,16 +1,12 @@
-import mysql from 'mysql2/promise';
+import { Pool } from 'pg';
 
-export const pool = mysql.createPool({
-    host: process.env.DB_HOST,
+export const pool = new Pool({
     user: process.env.DB_USER,
+    host: process.env.DB_HOST,
     database: process.env.DB_DATABASE_NAME,
     password: process.env.DB_PASSWORD,
     port: Number(process.env.DB_PORT),
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0,
-    ssl: "Amazon RDS"
-    // ssl: {
-    //     rejectUnauthorized: false, // for public RDS; remove or set to true for production
-    // },
+    ssl: {
+        rejectUnauthorized: false // for RDS public access; set to true if using a valid CA
+    },
 });

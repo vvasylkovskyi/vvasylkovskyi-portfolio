@@ -1,69 +1,51 @@
+// scripts/seed-db.ts
+
 import { PostType } from '@/types/post';
 import 'dotenv/config';
-import mysql from 'mysql2/promise';
+import { Client } from 'pg';
 import { getBlogsData } from './get-all-posts';
 import { getBlogById } from './get-post-by-id';
 
 async function main() {
-    const blogs: PostType[] = await getBlogsData();
 
-    const connection = await mysql.createConnection({
-        host: process.env.DB_HOST,
+    const blogs: PostType[] = await getBlogsData();
+    const client = new Client({
         user: process.env.DB_USER,
+        host: process.env.DB_HOST,
         database: process.env.DB_DATABASE_NAME,
         password: process.env.DB_PASSWORD,
         port: Number(process.env.DB_PORT),
         ssl: {
-            rejectUnauthorized: false,
+            rejectUnauthorized: false // for RDS public access; set to true if using a valid CA
         },
     });
 
+    await client.connect();
+
     for (const blog of blogs) {
-        // Insert blog
-        const [blogResult] = await connection.execute<any[]>(
-            `INSERT INTO blogs (slug, title, meta_text, date)
-             VALUES (?, ?, ?, ?)
-             ON DUPLICATE KEY UPDATE title = VALUES(title)`,
-            [blog.url, blog.title, blog.metaText, blog.date]
+        const blogResult = await client.query(
+            `INSERT INTO blogs (slug, title, meta_text, date, categories)
+       VALUES ($1, $2, $3, $4, $5)
+       ON CONFLICT (slug) DO UPDATE SET title = EXCLUDED.title
+       RETURNING id`,
+            [
+                blog.url,
+                blog.title,
+                blog.metaText,
+                blog.date,
+                blog.categories,
+            ]
         );
 
-        // Get inserted or existing blog ID
-        const [rows] = await connection.execute<any[]>(
-            `SELECT id FROM blogs WHERE slug = ?`,
-            [blog.url]
-        );
-        const blogId = rows[0].id;
+        const blogId = blogResult.rows[0].id;
 
-        console.log(`Inserted/Updated blog: ${blog.title} (ID: ${blogId})`);
-        // Insert categories and their links
-        for (const cat of blog.categories || []) {
-            // Insert category if not exists
-            await connection.execute(
-                `INSERT IGNORE INTO categories (name) VALUES (?)`,
-                [cat]
-            );
-
-            // Get category id
-            const [catRows] = await connection.execute<any[]>(
-                `SELECT id FROM categories WHERE name = ?`,
-                [cat]
-            );
-            const categoryId = catRows[0].id;
-
-            // Insert into blog_categories
-            await connection.execute(
-                `INSERT IGNORE INTO blog_categories (blog_id, category_id) VALUES (?, ?)`,
-                [blogId, categoryId]
-            );
-        }
-
-        // Insert blog content
         const blogData: Partial<PostType> = getBlogById(blog.url);
-        console.log(`Inserting content for blog: ${blog.title}, ID: ${blogId}, URL: ${blog.url}, metaText: ${blogData.metaText}, date: ${blogData.date}`);
-        await connection.execute(
+
+        // Insert into blog_posts table
+        await client.query(
             `INSERT INTO blog_contents (blog_id, slug, content, date, meta_text, title)
-             VALUES (?, ?, ?, ?, ?, ?)
-             ON DUPLICATE KEY UPDATE content = VALUES(content)`,
+             VALUES ($1, $2, $3, $4, $5, $6)
+             ON CONFLICT (blog_id, slug) DO UPDATE SET content = EXCLUDED.content`,
             [
                 blogId,
                 blog.url,
@@ -75,7 +57,7 @@ async function main() {
         );
     }
 
-    await connection.end();
+    await client.end();
     console.log('✅ Database seeding complete');
 }
 
