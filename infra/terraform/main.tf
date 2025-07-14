@@ -41,6 +41,9 @@ module "ec2" {
               -e DB_DATABASE_NAME=${module.secrets.secrets.mysql_database_name} \
               -e DB_HOST=${module.rds.database_host} \
               -e DB_PORT=${module.rds.database_port} \
+              -e SECRET_KEY_BASE=${module.secrets.secrets.video_service_secret_key_base} \
+              -e AWS_ACCESS_KEY_ID=${module.secrets.secrets.aws_access_key_id} \
+              -e AWS_SECRET_ACCESS_KEY=${module.secrets.secrets.aws_secret_access_key} \
               vvasylkovskyi1/vvasylkovskyi-video-service-elixir:${var.docker_image_hash_video_service}
 
             sudo docker run -d --name frontend --network docker-internal-network -p 80:80 \
