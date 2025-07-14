@@ -205,4 +205,20 @@ $button-primary-background-color-hover: $colors-teal-700;
 $button-secondary-background-color: $colors-gray-800;
 $button-secondary-background-color-hover: $colors-gray-700;
 
+
+// Slider
+$slider-slider-background-color--light-mode: $colors-gray-500;
+$slider-slider-background-color-hover--light-mode: $colors-gray-300;
+$slider-slider-background-color-active--light-mode: $colors-teal-400;
+
+$slider-slider-background-color--dark-mode: $colors-gray-700;
+$slider-slider-background-color-hover--dark-mode: $colors-gray-600;
+$slider-slider-background-color-active--dark-mode: $colors-teal-700;
+
+$slider-text-color--dark-mode: $colors-gray-200;
+$slider-text-color--light-mode: $white;
+
+$slider-arrows-color--dark-mode: $colors-teal-500;
+$slider-arrows-color--light-mode: $colors-teal-500;
+
 $radial-gradient: radial-gradient(600px at 613px 553px, rgb(45 212 191 / 22%), transparent 80%);

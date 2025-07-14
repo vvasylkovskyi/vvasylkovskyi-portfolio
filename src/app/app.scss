@@ -56,6 +56,11 @@
   --dropdown-menu-content-background: #{$dropdown-menu-content-background--light-mode};
   --dropdown-menu-content-item-hover-background: #{$dropdown-menu-content-item-hover-background--light-mode};
   --hover-table-row-background-color: #{$hover-table-row-background-color--light-mode};
+  --slider-background-color: #{$slider-slider-background-color--light-mode};
+  --slider-background-color-hover: #{$slider-slider-background-color-hover--light-mode};
+  --slider-background-color-active: #{$slider-slider-background-color-active--light-mode};
+  --slider-text-color: #{$slider-text-color--light-mode};
+  --slider-arrows-color: #{$slider-arrows-color--light-mode};
 }
 
 .app-container--dark {
@@ -82,6 +87,11 @@
   --dropdown-menu-content-background: #{$dropdown-menu-content-background--dark-mode};
   --dropdown-menu-content-item-hover-background: #{$dropdown-menu-content-item-hover-background--dark-mode};
   --hover-table-row-background-color: #{$hover-table-row-background-color--dark-mode};
+  --slider-background-color: #{$slider-slider-background-color--dark-mode};
+  --slider-background-color-hover: #{$slider-slider-background-color-hover--dark-mode};
+  --slider-background-color-active: #{$slider-slider-background-color-active--dark-mode};
+  --slider-text-color: #{$slider-text-color--dark-mode};
+  --slider-arrows-color: #{$slider-arrows-color--dark-mode};
 }
 
 /* Override background color of control bar */
@@ -122,8 +132,61 @@
   height: 50vh;
   position: relative;
   margin-top: calc($topbar-height * -2);
+  width: 100%;
+}
+
+.camera__layout-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   width: calc(100% + $padding-xs * 2);
   margin-left: -$padding-xs;
+  height: 100%;
+}
+
+.player-timeline {
+  width: 100%;
+  display: flex;
+  margin-top: 40px;
+}
+
+.swiper-slide {
+  width: 250px;
+  height: 150px;
+
+  &.swiper-slide-active {
+    .timeline-slide {
+      background: var(--slider-background-color-active);
+    }
+  }
+}
+
+.timeline-slide {
+  width: 100%;
+  height: 100%;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--slider-background-color);
+  border-radius: $radii-md;
+  cursor: pointer;
+  transition: background 0.3s ease;
+
+  p {
+    color: var(--slider-text-color);
+    font-weight: 500;
+  }
+
+  &:hover {
+    background: var(--slider-background-color-hover);
+  }
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: var(--slider-arrows-color) !important;
 }
 
 @media (min-width: 768px) {
