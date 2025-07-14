@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Analytics } from './analytics-client';
+import 'plyr-react/plyr.css';
 import './app.scss';
 import './globals.css';
 import LayoutInner from './layout-inner';

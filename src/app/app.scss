@@ -84,6 +84,61 @@
   --hover-table-row-background-color: #{$hover-table-row-background-color--dark-mode};
 }
 
+/* Override background color of control bar */
+.plyr__controls {
+  background-color: rgba(0, 0, 0, 0.8) !important;
+}
+
+/* Change play button size and color */
+.plyr__control.plyr__control--overlaid {
+  background-color: var(--primary-color) !important;
+}
+
+/* Customize progress bar */
+.plyr__progress input[type='range'] {
+  color: var(--primary-color) !important;
+}
+
+.plyr--full-ui input[type="range"] {
+  color: var(--primary-color) !important;
+}
+
+.plyr--video .plyr__control:focus-visible,
+.plyr--video .plyr__control:hover,
+.plyr--video .plyr__control[aria-expanded="true"] {
+  background: var(--primary-color) !important;
+}
+
+.plyr--video {
+  width: 100%;
+  border-radius: 0;
+}
+
+.player-component-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 50vh;
+  position: relative;
+  margin-top: calc($topbar-height * -2);
+  width: calc(100% + $padding-xs * 2);
+  margin-left: -$padding-xs;
+}
+
+@media (min-width: 768px) {
+  .player-component-wrapper {
+    margin-top: 0;
+  }
+
+  .plyr--video {
+    width: 800px;
+    height: 50vh;
+    border-radius: $radii-md;
+  }
+}
+
+
 h1,
 h2,
 h3,
@@ -244,7 +299,7 @@ body {
   -webkit-flex-shrink: 0;
   -ms-flex-negative: 0;
   flex-shrink: 0;
-  background-image: radial-gradient(#5EEAD4 0%, rgba(94, 234, 212, 0) 60%); 
+  background-image: radial-gradient(#5EEAD4 0%, rgba(94, 234, 212, 0) 60%);
   z-index: 0;
   left: 30%;
   top: -20%;
@@ -399,7 +454,7 @@ body {
   user-select: none;
   display: flex;
   align-items: center;
-  justify-content: center; 
+  justify-content: center;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
 }
@@ -442,7 +497,8 @@ body {
   }
 }
 
-.greeting-heading, .landing-subheading {
+.greeting-heading,
+.landing-subheading {
   color: var(--secondary-text-color);
 }
 
@@ -463,13 +519,15 @@ body {
   .app-container {
     padding: $app-padding-desktop;
   }
-  
-  .heading-h1, .landing-heading-h1 {
+
+  .heading-h1,
+  .landing-heading-h1 {
     font-size: $font-size-3xl;
     line-height: 1.5;
   }
 
-  .greeting-heading, .landing-subheading {
+  .greeting-heading,
+  .landing-subheading {
     font-size: $font-size-xl;
     line-height: 1.875rem;
   }
@@ -521,4 +579,3 @@ body {
     margin-top: 30px;
   }
 }
-
