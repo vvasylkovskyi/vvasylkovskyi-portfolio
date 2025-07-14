@@ -145,7 +145,8 @@ async function main() {
     for (const blog of blogs) {
         await client.query(
             `INSERT INTO blogs (slug, title, meta_text, date, categories)
-       VALUES ($1, $2, $3, $4, $5)`,
+       VALUES ($1, $2, $3, $4, $5)
+       ON CONFLICT (slug) DO NOTHING`,
             [
                 blog.url,
                 blog.title,

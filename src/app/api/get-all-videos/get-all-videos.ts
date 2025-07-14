@@ -1,6 +1,4 @@
-import type { PostType } from '@/types/post';
-import { pool } from '../database/pool';
-import { VideoResponse } from '@/types/video';
+import type { VideoResponse } from '@/types/video';
 
 export const getAllVideos = async (): Promise<VideoResponse> => {
     try {

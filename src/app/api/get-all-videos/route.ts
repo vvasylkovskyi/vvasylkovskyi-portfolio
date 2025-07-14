@@ -1,4 +1,4 @@
-import { getAllVideos } from "./get-all-videos";
+import { getAllVideos } from './get-all-videos';
 
 export async function GET(_: Request) {
     try {
