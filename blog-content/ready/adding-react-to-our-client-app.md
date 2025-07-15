@@ -115,7 +115,7 @@ Run `npm run build` to compile your application and `npm run start` to launch it
 
 This tutorial has guided you through fusing React with your Webpack-bundled applications, empowering your web development journey. The full source code is available
 
-at [this GitHub repository](https://github.com/vvasylkovskyi/react-app-with-webpack), and you can view a [live demonstration](https://vvasylkovskyi.github.io/react-app-with-webpack/).
+at [this GitHub repository](https://github.com/viktorvasylkovskyi/react-app-with-webpack), and you can view a [live demonstration](https://viktorvasylkovskyi.github.io/react-app-with-webpack/).
 
 ## Further Reading
 

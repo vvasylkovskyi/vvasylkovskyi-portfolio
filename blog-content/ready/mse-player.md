@@ -4,7 +4,7 @@ In the ever-evolving landscape of web development, delivering high-quality media
 
 ## Laying the Foundation
 
-Before we plunge into the captivating realm of Media Source Extensions, it's essential to establish a solid foundation. We'll kick things off by setting up a basic Express server. This server will serve our HTML file and videos, gracefully sidestepping those pesky CORS (Cross-Origin Resource Sharing) issues. Feel free to visit the article about [HTTP Server Setup](link-to-http-server-setup). Or simply [clone the project here](https://github.com/vvasylkovskyi/http-server).
+Before we plunge into the captivating realm of Media Source Extensions, it's essential to establish a solid foundation. We'll kick things off by setting up a basic Express server. This server will serve our HTML file and videos, gracefully sidestepping those pesky CORS (Cross-Origin Resource Sharing) issues. Feel free to visit the article about [HTTP Server Setup](link-to-http-server-setup). Or simply [clone the project here](https://github.com/viktorvasylkovskyi/http-server).
 
 Once your setup is complete, running `npm install` will neatly install the necessary dependencies. Execute `npm run start` to launch the server on port 4000.
 
@@ -243,7 +243,7 @@ console.log(video.duration); // The video duration is approximately 9.999 second
 
 As you can observe, the video duration closely aligns with the expected 10 seconds. Additionally, for a more in-depth examination, you can inspect the network tab within the developer tools, where you'll witness the concurrent downloading of multiple video segments. This insightful observation reaffirms the successful segmentation and playback of our video content.
 
-In conclusion, we hope this guide has illuminated the inner workings of Media Source Extensions and how they can be harnessed to optimize media playback on the web. For the complete code and a hands-on experience, visit the [GitHub repository](https://github.com/vvasylkovskyi/barebones-mse-playback).
+In conclusion, we hope this guide has illuminated the inner workings of Media Source Extensions and how they can be harnessed to optimize media playback on the web. For the complete code and a hands-on experience, visit the [GitHub repository](https://github.com/viktorvasylkovskyi/barebones-mse-playback).
 
 If you're eager to dive even deeper into this realm, feel free to explore the references below. Happy coding!
 

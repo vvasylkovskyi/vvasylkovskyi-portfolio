@@ -14,14 +14,14 @@ Head on to Matomo - https://matomo.org/.
   _paq.push(["trackPageView"]);
   _paq.push(["enableLinkTracking"]);
   (function () {
-    var u = "https://vvasylkovskyi.matomo.cloud/";
+    var u = "https://viktorvasylkovskyi.matomo.cloud/";
     _paq.push(["setTrackerUrl", u + "matomo.php"]);
     _paq.push(["setSiteId", "1"]);
     var d = document,
       g = d.createElement("script"),
       s = d.getElementsByTagName("script")[0];
     g.async = true;
-    g.src = "//cdn.matomo.cloud/vvasylkovskyi.matomo.cloud/matomo.js";
+    g.src = "//cdn.matomo.cloud/viktorvasylkovskyi.matomo.cloud/matomo.js";
     s.parentNode.insertBefore(g, s);
   })();
 </script>
@@ -30,7 +30,7 @@ Head on to Matomo - https://matomo.org/.
 
 ### Check your stats
 
-- https://vvasylkovskyi.matomo.cloud/
+- https://viktorvasylkovskyi.matomo.cloud/
 
 ## Alternatives - StatsCounter
 
@@ -39,7 +39,7 @@ Go to a website - https://statcounter.com/
 ### Install JS
 
 ```html
-<!-- Default Statcounter code for Web Blog https://webblog.vvasylkovskyi.com -->
+<!-- Default Statcounter code for Web Blog https://webblog.viktorvasylkovskyi.com -->
 <script type="text/javascript">
   var sc_project = 12936875;
   var sc_invisible = 1;

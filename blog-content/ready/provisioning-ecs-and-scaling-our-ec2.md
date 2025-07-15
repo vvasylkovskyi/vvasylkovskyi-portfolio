@@ -4,7 +4,7 @@ In these notes we are going to level up our infrastructure setup. Mainly we are 
 
 ## Prerequisites
 
-This article assumes that you already have a VPC provisioned using Terraform and that your AWS environment is properly configured. Since remote state storage requires provisioning resources within AWS, I recommend reading this article to set that up first: [Deploying EC2 instance on AWS with Terraform](https://www.vvasylkovskyi.com/posts/provisioning-ec2-on-aws-with-terraform).
+This article assumes that you already have a VPC provisioned using Terraform and that your AWS environment is properly configured. Since remote state storage requires provisioning resources within AWS, I recommend reading this article to set that up first: [Deploying EC2 instance on AWS with Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-ec2-on-aws-with-terraform).
 
 ## Provisioning ECS with terraform
 
@@ -147,7 +147,7 @@ sudo cat /var/log/ecs/ecs-agent.log | tail -n 50
 
 By that far, if you had run the `docker ps` and `cat /var/log/ecs/ecs-agent.log | tail -n 50` you most likely have an `AccessDeniedException: ` since we did not attach the AWS Ec2 container service for our ec2. This means that our cluster is not managing to access to ec2 to register docker container instance. 
 
-Remember from [the previous notes about adding AWS Secrets Manager](https://www.vvasylkovskyi.com/posts/provisioning-aws-secret-manager-and-securing-secrets), we had set the secrets manager IAM to our EC-2 so that it can access to the datadog API keys.
+Remember from [the previous notes about adding AWS Secrets Manager](https://www.viktorvasylkovskyi.com/posts/provisioning-aws-secret-manager-and-securing-secrets), we had set the secrets manager IAM to our EC-2 so that it can access to the datadog API keys.
 
 So we already have a role and a profile that Ec-2 uses. We only need to add a new policy to that role - the one that grants EC2 instance permissions needed by the ECS agent to manage the instance (register in ecs cluster, manage containers).
 
@@ -202,4 +202,4 @@ Since we are moving to the conteinerized solution, when a user visits `/` if our
 
 ## Conclusion
 
-Whoa! We just moved from serving a static website to serving an actual application from docker image. We had to create an ECS cluster managed by AWS. Even though, we have a cluster in our infrastructure, we are still not taking advantage of it since we are using a static IP address for the EC-2 instance directly. To improve this, we will add a load balancer in the next notes, and make sure that our DNS points to it. You can find the notes about it in [Provisioning AWS Load Balancer and connecting it to ECS cluster](https://www.vvasylkovskyi.com/posts/provisioning-alb-and-connecting-to-ecs). Happy hacking!
+Whoa! We just moved from serving a static website to serving an actual application from docker image. We had to create an ECS cluster managed by AWS. Even though, we have a cluster in our infrastructure, we are still not taking advantage of it since we are using a static IP address for the EC-2 instance directly. To improve this, we will add a load balancer in the next notes, and make sure that our DNS points to it. You can find the notes about it in [Provisioning AWS Load Balancer and connecting it to ECS cluster](https://www.viktorvasylkovskyi.com/posts/provisioning-alb-and-connecting-to-ecs). Happy hacking!

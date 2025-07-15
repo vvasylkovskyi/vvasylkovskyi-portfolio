@@ -4,7 +4,7 @@ Hi! I’m very excited to write this as I just finished successfully accessing m
 
 The idea behind this setup is to use a reverse proxy to expose a Raspberry Pi that’s sitting behind a NAT or home router. A reverse proxy is basically a server that accepts requests from the internet and forwards them to another machine on the private network (in our case, the Pi). This way, your Raspberry Pi can stay safely hidden behind your router while still being accessible via a nice domain name like `rpi.your-domain.com`.
 
-Initially, I tried doing this with `Cloudflare Tunnels`, which work pretty well for manual setups. You can read about it here: [Expose Your Raspberry Pi to the Internet with Cloudflare Tunnel](https://www.vvasylkovskyi.com/posts/expose-rpi-to-public-network-using-cloudfare-tunnel). However, I hit a wall trying to manage it cleanly using infrastructure as code — especially when I wanted to integrate it with existing Terraform-managed resources. So I did a bit of hacking, and what came out of it is this really neat solution that uses an EC2 instance as a relay between the public internet and the Raspberry Pi — all automated and reproducible.
+Initially, I tried doing this with `Cloudflare Tunnels`, which work pretty well for manual setups. You can read about it here: [Expose Your Raspberry Pi to the Internet with Cloudflare Tunnel](https://www.viktorvasylkovskyi.com/posts/expose-rpi-to-public-network-using-cloudfare-tunnel). However, I hit a wall trying to manage it cleanly using infrastructure as code — especially when I wanted to integrate it with existing Terraform-managed resources. So I did a bit of hacking, and what came out of it is this really neat solution that uses an EC2 instance as a relay between the public internet and the Raspberry Pi — all automated and reproducible.
 
 Let’s walk through how to do it!
 
@@ -12,8 +12,8 @@ Let’s walk through how to do it!
 
 We assume good level of knowledge here of terraform, but if want to learn, there are lots of great notes of mine you can read to reach the setup we will propose here. 
 
-  - [Provisioning EC-2 Instance on Terraform using Modules and best practices](https://www.vvasylkovskyi.com/posts/terraform-modularizing)
-  - [Provisioning Application Load Balancer and connecting it to ECS using Terraform](https://www.vvasylkovskyi.com/posts/provisioning-alb-and-connecting-to-ecs)
+  - [Provisioning EC-2 Instance on Terraform using Modules and best practices](https://www.viktorvasylkovskyi.com/posts/terraform-modularizing)
+  - [Provisioning Application Load Balancer and connecting it to ECS using Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-alb-and-connecting-to-ecs)
 
 ## Goals
 
@@ -139,7 +139,7 @@ The terraform code I used for my instance is the same as above, with the ssh key
 
 ```hcl
 module "ec2" {
-  source              = "git::https://github.com/vvasylkovskyi/vvasylkovskyi-infra.git//modules/ec2?ref=main"
+  source              = "git::https://github.com/viktorvasylkovskyi/viktorvasylkovskyi-infra.git//modules/ec2?ref=main"
   ...
   ssh_public_key      = file("~/.ssh/${var.ssh_public_key_name}.pub")
   ssh_public_key_name = var.ssh_public_key_name

@@ -6,7 +6,7 @@ In the previous notes we have introduced alot of new resources:
  - Two public subnets in different availability zones for load balancer
  - increased the number of EC-2 instances from 1 to 2. 
 
-You can read more about it in [Provisioning Application Load Balancer and connecting it to ECS using Terraform](https://www.vvasylkovskyi.com/posts/provisioning-alb-and-connecting-to-ecs). 
+You can read more about it in [Provisioning Application Load Balancer and connecting it to ECS using Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-alb-and-connecting-to-ecs). 
 
 But we have been managing the EC-2 instances manually by hardcoding two instances. There is a better way - launching instances on demand as the need for more resources appear. Similarly, as the load decreases and number of resources needed is lower, we can decommision some instances. This is a job for Auto Scaling Group:
 

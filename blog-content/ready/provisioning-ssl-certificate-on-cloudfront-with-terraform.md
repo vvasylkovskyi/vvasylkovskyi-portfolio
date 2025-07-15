@@ -2,9 +2,9 @@
 
 At this point, you should have provisioned EC-2 and CloudFront. If not, check these notes:
 
-- [Deploying EC2 instance on AWS with Terraform](https://www.vvasylkovskyi.com/posts/provisioning-ec2-on-aws-with-terraform)
-- [Provision DNS records with Terraform](https://www.vvasylkovskyi.com/posts/provisioning-dns-records-with-terraform)
-- [Provision CloudFront CDN with Terraform](https://www.vvasylkovskyi.com/posts/provisioning-cloudfront-with-terraform)
+- [Deploying EC2 instance on AWS with Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-ec2-on-aws-with-terraform)
+- [Provision DNS records with Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-dns-records-with-terraform)
+- [Provision CloudFront CDN with Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-cloudfront-with-terraform)
 
 In this note, we will provision SSL certificate using ACM, and add HTTPS termination on our Cloudfront distribution.
 
@@ -43,7 +43,7 @@ This requests an SSL/TLS certificate from AWS Certificate Manager for your domai
 
 ## DNS Validation via Route 53
 
-Next, we need to create the required DNS record to prove domain ownership to ACM. If you are curious in details, there is a step-by-step way of doing that manually described here [Installing SSL and Moving to HTTPS on Our Website with Let's Encrypt](https://notes.vvasylkovskyi.com/posts/adding-ssl-with-ca.md).
+Next, we need to create the required DNS record to prove domain ownership to ACM. If you are curious in details, there is a step-by-step way of doing that manually described here [Installing SSL and Moving to HTTPS on Our Website with Let's Encrypt](https://notes.viktorvasylkovskyi.com/posts/adding-ssl-with-ca.md).
 
 ```tf
 # ssl.tf

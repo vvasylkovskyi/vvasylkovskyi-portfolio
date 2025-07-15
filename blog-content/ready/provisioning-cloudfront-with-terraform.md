@@ -20,7 +20,7 @@ First thing is to define our origin endpoint. We can do it using Route53, where 
 # Route53.tf
 
 resource "aws_route53_zone" "main" {
-  name = "vvasylkovskyi.com"
+  name = "viktorvasylkovskyi.com"
 }
 
 resource "aws_route53_record" "origin" {
@@ -155,7 +155,7 @@ Note that we are adding `lifecycle.create_before_destroy`. This is because in ca
 
 ### DNS Validation via Route 53
 
-Next, we need to create the required DNS record to prove domain ownership to ACM. If you are curious in details, there is a step-by-step way of doing that manually described here [Installing SSL and Moving to HTTPS on Our Website with Let's Encrypt](https://notes.vvasylkovskyi.com/posts/adding-ssl-with-ca.md).
+Next, we need to create the required DNS record to prove domain ownership to ACM. If you are curious in details, there is a step-by-step way of doing that manually described here [Installing SSL and Moving to HTTPS on Our Website with Let's Encrypt](https://notes.viktorvasylkovskyi.com/posts/adding-ssl-with-ca.md).
 
 ```tf
 # ssl.tf

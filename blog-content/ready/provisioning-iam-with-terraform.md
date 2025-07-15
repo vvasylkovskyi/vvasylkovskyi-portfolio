@@ -13,7 +13,7 @@ In this notes we will write a very small terraform code where we will provision 
 
 ## Github Code
 
-Full code available on [`https://github.com/vvasylkovskyi/vvasylkovskyi-infra/tree/vv-iam-v5`](https://github.com/vvasylkovskyi/vvasylkovskyi-infra/tree/vv-iam-v5). You can clone that and apply the infra yourself, all you need to do is to modify the variables for your domain.
+Full code available on [`https://github.com/viktorvasylkovskyi/viktorvasylkovskyi-infra/tree/vv-iam-v5`](https://github.com/viktorvasylkovskyi/viktorvasylkovskyi-infra/tree/vv-iam-v5). You can clone that and apply the infra yourself, all you need to do is to modify the variables for your domain.
 
 ## Provisioning IAM for S3 access 
 
@@ -120,7 +120,7 @@ Or by looking into your `terraform.tfstate`.
 
 ## A word on security and remote states
 
-Beware that the state files are storing keys in plain text on purpose. That is why you should avoid storing them in version control. Ideally this files should be managed remotely in S3 using terraform remote state. Read more about how to setup terraform remote state in here: [Saving Terraform State in a Remote Backend on AWS with S3 and DynamoDB](https://www.vvasylkovskyi.com/posts/terraform-state-in-s3-dynamodb-backend). And make sure to use encryption.
+Beware that the state files are storing keys in plain text on purpose. That is why you should avoid storing them in version control. Ideally this files should be managed remotely in S3 using terraform remote state. Read more about how to setup terraform remote state in here: [Saving Terraform State in a Remote Backend on AWS with S3 and DynamoDB](https://www.viktorvasylkovskyi.com/posts/terraform-state-in-s3-dynamodb-backend). And make sure to use encryption.
 
 ## Add a user login 
 
@@ -162,7 +162,7 @@ You can now login on AWS console using your credentials created here.
 
 ## Project Organization
 
-Most of the times when a programmatic access is needed for some repository to perform terraform deploy, it is a good practice to create IAM for that access and leave the project deploy via some CI/CD platform. I personally found that separating the app resources provisioning code from IAM provisioning is a convient practice because this way we can ensure that the IAM doesn't accidentally get destroyed while changing the app resourses. You can find in the code here [`https://github.com/vvasylkovskyi/vvasylkovskyi-infra/tree/vv-iam-v5`](https://github.com/vvasylkovskyi/vvasylkovskyi-infra/tree/vv-iam-v5) at the folders `iam` there are specific project IAM roles definitions (which in turn use the IAM Module from `modules`). 
+Most of the times when a programmatic access is needed for some repository to perform terraform deploy, it is a good practice to create IAM for that access and leave the project deploy via some CI/CD platform. I personally found that separating the app resources provisioning code from IAM provisioning is a convient practice because this way we can ensure that the IAM doesn't accidentally get destroyed while changing the app resourses. You can find in the code here [`https://github.com/viktorvasylkovskyi/viktorvasylkovskyi-infra/tree/vv-iam-v5`](https://github.com/viktorvasylkovskyi/viktorvasylkovskyi-infra/tree/vv-iam-v5) at the folders `iam` there are specific project IAM roles definitions (which in turn use the IAM Module from `modules`). 
 
 The general workflow for the project is:
 

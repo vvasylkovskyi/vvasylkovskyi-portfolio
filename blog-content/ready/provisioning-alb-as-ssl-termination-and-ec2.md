@@ -6,11 +6,11 @@ The easiest way to have https on web app using IaC is in my opinion using AWS lo
 
 ## Prerequisites
 
-Make sure you have base running, I suggest having a look at my previous notes: [Provisioning EC-2 Instance on Terraform using Modules and best practices](https://www.vvasylkovskyi.com/posts/terraform-modularizing). There we setup basic http server using EC-2. 
+Make sure you have base running, I suggest having a look at my previous notes: [Provisioning EC-2 Instance on Terraform using Modules and best practices](https://www.viktorvasylkovskyi.com/posts/terraform-modularizing). There we setup basic http server using EC-2. 
 
 ## Github Code
 
-Full code available on `https://github.com/vvasylkovskyi/vvasylkovskyi-infra/tree/vv-https-server-ec2-and-load-balancer-v2`. You can clone that and apply the infra yourself, all you need to do is to modify the variables for your domain.
+Full code available on `https://github.com/viktorvasylkovskyi/viktorvasylkovskyi-infra/tree/vv-https-server-ec2-and-load-balancer-v2`. You can clone that and apply the infra yourself, all you need to do is to modify the variables for your domain.
 
 ## Overview
 
@@ -113,7 +113,7 @@ This requests an SSL/TLS certificate from AWS Certificate Manager for your domai
 
 ### DNS Validation via Route 53
 
-Next, we need to create the required DNS record to prove domain ownership to ACM. If you are curious in details, there is a step-by-step way of doing that manually described here [Installing SSL and Moving to HTTPS on Our Website with Let's Encrypt](https://notes.vvasylkovskyi.com/posts/adding-ssl-with-ca.md).
+Next, we need to create the required DNS record to prove domain ownership to ACM. If you are curious in details, there is a step-by-step way of doing that manually described here [Installing SSL and Moving to HTTPS on Our Website with Let's Encrypt](https://notes.viktorvasylkovskyi.com/posts/adding-ssl-with-ca.md).
 
 ```tf
 # ssl.tf

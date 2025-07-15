@@ -6,7 +6,7 @@ In this tutorial we are going to learn how to parse `.mp4` boxes in browser, and
 
 ## Setup
 
-For this tutorial, we expect that you understand the MSE streaming and are familiar with basic playback. To simplify, we are going to use an already existing basic MSE playback project. You can download the sample project from [this github repository](https://github.com/vvasylkovskyi/barebones-mse-playback). If you are not familiar with MSE playback, I suggest you start by reading [this introductory tutorial of MSE playback](link-to-mse-playback-blog).
+For this tutorial, we expect that you understand the MSE streaming and are familiar with basic playback. To simplify, we are going to use an already existing basic MSE playback project. You can download the sample project from [this github repository](https://github.com/viktorvasylkovskyi/barebones-mse-playback). If you are not familiar with MSE playback, I suggest you start by reading [this introductory tutorial of MSE playback](link-to-mse-playback-blog).
 
 ## Intercepting MP4 file arrayBuffers
 

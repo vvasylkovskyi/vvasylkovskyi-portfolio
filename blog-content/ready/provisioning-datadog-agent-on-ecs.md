@@ -1,8 +1,8 @@
 # Provision Datadog Observability on ECS with Terraform
 
-Previously we had EC-2 instance and Datadog agent monitoring instance itself. I recommend you give it a read here before diving into this notes: [Provision Datadog Observability on Ec-2 with Terraform](https://www.vvasylkovskyi.com/posts/provisioning-datadog-on-ec2-with-terraform).
+Previously we had EC-2 instance and Datadog agent monitoring instance itself. I recommend you give it a read here before diving into this notes: [Provision Datadog Observability on Ec-2 with Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-datadog-on-ec2-with-terraform).
 
-In our previous notes, we had moved away from using single EC-2 to ECS for better infrastructure: [Scaling our infra - from 1 EC-2 to ECS](https://www.vvasylkovskyi.com/posts/provisioning-ecs-and-scaling-our-ec2). As a result, we are no longer serving static html webpage directly from the machine, but we are serving what is inside docker container. Docker containers stop and start as the ECS task dictates while EC-2 instances may remain unchanges, so it is far more interesting to monitor on the docker container level as it provides better isolation of logs and metrics.
+In our previous notes, we had moved away from using single EC-2 to ECS for better infrastructure: [Scaling our infra - from 1 EC-2 to ECS](https://www.viktorvasylkovskyi.com/posts/provisioning-ecs-and-scaling-our-ec2). As a result, we are no longer serving static html webpage directly from the machine, but we are serving what is inside docker container. Docker containers stop and start as the ECS task dictates while EC-2 instances may remain unchanges, so it is far more interesting to monitor on the docker container level as it provides better isolation of logs and metrics.
 
 In this notes we will describe how to setup Datadog monitoring as a sidecar while using ECS cluster and we will do all this using terraform. 
 
@@ -52,7 +52,7 @@ resource "aws_iam_role_policy" "secrets_manager_policy" {
 }
 ```
 
-This code snippet just creates a new role and assignes the policy to that role stating tha we can access to secrets manager read thus providing Least Priviledge Principle. Note remember when we defined a caller identity in this notes: [Provision AWS Secret Manager and Store Secrets Securely](https://www.vvasylkovskyi.com/posts/provisioning-aws-secret-manager-and-securing-secrets) like follows: 
+This code snippet just creates a new role and assignes the policy to that role stating tha we can access to secrets manager read thus providing Least Priviledge Principle. Note remember when we defined a caller identity in this notes: [Provision AWS Secret Manager and Store Secrets Securely](https://www.viktorvasylkovskyi.com/posts/provisioning-aws-secret-manager-and-securing-secrets) like follows: 
 
 ```hcl
 data "aws_caller_identity" "current" {}
@@ -75,7 +75,7 @@ resource "aws_ecs_task_definition" "my_app" {
 container_definitions = jsonencode([
     {
       name      = "portfolio"
-      image     = "vvasylkovskyi1/vvasylkovskyi-portfolio:latest"
+      image     = "viktorvasylkovskyi1/viktorvasylkovskyi-portfolio:latest"
       essential = true
       portMappings = [
         {

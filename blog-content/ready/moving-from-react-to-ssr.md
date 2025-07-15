@@ -6,7 +6,7 @@ Server-Side Rendering (SSR) offers a significant enhancement to the traditional 
 
 ## Prerequisites
 
-Before proceeding, ensure that you have a solid understanding of React applications and webpack bundlers. For those who might need a refresher, I recommend reading my previous article on setting up a simple React application with webpack, available [here](insert-link). Additionally, you can find a basic setup of a React app [here](https://github.com/vvasylkovskyi/react-app-with-webpack). This project utilizes React 18, which is the most up-to-date version at the time of writing this article.
+Before proceeding, ensure that you have a solid understanding of React applications and webpack bundlers. For those who might need a refresher, I recommend reading my previous article on setting up a simple React application with webpack, available [here](insert-link). Additionally, you can find a basic setup of a React app [here](https://github.com/viktorvasylkovskyi/react-app-with-webpack). This project utilizes React 18, which is the most up-to-date version at the time of writing this article.
 
 ## Creating an Express Server
 
@@ -183,4 +183,4 @@ Upon successful execution, you should see the server running. An effective metho
 
 Server-Side Rendering offers numerous benefits such as improved SEO, faster performance on initial page load, and an enhanced user experience due to the pre-rendered content. However, it is also important to consider the potential drawbacks, such as increased resource consumption on the server side. These factors must be balanced according to the specific needs of your application.
 
-You can find the complete source code in [this GitHub repository](https://github.com/vvasylkovskyi/react-express-SSR) and view a live demo [here](https://vvasylkovskyi.github.io/react-express-SSR/). Happy coding!
+You can find the complete source code in [this GitHub repository](https://github.com/viktorvasylkovskyi/react-express-SSR) and view a live demo [here](https://viktorvasylkovskyi.github.io/react-express-SSR/). Happy coding!

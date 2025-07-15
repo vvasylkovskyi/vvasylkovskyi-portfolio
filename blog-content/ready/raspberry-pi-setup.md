@@ -99,7 +99,7 @@ all:
   hosts:
     raspberrypi:
       ansible_host: raspberrypi.local
-      ansible_user: vvasylkovskyi
+      ansible_user: viktorvasylkovskyi
       ansible_ssh_private_key_file: ~/.ssh/<your-key-file>
 ```
 

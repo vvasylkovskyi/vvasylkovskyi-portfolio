@@ -8,7 +8,7 @@ This setup focuses on a proof-of-concept workflow, where simplicity and fast ite
 
 ## Github Code
 
-Full code available on https://github.com/vvasylkovskyi/rpi-camera. 
+Full code available on https://github.com/viktorvasylkovskyi/rpi-camera. 
 
 ## Installing the system-wide packages 
 

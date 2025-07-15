@@ -1,6 +1,6 @@
 # Provisioning Application Load Balancer and connecting it to ECS using Terraform
 
-So in the previous notes we have added ECS to our infrastructure in [Scaling our infra - from 1 EC-2 to ECS](https://www.vvasylkovskyi.com/posts/provisioning-ecs-and-scaling-our-ec2). The one only caveat in this architecture is that our DNS mapping still uses CloudFront which then points to the origin and the origin is our EC-2 instance. This obviously doesn't provide the advantages of using cluster or machines, since we still only use 1 single EC-2 instance, there will be other instances that are not utilized. 
+So in the previous notes we have added ECS to our infrastructure in [Scaling our infra - from 1 EC-2 to ECS](https://www.viktorvasylkovskyi.com/posts/provisioning-ecs-and-scaling-our-ec2). The one only caveat in this architecture is that our DNS mapping still uses CloudFront which then points to the origin and the origin is our EC-2 instance. This obviously doesn't provide the advantages of using cluster or machines, since we still only use 1 single EC-2 instance, there will be other instances that are not utilized. 
 
 In this notes, we will introduce the Application Load Balancer (ALB) which is the server that takes over the task of load balancing, i.e., distribution of requests to the available Container Instances and ECS tasks.
 
@@ -8,8 +8,8 @@ In this notes, we will introduce the Application Load Balancer (ALB) which is th
 
 I highly recommend that you get familiar with my series of notes about how to setup you web server using single EC-2 instance. It provides the foundations of working here such as provisioning of the VPC and all the related basic infrastructure. Additionally, get familiar with:  
 
-  - [Provision SSL and HTTPS with Terraform using Cloudfront, ACM, Route53 and Ec2](https://www.vvasylkovskyi.com/posts/provisioning-ssl-certificate-on-cloudfront-with-terraform)
-  - [Scaling our infra - from 1 EC-2 to ECS](https://www.vvasylkovskyi.com/posts/provisioning-ecs-and-scaling-our-ec2)
+  - [Provision SSL and HTTPS with Terraform using Cloudfront, ACM, Route53 and Ec2](https://www.viktorvasylkovskyi.com/posts/provisioning-ssl-certificate-on-cloudfront-with-terraform)
+  - [Scaling our infra - from 1 EC-2 to ECS](https://www.viktorvasylkovskyi.com/posts/provisioning-ecs-and-scaling-our-ec2)
 
 ## Overview
 
@@ -228,7 +228,7 @@ To fix the above error, and meet requirements of having load balancer, we need t
  
 ### Adding two availability zones
 
-We already have a VPC and a Gateway and a subnet within our VPC. You can refer to the setup in this notes: [Deploying EC2 instance on AWS with Terraform](https://www.vvasylkovskyi.com/posts/provisioning-ec2-on-aws-with-terraform). So in here we will be building on top these notes. 
+We already have a VPC and a Gateway and a subnet within our VPC. You can refer to the setup in this notes: [Deploying EC2 instance on AWS with Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-ec2-on-aws-with-terraform). So in here we will be building on top these notes. 
 
 For simplicity, we will define only two public subnets, without private subnets. 
 
@@ -349,4 +349,4 @@ Test everything with `terraform apply --auto-approve`.
 ## Conclusion 
 
 And that is it! Here we have successfully added a load balancer that distributes the traffic across two instances of our app. This is great scalability improvement. However, there is a catch. We are not taking the full advantage of cloud resources management, since now we have 2 EC-2 instances, we are going to spend double $$. Even when resources are not utilized. The cloud platforms are great especially for the ability to scale the servers up and down based on demand. This is accomplished using Auto Scaling Group and we are going to look into it in the next note: 
-  - [Provisioning Auto Scaling Group with Terraform and connecting it to our Load Balancer and ECS](https://www.vvasylkovskyi.com/posts/provisioning-auto-scaling-group)
+  - [Provisioning Auto Scaling Group with Terraform and connecting it to our Load Balancer and ECS](https://www.viktorvasylkovskyi.com/posts/provisioning-auto-scaling-group)

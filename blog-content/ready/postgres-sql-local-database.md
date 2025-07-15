@@ -1,6 +1,6 @@
 # End-to-End Local PostgreSQL Workflow for Full-Stack Development
 
-Here in this notes we will describe high-level instructions required to connect our frontend NextJS application to the PostgresSQL database. We will a database as a docker container. Note, these notes are for the local development and assume that the database is running next to the web server using `docker-compose.yaml`. For production example, please refer to the notes about setting up remote database on AWS at [Provisioning PostgresSQL RDBMS on AWS with Terraform](https://www.vvasylkovskyi.com/posts/provisioning-postgresql-on-aws-terraform).
+Here in this notes we will describe high-level instructions required to connect our frontend NextJS application to the PostgresSQL database. We will a database as a docker container. Note, these notes are for the local development and assume that the database is running next to the web server using `docker-compose.yaml`. For production example, please refer to the notes about setting up remote database on AWS at [Provisioning PostgresSQL RDBMS on AWS with Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-postgresql-on-aws-terraform).
 
 ## Starting PostgreSQL Docker Image
 
@@ -66,7 +66,7 @@ To streamline the development process we will add the bootstrap script to the po
 
 ### Define InitDB
 
-Now we will define it. Let's create a folder `./initdb` with `schema.sql`. Here I will show example of how I did it for my portfolio app: [Viktor Vasylkovskyi](https://www.vvasylkovskyi.com/):
+Now we will define it. Let's create a folder `./initdb` with `schema.sql`. Here I will show example of how I did it for my portfolio app: [Viktor Vasylkovskyi](https://www.viktorvasylkovskyi.com/):
 
 ```sql
 -- initdb/schema.sql
@@ -114,7 +114,7 @@ SELECT * FROM blogs;
 
 ### Seed Database
 
-So far our database and tables were created, so we can start connecting from the frontend apps and expect to have end to end flow working as expected. There is just no data in this database. Seeding database is the process of adding initial data for empty databases. In this scenario, we will seed the database using the content of the notes. The notes consist of JSON files containing metadata, and the `*.md` files containing the `content`. You can find the data example in this repository: [Blog Content Github Repository](https://github.com/vvasylkovskyi/vvasylkovskyi-portfolio/tree/main/blog-content).
+So far our database and tables were created, so we can start connecting from the frontend apps and expect to have end to end flow working as expected. There is just no data in this database. Seeding database is the process of adding initial data for empty databases. In this scenario, we will seed the database using the content of the notes. The notes consist of JSON files containing metadata, and the `*.md` files containing the `content`. You can find the data example in this repository: [Blog Content Github Repository](https://github.com/viktorvasylkovskyi/viktorvasylkovskyi-portfolio/tree/main/blog-content).
 
 We will create a seed script: `scripts/seed.ts`. My project already has a function that extracts the data from the files and converts them into javascrip objects, so we will use it to get the data. The rest of the code will be connecting to the database and inserting rows one by one: 
 

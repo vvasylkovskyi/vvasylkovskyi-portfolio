@@ -172,7 +172,7 @@ The remaining code should closely resemble what we've discussed in the previous 
 
 As an observant reader might have noticed, our code still lacks an essential component: the logic to switch between different renditions during playback. This decision-making process is typically handled by an Adaptive Bitrate (ABR) Manager in real-world streaming applications. The ABR Manager continuously assesses network conditions, buffer levels, and other factors to determine the optimal rendition to deliver. The Player Engine simply listens to the ABR Manager's decisions and switches between renditions accordingly.
 
-The implementation of an ABR Manager is a topic that warrants its own dedicated article. Stay tuned for our next article, where we will explore the development of an ABR algorithm. As usually, the link to [full source code is here](https://github.com/vvasylkovskyi/barebones-mse-playback-with-multi-renditions).
+The implementation of an ABR Manager is a topic that warrants its own dedicated article. Stay tuned for our next article, where we will explore the development of an ABR algorithm. As usually, the link to [full source code is here](https://github.com/viktorvasylkovskyi/barebones-mse-playback-with-multi-renditions).
 
 We hope you've found this article informative and gained a deeper understanding of Adaptive Bitrate and its importance in modern streaming. Happy coding!
 

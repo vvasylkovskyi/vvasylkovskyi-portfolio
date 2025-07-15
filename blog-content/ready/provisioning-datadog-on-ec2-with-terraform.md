@@ -2,7 +2,7 @@
 
 At this point, you should have provisioned EC-2. If not, check these notes:
 
-- [Deploying EC2 instance on AWS with Terraform](https://www.vvasylkovskyi.com/posts/provisioning-ec2-on-aws-with-terraform)
+- [Deploying EC2 instance on AWS with Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-ec2-on-aws-with-terraform)
 
 In this note, we add a simple configuration to our EC-2 instance so that it sends observability monitoring to Datadog .
 

@@ -346,10 +346,10 @@ open `/etc/nginx/conf.d/default.conf` and add this in the beginning of the file
         ssl_protocols TLSv1.2 TLSv1.3;
         ssl_prefer_server_ciphers off;
 
-        server_name vvasylkovskyi.com *.vvasylkovskyi.com;
+        server_name viktorvasylkovskyi.com *.viktorvasylkovskyi.com;
 
-        ssl_certificate /etc/ssl/certs/vvasylkovskyi_com.pem;
-        ssl_certificate_key /etc/ssl/private/vvasylkovskyi_com.key;
+        ssl_certificate /etc/ssl/certs/viktorvasylkovskyi_com.pem;
+        ssl_certificate_key /etc/ssl/private/viktorvasylkovskyi_com.key;
         ...
 ```
 

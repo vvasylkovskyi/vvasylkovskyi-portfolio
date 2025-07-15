@@ -6,7 +6,7 @@ As you may have noticed, each time Terraform applies changes, it updates the ter
 
 ## Pre-requisites
 
-This article assumes that you already have a VPC provisioned using Terraform and that your AWS environment is properly configured. Since remote state storage requires provisioning resources within AWS, I recommend reading this article to set that up first: [Deploying EC2 instance on AWS with Terraform](https://www.vvasylkovskyi.com/posts/provisioning-ec2-on-aws-with-terraform).
+This article assumes that you already have a VPC provisioned using Terraform and that your AWS environment is properly configured. Since remote state storage requires provisioning resources within AWS, I recommend reading this article to set that up first: [Deploying EC2 instance on AWS with Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-ec2-on-aws-with-terraform).
 
 ## How Remote State in AWS Works
 
@@ -104,7 +104,7 @@ Now that we have the resources used for backend, we can begin instructing terraf
 
 terraform {
   backend "s3" {
-    bucket         = "vvasylkovskyi-portfolio-terraform-state-backend"
+    bucket         = "viktorvasylkovskyi-portfolio-terraform-state-backend"
     key            = "terraform.tfstate"
     region         = "us-east-1"
     dynamodb_table = "terraform_state"

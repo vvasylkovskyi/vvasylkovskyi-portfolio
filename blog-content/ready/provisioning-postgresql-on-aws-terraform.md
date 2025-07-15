@@ -1,12 +1,12 @@
 # Provisioning PostgresSQL RDBMS on AWS with Terraform
 
-In our previous notes we discussed about how to launch a simple HTTPS web server running docker container. You can read about it here: [Provisioning Application Load Balancer and connecting it to ECS using Terraform](https://www.vvasylkovskyi.com/posts/provisioning-alb-and-connecting-to-ecs). Although it is not scaled to multiple instances or clusters, it represents a minimal working production environment. 
+In our previous notes we discussed about how to launch a simple HTTPS web server running docker container. You can read about it here: [Provisioning Application Load Balancer and connecting it to ECS using Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-alb-and-connecting-to-ecs). Although it is not scaled to multiple instances or clusters, it represents a minimal working production environment. 
 
-We have also advanced into making our servers stateless, by removing the data from them and using the database, about which we can find information here: [End-to-End Local PostgreSQL Workflow for Full-Stack Development](https://www.vvasylkovskyi.com/posts/postgres-sql-local-database). This works great locally, however the database is baked into docker image and sits on the EC-2 node, so our server is still stateful. For the production environment we need to provision a database on AWS. So this note will talk about that. 
+We have also advanced into making our servers stateless, by removing the data from them and using the database, about which we can find information here: [End-to-End Local PostgreSQL Workflow for Full-Stack Development](https://www.viktorvasylkovskyi.com/posts/postgres-sql-local-database). This works great locally, however the database is baked into docker image and sits on the EC-2 node, so our server is still stateful. For the production environment we need to provision a database on AWS. So this note will talk about that. 
 
 ## Github Code
 
-Full code available on `https://github.com/vvasylkovskyi/vvasylkovskyi-infra/tree/vv-rds-with-ec2-v3`. You can clone that and apply the infra yourself, all you need to do is to modify the variables for your domain.
+Full code available on `https://github.com/viktorvasylkovskyi/viktorvasylkovskyi-infra/tree/vv-rds-with-ec2-v3`. You can clone that and apply the infra yourself, all you need to do is to modify the variables for your domain.
 
 ## Overview 
 
@@ -115,7 +115,7 @@ Note this is a very similar setup to having only 2 public subnets, we just added
 
 ### Add new secrets for the secure database access
 
-One of my previous notes explains very well how to add new secrets using AWS Secrets Manager. You can read about it: [Provision AWS Secret Manager and Store Secrets Securely](https://www.vvasylkovskyi.com/posts/provisioning-aws-secret-manager-and-securing-secrets). 
+One of my previous notes explains very well how to add new secrets using AWS Secrets Manager. You can read about it: [Provision AWS Secret Manager and Store Secrets Securely](https://www.viktorvasylkovskyi.com/posts/provisioning-aws-secret-manager-and-securing-secrets). 
 
 We need to add three new secrets: 
 
@@ -162,7 +162,7 @@ The `skip_final_snapshot` is a parameter used in AWS RDS (Relational Database Se
 
 ## Provide those secrets to the EC-2 instance so that the app can connect
 
-Finally, we will update our EC-2 `user_data` so that it can start with the right environment variables that our app will use to connect to the database. The environment variables were defined here: [End-to-End Local PostgreSQL Workflow for Full-Stack Development](https://www.vvasylkovskyi.com/posts/postgres-sql-local-database). 
+Finally, we will update our EC-2 `user_data` so that it can start with the right environment variables that our app will use to connect to the database. The environment variables were defined here: [End-to-End Local PostgreSQL Workflow for Full-Stack Development](https://www.viktorvasylkovskyi.com/posts/postgres-sql-local-database). 
 
 These are the variables that we need: 
 
@@ -201,7 +201,7 @@ resource "aws_instance" "portfolio" {
               -e DB_DATABASE_NAME=${var.database_name} \
               -e DB_HOST=${var.database_host} \
               -e DB_PORT=${var.database_port} \
-              vvasylkovskyi1/vvasylkovskyi-portfolio:latest
+              viktorvasylkovskyi1/viktorvasylkovskyi-portfolio:latest
             EOF
 }
 
@@ -303,4 +303,4 @@ jobs:
 
 ## Conclusion
 
-We have successfully provisioned PostgreSQL database using terraform! There is a catch though, this database is empty and needs to have some tables and seed data, similarly to what we did for the local database here: [End-to-End Local PostgreSQL Workflow for Full-Stack Development](https://www.vvasylkovskyi.com/posts/postgres-sql-local-database).
+We have successfully provisioned PostgreSQL database using terraform! There is a catch though, this database is empty and needs to have some tables and seed data, similarly to what we did for the local database here: [End-to-End Local PostgreSQL Workflow for Full-Stack Development](https://www.viktorvasylkovskyi.com/posts/postgres-sql-local-database).

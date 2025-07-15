@@ -1,6 +1,6 @@
 # Provisioning EC-2 Instance on Terraform using Modules and best practices
 
-So I have decided to destroy my complex infra with [ECS cluster and Auto Scaling Group](https://www.vvasylkovskyi.com/posts/provisioning-auto-scaling-group) and try something new. The reason for the destruction of the great infra above, I realized that as the infrastructure grows, it becomes so much harded to maintain it, especially when writing the code in a very poor way like I did - I am a beginner, bear with me. 
+So I have decided to destroy my complex infra with [ECS cluster and Auto Scaling Group](https://www.viktorvasylkovskyi.com/posts/provisioning-auto-scaling-group) and try something new. The reason for the destruction of the great infra above, I realized that as the infrastructure grows, it becomes so much harded to maintain it, especially when writing the code in a very poor way like I did - I am a beginner, bear with me. 
 
 In this notes, we are going to learn how to organise terraform code using best practices like terraform modules. For the sake of simplicity we will reduce the code to the very basic example. 
 
@@ -20,7 +20,7 @@ security_group.tf
 terraform.tfvars
 ```
 
-There is not much code, so I will paste here the repository for us to fork from. The repository can be found [https://github.com/vvasylkovskyi/vvasylkovskyi-infra](https://github.com/vvasylkovskyi/vvasylkovskyi-infra).
+There is not much code, so I will paste here the repository for us to fork from. The repository can be found [https://github.com/viktorvasylkovskyi/viktorvasylkovskyi-infra](https://github.com/viktorvasylkovskyi/viktorvasylkovskyi-infra).
 
 Make sure to clone it, run `terraform init` and `terraform apply --auto-approve`. Check you EIP address in console and access it via SSH using `ssh ubuntu@ip-address` to double check that the instance loaded correctly. 
 
@@ -299,7 +299,7 @@ Now in our `route53.tf`:
 # route53.tf
 
 resource "aws_route53_zone" "main" {
-  name = "vvasylkovskyi.com"
+  name = "viktorvasylkovskyi.com"
 }
 
 module "aws_route53_record" {
@@ -393,4 +393,4 @@ You can apply both environments using `terraform apply`. Just jump into the fold
 
 ## Conclusion
 
-By modularizing our Terraform code, we make our infrastructure more organized, reusable, and easier to maintain. This approach not only saves time as our projects grow, but also helps us avoid duplication and mistakes. With modules, scaling and evolving your infrastructure becomes a much smoother process. If needed, you can find full code here - `https://github.com/vvasylkovskyi/vvasylkovskyi-infra`. Keep iterating, keep improving, and happy hacking!
+By modularizing our Terraform code, we make our infrastructure more organized, reusable, and easier to maintain. This approach not only saves time as our projects grow, but also helps us avoid duplication and mistakes. With modules, scaling and evolving your infrastructure becomes a much smoother process. If needed, you can find full code here - `https://github.com/viktorvasylkovskyi/viktorvasylkovskyi-infra`. Keep iterating, keep improving, and happy hacking!

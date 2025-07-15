@@ -155,7 +155,7 @@ async function onSourceOpen() {
 mediaSource.addEventListener("sourceopen", onSourceOpen.bind(mediaSource));
 ```
 
-Note you can also find the code above on [this Github repository](https://github.com/vvasylkovskyi/barebones-mse-playback)
+Note you can also find the code above on [this Github repository](https://github.com/viktorvasylkovskyi/barebones-mse-playback)
 
 The provided code handles the download of segments. Now, let's introduce the `mpd-parser`.
 
@@ -278,7 +278,7 @@ Throughout the article, we addressed several key components and concepts:
 
 - **Testing:** We ensured that everything worked as expected by adding playback controls to the video element and verifying seamless video playback.
 
-I hope you enjoyed this article! Don't forget to explore the full code in [our GitHub repository](https://github.com/vvasylkovskyi/barebones-mse-playback). Stay tuned for more exciting articles on web development and media streaming.
+I hope you enjoyed this article! Don't forget to explore the full code in [our GitHub repository](https://github.com/viktorvasylkovskyi/barebones-mse-playback). Stay tuned for more exciting articles on web development and media streaming.
 
 ## References
 

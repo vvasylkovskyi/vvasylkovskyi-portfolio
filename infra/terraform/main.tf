@@ -83,22 +83,6 @@ module "alb" {
   alb_name                 = var.alb_name
 }
 
-# module "rds" {
-#   source             = "git::https://github.com/vvasylkovskyi/vvasylkovskyi-infra.git//modules/rds?ref=main"
-#   security_group     = module.security_group.security_group_rds
-#   database_name      = module.secrets.secrets.mysql_database_name
-#   database_username  = module.secrets.secrets.mysql_database_username
-#   database_password  = module.secrets.secrets.mysql_database_password
-#   private_subnet_ids = module.network.private_subnet_ids
-#   public_subnet_ids  = module.network.public_subnet_ids
-#   database_identifier = "mysql-db"
-#   database_engine    = "mysql"
-#   database_engine_version = "8.0"
-#   db_private_subnet_group_name = "mysql_rds-private-subnet-group"
-#   db_public_subnet_group_name = "mysql_rds-public-subnet-group"
-# }
-
-
 module "rds" {
   source             = "git::https://github.com/vvasylkovskyi/vvasylkovskyi-infra.git//modules/rds?ref=main"
   security_group     = module.security_group.security_group_rds

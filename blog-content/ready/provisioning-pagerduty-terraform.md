@@ -123,7 +123,7 @@ Let's apply what we have already using `terraform apply --auto-approve` to test 
 
 In this section we are going to add an integration between PagerDuty and Datadog and configure Datadog such that it will send alerts to PagerDuty. The PagerDuty will detect alerts and create incidents, notifying the users on call according to escalation policy.
 
-I recommend that you read my previous article about [Provision Datadog Observability on Ec-2 with Terraform](https://www.vvasylkovskyi.com/posts/provisioning-datadog-on-ec2-with-terraform). It will walk you through about how to setup Datadog Agent and ensure that your app has observability. Once the observability is in place, next we will configure rules in datadog about when to create the alert based on observability data.
+I recommend that you read my previous article about [Provision Datadog Observability on Ec-2 with Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-datadog-on-ec2-with-terraform). It will walk you through about how to setup Datadog Agent and ensure that your app has observability. Once the observability is in place, next we will configure rules in datadog about when to create the alert based on observability data.
 
 ### Add Datadog Provider
 

@@ -17,7 +17,7 @@ export AWS_ACCESS_KEY_ID=
 export AWS_SECRET_ACCESS_KEY=
 ```
 
-Or you can start as an advanced user and provision the IAM (Identity and Access Management) using terraform as well. Here is an in-depth notes about how to do this and it is the recommended way: [Provisioning IAM with Terraform for secure AWS access](https://www.vvasylkovskyi.com/posts/provisioning-iam-with-terraform).
+Or you can start as an advanced user and provision the IAM (Identity and Access Management) using terraform as well. Here is an in-depth notes about how to do this and it is the recommended way: [Provisioning IAM with Terraform for secure AWS access](https://www.viktorvasylkovskyi.com/posts/provisioning-iam-with-terraform).
 
 Now the AWS Api keys are ready, next we are going to start provisioning our infra using terraform.
 

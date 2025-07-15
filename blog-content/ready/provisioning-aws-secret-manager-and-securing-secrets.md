@@ -1,15 +1,15 @@
 # Provision AWS Secret Manager and Store Secrets Securely
 
-In the previous note we moved terraform state to the shared location, so that multiple team members have ability to provision infra using shared state. You can read about it in here: [Saving Terraform State in a Remote Backend on AWS with S3 and DynamoDB](https://www.vvasylkovskyi.com/posts/terraform-state-in-s3-dynamodb-backend).
+In the previous note we moved terraform state to the shared location, so that multiple team members have ability to provision infra using shared state. You can read about it in here: [Saving Terraform State in a Remote Backend on AWS with S3 and DynamoDB](https://www.viktorvasylkovskyi.com/posts/terraform-state-in-s3-dynamodb-backend).
 
 This shared setup is still not complete because the secrets remain on the user machine. So in this note, we will move the secrets from our laptop and store them in AWS secret Manager. 
 
 ## Prerequisites
 
 We assume that you already have VPC and a sample EC-2 instance. If not, I recommend setting up based on the following notes: 
-- [Deploying EC2 instance on AWS with Terraform](https://www.vvasylkovskyi.com/posts/provisioning-ec2-on-aws-with-terraform)
-- [Provision Datadog Observability on Ec-2 with Terraform](https://www.vvasylkovskyi.com/posts/provisioning-datadog-on-ec2-with-terraform)
-- [Provision Pagerduty with Terraform](https://www.vvasylkovskyi.com/posts/provisioning-pagerduty-terraform)
+- [Deploying EC2 instance on AWS with Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-ec2-on-aws-with-terraform)
+- [Provision Datadog Observability on Ec-2 with Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-datadog-on-ec2-with-terraform)
+- [Provision Pagerduty with Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-pagerduty-terraform)
 
 The Datadog Observability is a setup example that enables our Ec-2 with observability, which means that ec-2 instance requires access Datadog API key. Since that key will be stored in AWS secrets manager, it is a great use case for us to learn about how to give access to instance to the secret. 
 

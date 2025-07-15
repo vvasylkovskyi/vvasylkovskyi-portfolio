@@ -4,13 +4,13 @@ In this notes we will write the code for the `s3` bucket, and modify the `iam` r
 
 ## Previous notes
 
-This notes is a follow up on previous secure AWS Access - [Provisioning IAM with Terraform for secure AWS access](https://www.vvasylkovskyi.com/posts/provisioning-iam-with-terraform). Please read it to get familiar with the best practices on how to interact with AWS via terraform. 
+This notes is a follow up on previous secure AWS Access - [Provisioning IAM with Terraform for secure AWS access](https://www.viktorvasylkovskyi.com/posts/provisioning-iam-with-terraform). Please read it to get familiar with the best practices on how to interact with AWS via terraform. 
 
-Also, a useful notes in case you are new to the terraform modules - [Provisioning EC-2 Instance on Terraform using Modules and best practices](https://www.vvasylkovskyi.com/posts/terraform-modularizing).
+Also, a useful notes in case you are new to the terraform modules - [Provisioning EC-2 Instance on Terraform using Modules and best practices](https://www.viktorvasylkovskyi.com/posts/terraform-modularizing).
 
 ## Code on Github
 
-Full code available on [`https://github.com/vvasylkovskyi/vvasylkovskyi-infra/tree/vv-s3-bucket-v4`](https://github.com/vvasylkovskyi/vvasylkovskyi-infra/tree/vv-s3-bucket-v4). You can clone that and apply the infra yourself, all you need to do is to modify the variables for your domain.
+Full code available on [`https://github.com/viktorvasylkovskyi/viktorvasylkovskyi-infra/tree/vv-s3-bucket-v4`](https://github.com/viktorvasylkovskyi/viktorvasylkovskyi-infra/tree/vv-s3-bucket-v4). You can clone that and apply the infra yourself, all you need to do is to modify the variables for your domain.
 
 ## S3 bucket module 
 
@@ -107,7 +107,7 @@ variable "bucket_name" {
 
 This module can be used directly in the IAM policy - to auto the access control provisioning to the right s3. For that we need to output the `s3` ARN and name and then grab them in IAM policy. 
 
-Remember our IAM policy from [Provisioning IAM with Terraform for secure AWS access](https://www.vvasylkovskyi.com/posts/provisioning-iam-with-terraform): 
+Remember our IAM policy from [Provisioning IAM with Terraform for secure AWS access](https://www.viktorvasylkovskyi.com/posts/provisioning-iam-with-terraform): 
 
 ```hcl
 resource "aws_iam_policy" "s3_upload_policy" {
