@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
-import { Analytics } from './analytics-client';
 import 'plyr-react/plyr.css';
 import './app.scss';
 import './globals.css';
 import LayoutInner from './layout-inner';
 import StyledComponentsRegistry from './registry';
 import { ThemeScript } from './theme-script';
+import { PostHogProvider } from './providers';
 
 export const metadata: Metadata = {
   title: 'Viktor Vasylkovskyi',
@@ -38,8 +38,8 @@ export default function RootLayout({
       <body className='antialiased'>
         <StyledComponentsRegistry>
           <ThemeScript />
-          <Analytics />
-          <LayoutInner>{children}</LayoutInner>
+          <PostHogProvider><LayoutInner>{children}</LayoutInner></PostHogProvider>
+
         </StyledComponentsRegistry>
       </body>
     </html>

@@ -1,6 +1,5 @@
 'use client';
 
-import { useJune } from '@/hooks/useJune';
 import { useTheme } from '@/hooks/useTheme';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -12,49 +11,36 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
+import { posthog } from 'posthog-js';
 
 export const TopBar = () => {
   const pathname = usePathname();
   const { theme, toggleTheme, isResolved } = useTheme();
-  const analytics = useJune();
 
   const handleToggleTheme = useCallback(() => {
     toggleTheme();
-
-    if (analytics) {
-      analytics.track(`Theme toggled - ${theme}`, { theme });
-    }
-  }, [analytics, toggleTheme, theme]);
+    posthog.capture(`Theme toggled - ${theme}`, { theme })
+  }, [posthog, toggleTheme, theme]);
 
   const handleLogoClick = useCallback(() => {
-    if (analytics) {
-      analytics.track('Logo clicked');
-    }
-  }, [analytics]);
+    posthog.capture("Logo clicked")
+  }, [posthog]);
 
   const handleGithubClick = useCallback(() => {
-    if (analytics) {
-      analytics.track('Github clicked');
-    }
-  }, [analytics]);
+    posthog.capture('Github clicked');
+  }, [posthog]);
 
   const handleHamburgerClick = useCallback(() => {
-    if (analytics) {
-      analytics.track('Hamburger clicked');
-    }
-  }, [analytics]);
+    posthog.capture('Hamburger clicked');
+  }, [posthog]);
 
   const handleHamburgerClickBlog = useCallback(() => {
-    if (analytics) {
-      analytics.track('Hamburger clicked - Blog');
-    }
-  }, [analytics]);
+    posthog.capture('Hamburger clicked - Blog');
+  }, [posthog]);
 
   const handleHamburgerClickAbout = useCallback(() => {
-    if (analytics) {
-      analytics.track('Hamburger clicked - About');
-    }
-  }, [analytics]);
+    posthog.capture('Hamburger clicked - About');
+  }, [posthog]);
 
   if (!isResolved) {
     return null;

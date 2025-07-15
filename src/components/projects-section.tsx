@@ -1,6 +1,5 @@
 'use client';
 
-import { useJune } from '@/hooks/useJune';
 import { Card } from './molecules/card';
 
 const projects = [
@@ -46,7 +45,6 @@ const projects = [
 ];
 
 export const ProjectsSection = () => {
-  const analytics = useJune();
   return (
     <div>
       <h2 className='projects__title'>Work Experience</h2>
@@ -63,11 +61,6 @@ export const ProjectsSection = () => {
             height={project.height}
             date={project.date}
             role={project.role}
-            onClick={() => {
-              if (analytics) {
-                analytics.track(`Project clicked - ${project.title}`, { project: project.title });
-              }
-            }}
           />
         ))}
       </div>

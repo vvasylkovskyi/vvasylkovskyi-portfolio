@@ -53,6 +53,8 @@ module "ec2" {
               -e DB_HOST=${module.rds.database_host} \
               -e DB_PORT=${module.rds.database_port} \
               -e VIDEO_SERVICE_URL=${var.video_service_url} \
+              -e NEXT_PUBLIC_POSTHOG_KEY=${module.secrets.secrets.posthog_key} \
+              -e NEXT_PUBLIC_POSTHOG_HOST=${module.secrets.secrets.posthog_host} \
               vvasylkovskyi1/vvasylkovskyi-portfolio:${var.docker_image_hash_portfolio_fe}
             EOF
 }
