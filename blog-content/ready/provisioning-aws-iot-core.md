@@ -235,4 +235,10 @@ awsiotsdk = "1.24.0"
 
 The official place to get it is here in PyPi - https://pypi.org/project/awsiotsdk/.
 
+### Python script to connect
 
+Now we are going to write an actual script that connects all this: `aws_mqtt_connect.py`
+
+```sh
+aws_mqtt_connect.py
+```
