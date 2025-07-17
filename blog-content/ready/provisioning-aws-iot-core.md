@@ -213,6 +213,60 @@ Let's write ansible script:
 
 Make sure the you `aws_iot_local_path` and `aws_iot_remote_path` are correct. Run the script using ansible: `ansible-playbook -i inventory/all.yml playbooks/playbook.yml --vault-password-file .vault_pass.txt`
 
+### Add necessary environment variables
+
+Later on for the MQTT connection to work, we are going to setup a python script that will be looking at the values for the connection. The AWS IOT Core endpoint and certificates are usually secrets, and for best portability, we will encode them into environment variables. So lets define the environment variables first. We will be using them in the code later. 
+
+I like to setup the `.env` file using ansible, this way I can upload a set of env vars to the new device when needed. let's write an ansible script: 
+
+```yml
+# create_env_file_for_camera
+- name: Create environment file for FastAPI app
+  copy:
+    dest: /etc/rpi-camera.env
+    content: |
+      export AWS_ACCESS_KEY_ID={{ aws_access_key_id }}
+      export AWS_SECRET_ACCESS_KEY={{ aws_secret_access_key }}
+      export AWS_DEFAULT_REGION={{ aws_default_region }}
+      export AWS_IOT_CORE_ENDPOINT={{ aws_iot_core_endpoint }}
+      export AWS_IOT_CLIENT_ID={{ aws_iot_client_id }}
+      export AWS_IOT_PATH_TO_CERT={{ aws_iot_path_to_cert }}
+      export AWS_IOT_PATH_TO_KEY={{ aws_iot_path_to_key }}
+      export AWS_IOT_PATH_TO_ROOT_CERT={{ aws_iot_path_to_root_cert }}
+      export AWS_IOT_MQTT_TOPIC={{ aws_iot_mqtt_topic }}
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0600"
+```
+
+Make sure to define your secrets using `ansible-vault`. You can learn about how to do it here: [TODO Link](). Finally, you can manually execute the script from the device: 
+
+```sh
+source /etc/rpi-camera.env
+```
+
+Or, if you want to automate this, then create a `systemd` daemon that will start your app at. In your `systemd` file devine `EnvironmentFile` under `[Service]` definitions. Similar to the following
+
+```yml
+      [Unit]
+      Description=Camera App Server
+      After=network.target
+
+      [Service]
+      Type=simple
+      User={{ ansible_user }}
+      EnvironmentFile=/etc/rpi-camera.env
+      WorkingDirectory=/home/{{ ansible_user }}/git/rpi-camera/app
+      ExecStart=/usr/bin/make run
+      Restart=on-failure
+      RestartSec=5
+      Environment=PYTHONUNBUFFERED=1
+
+      [Install]
+      WantedBy=multi-user.target
+```
+
+All variables are set, now it is time to do some python!
 
 ## Install AWS IoT Device SDK and adding connection using Python
 
@@ -237,8 +291,140 @@ The official place to get it is here in PyPi - https://pypi.org/project/awsiotsd
 
 ### Python script to connect
 
-Now we are going to write an actual script that connects all this: `aws_mqtt_connect.py`
+We are going to define a Python MQTT client that securely connects our Raspberry Pi to AWS IoT Core using mutual TLS authentication. Once connected, it can:
+  - Subscribe to MQTT topics
+  - Publish messages
+  - Receive messages via callbacks
+  - Gracefully disconnect
 
-```sh
-aws_mqtt_connect.py
+It uses the AWS IoT Device SDK v2, specifically the `awscrt` and `awsiot` libraries. Now we are going to write an actual script that connects all this: `aws_mqtt_client.py`
+
+```python
+# aws_mqtt_client.py
+import os
+import time
+from awscrt import io, mqtt
+from awsiot import mqtt_connection_builder
+
+class AwsMQTTClient:
+    ENDPOINT = os.environ["AWS_IOT_CORE_ENDPOINT"]
+    CLIENT_ID = os.environ.get("AWS_IOT_CLIENT_ID")
+    PATH_TO_CERT = os.environ["AWS_IOT_PATH_TO_CERT"]
+    PATH_TO_KEY = os.environ["AWS_IOT_PATH_TO_KEY"]
+    PATH_TO_ROOT = os.environ["AWS_IOT_PATH_TO_ROOT_CERT"]
+    TOPIC = os.environ.get("AWS_IOT_MQTT_TOPIC")
+
+    def __init__(self, bucket_name: str = None):
+        self.bucket_name = bucket_name
+
+        self.event_loop_group = io.EventLoopGroup(1)
+        self.host_resolver = io.DefaultHostResolver(self.event_loop_group)
+        self.client_bootstrap = io.ClientBootstrap(self.event_loop_group, self.host_resolver)
+
+        self.mqtt_connection = mqtt_connection_builder.mtls_from_path(
+            endpoint=self.ENDPOINT,
+            cert_filepath=self.PATH_TO_CERT,
+            pri_key_filepath=self.PATH_TO_KEY,
+            client_bootstrap=self.client_bootstrap,
+            ca_filepath=self.PATH_TO_ROOT,
+            client_id=self.CLIENT_ID,
+            clean_session=False,
+            keep_alive_secs=30
+        )
+
+    def connect(self):
+        print(f"Connecting to {self.ENDPOINT} with client ID '{self.CLIENT_ID}'...")
+        connect_future = self.mqtt_connection.connect()
+        connect_future.result()
+        print("Connected!")
+
+    def subscribe(self, callback=None):
+        def default_callback(topic, payload, **kwargs):
+            print(f"[MQTT] Received on topic '{topic}': {payload.decode()}")
+
+        cb = callback if callback else default_callback
+        print(f"Subscribing to topic '{self.TOPIC}'...")
+        subscribe_future, _ = self.mqtt_connection.subscribe(
+            topic=self.TOPIC,
+            qos=mqtt.QoS.AT_LEAST_ONCE,
+            callback=cb
+        )
+        subscribe_future.result()
+        print(f"Subscribed to topic '{self.TOPIC}'")
+
+    def publish(self, message: str):
+        print(f"Publishing message to topic '{self.TOPIC}': {message}")
+        self.mqtt_connection.publish(
+            topic=self.TOPIC,
+            payload=message,
+            qos=mqtt.QoS.AT_LEAST_ONCE
+        )
+
+    def disconnect(self):
+        print("Disconnecting...")
+        disconnect_future = self.mqtt_connection.disconnect()
+        disconnect_future.result()
+        print("Disconnected.")
 ```
+
+Then, on your app start, run this to initialize the client: 
+
+```python
+mqtt_client = AwsMQTTClient()
+mqtt_client.connect()
+mqtt_client.subscribe()
+```
+
+## Code overview
+
+Let's go step by step what this code actually does:
+
+### Initialization: __init__
+
+```python
+self.event_loop_group = io.EventLoopGroup(1)
+self.host_resolver = io.DefaultHostResolver(self.event_loop_group)
+self.client_bootstrap = io.ClientBootstrap(self.event_loop_group, self.host_resolver)
+```
+
+This sets up networking for MQTT using AWS’s `awscrt` library:
+  - EventLoopGroup handles async I/O.
+  - ClientBootstrap wraps the networking and TLS layers.
+
+Then `self.mqtt_connection = mqtt_connection_builder.mtls_from_path(...)` creates a secure MQTT connection using the client certificate, private key, and root CA — required for mutual TLS authentication with AWS IoT.
+
+### connect()
+
+```python
+self.connect_future = self.mqtt_connection.connect()
+self.connect_future.result()
+```
+
+This opens a secure connection to the AWS IoT Core endpoint. .result() blocks until the connection is established.
+
+### subscribe(callback=None)
+
+This subscribes to the MQTT topic defined in `AWS_IOT_MQTT_TOPIC`, it is how we listen for messages sent to our device: 
+
+```python
+def default_callback(topic, payload, **kwargs):
+    print(f"[MQTT] Received on topic '{topic}': {payload.decode()}")
+```
+
+### publish
+
+```python
+self.mqtt_connection.publish(
+    topic=self.TOPIC,
+    payload=message,
+    qos=mqtt.QoS.AT_LEAST_ONCE
+)
+```
+
+This publishes a message to the MQTT topic. Any subscriber to that topic will receive it. MQTT defines three levels of message delivery guarantees. They determine how reliably messages are delivered between the client (Raspberry Pi) and the broker (AWS IoT Core in this case):
+
+| Level | Constant            | Description                                                                                          |
+| ----- | ------------------- | ---------------------------------------------------------------------------------------------------- |
+| `0`   | `QOS.AT_MOST_ONCE`  | 🔹 *"Fire and forget"* — no retries, no confirmation. Fastest, least reliable.                       |
+| `1`   | `QOS.AT_LEAST_ONCE` | ✅ *Most commonly used*. Ensures message is **delivered at least once**, but **could be duplicated**. |
+| `2`   | `QOS.EXACTLY_ONCE`  | 🔒 Guarantees message is delivered **once and only once**. Most reliable, but slowest.               |

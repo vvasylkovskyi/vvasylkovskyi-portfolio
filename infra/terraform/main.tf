@@ -44,7 +44,7 @@ module "ec2" {
               -e SECRET_KEY_BASE=${module.secrets.secrets.video_service_secret_key_base} \
               -e AWS_ACCESS_KEY_ID=${module.secrets.secrets.aws_access_key_id} \
               -e AWS_SECRET_ACCESS_KEY=${module.secrets.secrets.aws_secret_access_key} \
-              vvasylkovskyi1/vvasylkovskyi-video-service-elixir:${var.docker_image_hash_video_service}
+              vvasylkovskyi1/vvasylkovskyi-video-service-web:${var.docker_image_hash_video_service}
 
             sudo docker run -d --name frontend --network docker-internal-network -p 80:80 \
               -e DB_USER=${module.secrets.secrets.postgres_database_username} \
