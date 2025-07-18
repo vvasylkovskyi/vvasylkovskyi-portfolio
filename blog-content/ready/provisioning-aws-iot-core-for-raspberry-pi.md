@@ -1,6 +1,6 @@
-# Provisioning AWS IoT Core for MQTT Broker with Terraform
+# Provisioning AWS IoT Core Certificates for Raspberry Pi - MQTT Publisher for MQTT Broker with Terraform 
 
-Recently I have been developing my IoT project where I have a device and a couple of web servers that need to intercommunicate. During this process, I have tried alot of different things: 
+Recently I have been developing my IoT project where I have a device and a couple of web servers that need to intercommunicate. During this process, I have tried a lot of different things: 
 
   - Running Raspberry Pi behind reverse proxy using terraform, and expose it publicly through ec2. This poses security concerns because we expose the device to the public network, plus it is not very scalable. Although an interesting read and I found it useful for debugging and dev. You can have a read on this: [Deploying EC2 as Remote Proxy for Raspberry Pi using Terraform and Ansible](https://www.viktorvasylkovskyi.com/posts/provisioning-ec2-as-remote-proxy-for-raspberry-pi).
 
@@ -266,165 +266,14 @@ Or, if you want to automate this, then create a `systemd` daemon that will start
       WantedBy=multi-user.target
 ```
 
-All variables are set, now it is time to do some python!
+## Conclusion
 
-## Install AWS IoT Device SDK and adding connection using Python
+And all is set! You Raspberry pi is ready to chat with with MQTT Service on AWS! Only python code implementation to actually do that is missing. From this point forward, there are two more journeys that you need to do to ensure the mastery of AWS MQTT: 
 
-Now that we have all infrastructure in place, the next step is to add the capability for the device to actually connect to that infrastructure. We will be adding AWS IOT SDK to our python app. This python app is meant to run on the Rpi - I will omit the steps on how to set this up, as there are many places this can be read about.
+1. Provision an AWS Web service that would be a subscriber to Raspberry Pi events. This is slightly different from what we did at the Ansible part. We need to store certificates on the AWS Ec-2 instance instead of directly on the device,
+2. Write an implementation code that will give all this infra some life. This is usually python in IoT world
 
-### Adding dependencies
+I like to take care of my infrastructure before diving into the implementations. But you can choose which one you want to pursue first. Deep dive for more in: 
 
-First we need to add dependencies
-
-```sh
-pip install awsiotsdk
-```
-
-Or another method that you prefer, I have added it using `poetry` in my `pyproject.toml`:
-
-```sh
-[tool.poetry.dependencies]
-awsiotsdk = "1.24.0"
-```
-
-The official place to get it is here in PyPi - https://pypi.org/project/awsiotsdk/.
-
-### Python script to connect
-
-We are going to define a Python MQTT client that securely connects our Raspberry Pi to AWS IoT Core using mutual TLS authentication. Once connected, it can:
-  - Subscribe to MQTT topics
-  - Publish messages
-  - Receive messages via callbacks
-  - Gracefully disconnect
-
-It uses the AWS IoT Device SDK v2, specifically the `awscrt` and `awsiot` libraries. Now we are going to write an actual script that connects all this: `aws_mqtt_client.py`
-
-```python
-# aws_mqtt_client.py
-import os
-import time
-from awscrt import io, mqtt
-from awsiot import mqtt_connection_builder
-
-class AwsMQTTClient:
-    ENDPOINT = os.environ["AWS_IOT_CORE_ENDPOINT"]
-    CLIENT_ID = os.environ.get("AWS_IOT_CLIENT_ID")
-    PATH_TO_CERT = os.environ["AWS_IOT_PATH_TO_CERT"]
-    PATH_TO_KEY = os.environ["AWS_IOT_PATH_TO_KEY"]
-    PATH_TO_ROOT = os.environ["AWS_IOT_PATH_TO_ROOT_CERT"]
-    TOPIC = os.environ.get("AWS_IOT_MQTT_TOPIC")
-
-    def __init__(self, bucket_name: str = None):
-        self.bucket_name = bucket_name
-
-        self.event_loop_group = io.EventLoopGroup(1)
-        self.host_resolver = io.DefaultHostResolver(self.event_loop_group)
-        self.client_bootstrap = io.ClientBootstrap(self.event_loop_group, self.host_resolver)
-
-        self.mqtt_connection = mqtt_connection_builder.mtls_from_path(
-            endpoint=self.ENDPOINT,
-            cert_filepath=self.PATH_TO_CERT,
-            pri_key_filepath=self.PATH_TO_KEY,
-            client_bootstrap=self.client_bootstrap,
-            ca_filepath=self.PATH_TO_ROOT,
-            client_id=self.CLIENT_ID,
-            clean_session=False,
-            keep_alive_secs=30
-        )
-
-    def connect(self):
-        print(f"Connecting to {self.ENDPOINT} with client ID '{self.CLIENT_ID}'...")
-        connect_future = self.mqtt_connection.connect()
-        connect_future.result()
-        print("Connected!")
-
-    def subscribe(self, callback=None):
-        def default_callback(topic, payload, **kwargs):
-            print(f"[MQTT] Received on topic '{topic}': {payload.decode()}")
-
-        cb = callback if callback else default_callback
-        print(f"Subscribing to topic '{self.TOPIC}'...")
-        subscribe_future, _ = self.mqtt_connection.subscribe(
-            topic=self.TOPIC,
-            qos=mqtt.QoS.AT_LEAST_ONCE,
-            callback=cb
-        )
-        subscribe_future.result()
-        print(f"Subscribed to topic '{self.TOPIC}'")
-
-    def publish(self, message: str):
-        print(f"Publishing message to topic '{self.TOPIC}': {message}")
-        self.mqtt_connection.publish(
-            topic=self.TOPIC,
-            payload=message,
-            qos=mqtt.QoS.AT_LEAST_ONCE
-        )
-
-    def disconnect(self):
-        print("Disconnecting...")
-        disconnect_future = self.mqtt_connection.disconnect()
-        disconnect_future.result()
-        print("Disconnected.")
-```
-
-Then, on your app start, run this to initialize the client: 
-
-```python
-mqtt_client = AwsMQTTClient()
-mqtt_client.connect()
-mqtt_client.subscribe()
-```
-
-## Code overview
-
-Let's go step by step what this code actually does:
-
-### Initialization: __init__
-
-```python
-self.event_loop_group = io.EventLoopGroup(1)
-self.host_resolver = io.DefaultHostResolver(self.event_loop_group)
-self.client_bootstrap = io.ClientBootstrap(self.event_loop_group, self.host_resolver)
-```
-
-This sets up networking for MQTT using AWS’s `awscrt` library:
-  - EventLoopGroup handles async I/O.
-  - ClientBootstrap wraps the networking and TLS layers.
-
-Then `self.mqtt_connection = mqtt_connection_builder.mtls_from_path(...)` creates a secure MQTT connection using the client certificate, private key, and root CA — required for mutual TLS authentication with AWS IoT.
-
-### connect()
-
-```python
-self.connect_future = self.mqtt_connection.connect()
-self.connect_future.result()
-```
-
-This opens a secure connection to the AWS IoT Core endpoint. .result() blocks until the connection is established.
-
-### subscribe(callback=None)
-
-This subscribes to the MQTT topic defined in `AWS_IOT_MQTT_TOPIC`, it is how we listen for messages sent to our device: 
-
-```python
-def default_callback(topic, payload, **kwargs):
-    print(f"[MQTT] Received on topic '{topic}': {payload.decode()}")
-```
-
-### publish
-
-```python
-self.mqtt_connection.publish(
-    topic=self.TOPIC,
-    payload=message,
-    qos=mqtt.QoS.AT_LEAST_ONCE
-)
-```
-
-This publishes a message to the MQTT topic. Any subscriber to that topic will receive it. MQTT defines three levels of message delivery guarantees. They determine how reliably messages are delivered between the client (Raspberry Pi) and the broker (AWS IoT Core in this case):
-
-| Level | Constant            | Description                                                                                          |
-| ----- | ------------------- | ---------------------------------------------------------------------------------------------------- |
-| `0`   | `QOS.AT_MOST_ONCE`  | 🔹 *"Fire and forget"* — no retries, no confirmation. Fastest, least reliable.                       |
-| `1`   | `QOS.AT_LEAST_ONCE` | ✅ *Most commonly used*. Ensures message is **delivered at least once**, but **could be duplicated**. |
-| `2`   | `QOS.EXACTLY_ONCE`  | 🔒 Guarantees message is delivered **once and only once**. Most reliable, but slowest.               |
+  - [Provisioning AWS IoT Core Certificates for Ec-2 instance - MQTT Subscriber with Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-aws-iot-core-for-ec-2)
+  - [AWS IoT Core - Implementing Publisher and Subscriber for MQTT in Python](https://www.viktorvasylkovskyi.com/posts/provisioning-aws-iot-core-python-implementation)

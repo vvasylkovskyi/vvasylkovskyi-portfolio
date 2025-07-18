@@ -1,4 +1,4 @@
-# Provisioning EC-2 Instance on Terraform using Modules and best practices
+# Provisioning EC2 Instances with Terraform Modules – Best Practices Guide
 
 So I have decided to destroy my complex infra with [ECS cluster and Auto Scaling Group](https://www.viktorvasylkovskyi.com/posts/provisioning-auto-scaling-group) and try something new. The reason for the destruction of the great infra above, I realized that as the infrastructure grows, it becomes so much harded to maintain it, especially when writing the code in a very poor way like I did - I am a beginner, bear with me. 
 

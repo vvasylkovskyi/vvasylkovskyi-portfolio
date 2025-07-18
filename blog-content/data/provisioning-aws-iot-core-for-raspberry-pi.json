@@ -1,0 +1,13 @@
+{
+    "title": "Provisioning AWS IoT Core Certificates for Raspberry Pi - MQTT Publisher for MQTT Broker with Terraform ",
+    "filename": "provisioning-aws-iot-core-for-raspberry-pi",
+    "date": "Jul 18, 2025",
+    "metaText": "Provision AWS IoT Core certificates for your Raspberry Pi using Terraform to securely connect to an MQTT broker. This guide covers X.509 certs, IoT policies, secure key handling, and automated deployment via Ansible.",
+    "categories": [
+        "Terraform",
+        "IOT",
+        "Raspberry Pi",
+        "MQTT",
+        "AWS"
+    ]
+}

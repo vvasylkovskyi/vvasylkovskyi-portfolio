@@ -41,9 +41,15 @@ module "ec2" {
               -e DB_DATABASE_NAME=${module.secrets.secrets.postgres_database_name} \
               -e DB_HOST=${module.rds.database_host} \
               -e DB_PORT=${module.rds.database_port} \
-              -e SECRET_KEY_BASE=${module.secrets.secrets.video_service_secret_key_base} \
-              -e AWS_ACCESS_KEY_ID=${module.secrets.secrets.aws_access_key_id} \
-              -e AWS_SECRET_ACCESS_KEY=${module.secrets.secrets.aws_secret_access_key} \
+              -e AWS_IOT_CORE_ENDPOINT=${module.secrets.secrets.aws_iot_core_endpoint} \
+              -e AWS_IOT_CLIENT_ID=${module.secrets.secrets.aws_iot_client_id} \
+              -e AWS_IOT_MQTT_TOPIC=${module.secrets.secrets.aws_iot_mqtt_topic} \
+              -e AWS_IOT_CERT_BASE64=${module.secrets.secrets.aws_iot_cert_base64} \
+              -e AWS_IOT_KEY_BASE64=${module.secrets.secrets.aws_iot_key_base64} \
+              -e AWS_IOT_ROOT_CERT_BASE64=${module.secrets.secrets.aws_iot_root_cert_base64} \
+              -e AWS_IOT_PATH_TO_CERT=${module.secrets.secrets.aws_iot_path_to_cert} \
+              -e AWS_IOT_PATH_TO_KEY=${module.secrets.secrets.aws_iot_path_to_key} \
+              -e AWS_IOT_PATH_TO_ROOT_CERT=${module.secrets.secrets.aws_iot_path_to_root_cert} \
               vvasylkovskyi1/vvasylkovskyi-video-service-web:${var.docker_image_hash_video_service}
 
             sudo docker run -d --name frontend --network docker-internal-network -p 80:80 \

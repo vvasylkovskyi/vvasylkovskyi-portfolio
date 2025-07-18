@@ -1,0 +1,13 @@
+{
+    "title": "AWS IoT Core - Implementing Publisher and Subscriber for MQTT in Python",
+    "filename": "provisioning-aws-iot-core-python-implementation",
+    "date": "Jul 18, 2025",
+    "metaText": "Explore how to implement a robust MQTT publisher and subscriber using Python on AWS IoT Core. This guide demonstrates setting up secure, bi-directional communication between a Raspberry Pi device and a web server leveraging AWS IoT Core and the AWS IoT Device SDK. Perfect for turning your Pi into a full-fledged IoT client with real-time message exchange.",
+    "categories": [
+        "Terraform",
+        "IOT",
+        "Raspberry Pi",
+        "MQTT",
+        "AWS"
+    ]
+}

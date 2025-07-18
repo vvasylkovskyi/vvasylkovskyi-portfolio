@@ -1,0 +1,11 @@
+{
+    "title": "Provisioning EC2 Instances with Terraform Modules – Best Practices Guide",
+    "filename": "terraform-modularizing",
+    "date": "May 23, 2025",
+    "metaText": "Learn how to provision an AWS EC2 instance using Terraform modules and best practices. This step-by-step guide covers modularization, reusable infrastructure, DNS setup, HTTP server automation, and multi-environment configuration for dev and prod.",
+    "categories": [
+        "Terraform",
+        "EC-2",
+        "AWS"
+    ]
+}

@@ -1,0 +1,13 @@
+{
+    "title": "Provisioning AWS IoT Core Certificates for Ec-2 instance - MQTT Subscriber with Terraform",
+    "filename": "provisioning-aws-iot-core-for-ec-2",
+    "date": "Jul 18, 2025",
+    "metaText": "Provision AWS IoT Core certificates for an EC2 instance using Terraform and securely inject them as base64-encoded secrets via AWS Secrets Manager. This guide covers setting up MQTT subscribers in a secure, scalable way for web services.",
+    "categories": [
+        "Terraform",
+        "IOT",
+        "EC2",
+        "MQTT",
+        "AWS"
+    ]
+}
