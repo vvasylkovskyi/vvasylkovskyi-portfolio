@@ -10,3 +10,8 @@ export type VideoResponse = {
     status: string;
     videos: Video[];
 }
+
+export type LiveStreamResponse = {
+    status: string;
+    stream_url: string;
+}

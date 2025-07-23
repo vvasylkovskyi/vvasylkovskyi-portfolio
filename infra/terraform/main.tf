@@ -35,7 +35,9 @@ module "ec2" {
 
             docker network create docker-internal-network
 
-            sudo docker run -d --name video-service --network docker-internal-network -p 4000:4000 \
+            sudo docker run -d --name video-service --network docker-internal-network \ 
+              -p 4000:4000/tcp \ 
+              -p 4001:4001/udp \
               -e DB_USER=${module.secrets.secrets.postgres_database_username} \
               -e DB_PASSWORD=${module.secrets.secrets.postgres_database_password} \
               -e DB_DATABASE_NAME=${module.secrets.secrets.postgres_database_name} \

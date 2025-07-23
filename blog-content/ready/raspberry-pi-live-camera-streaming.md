@@ -1,4 +1,4 @@
-# Live Camera Streaming from Raspberry Pi with AI Camera and Picamera2
+# Live Camera Streaming from Raspberry Pi with Camera Module and Picamera2 - the easy way
 
 ![alt text](./raspberry-pi-live-camera-streaming/raspberry-pi.png)
 
