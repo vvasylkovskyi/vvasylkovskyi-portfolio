@@ -124,6 +124,11 @@
   border-radius: 0;
 }
 
+.player-loading-wrapper {
+  padding: 0 40px;
+  text-align: center;
+}
+
 .player-component-wrapper {
   display: flex;
   align-items: center;
@@ -145,11 +150,20 @@
   height: 100%;
 }
 
-.player-timeline {
+.player-timeline,
+.player-live-buttons-wrapper {
   width: 100%;
   display: flex;
   margin-top: 40px;
 }
+
+.player-live-buttons-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-4;
+}
+
 
 .swiper-slide {
   width: 250px;

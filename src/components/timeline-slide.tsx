@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
 
-import { FC } from 'react';
+import type { FC } from 'react';
 import 'swiper/css';
 
 type TimelineSlideProps = {
@@ -22,7 +22,7 @@ function formatTimestampToLabel(timestamp: string) {
     }).format(date);
 }
 
-export const TimelineSlide: FC<TimelineSlideProps> = ({ timestamp, title, url }) => {
+export const TimelineSlide: FC<TimelineSlideProps> = ({ timestamp }) => {
     const label = formatTimestampToLabel(timestamp);
 
     return (

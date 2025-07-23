@@ -1,9 +1,10 @@
-"use client";
+'use client';
 
-import { TimelineSwiper } from "@/components/timeline-swiper";
-import { VideoPlayer } from "@/components/video-player";
-import { Video } from "@/types/video";
-import { FC, useState } from "react";
+import { TimelineSwiper } from '@/components/timeline-swiper';
+import { VideoPlayer } from '@/components/video-player';
+import type { Video } from '@/types/video';
+import type { FC} from 'react';
+import { useState } from 'react';
 
 type CameraRpiClientProps = {
     videos: Video[]

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
@@ -6,8 +6,8 @@ import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { TimelineSlide } from './timeline-slide';
-import { FC } from 'react';
-import { Video } from '@/types/video';
+import type { FC } from 'react';
+import type { Video } from '@/types/video';
 
 type TimelineSwiperProps = {
     videosList?: Video[];
@@ -15,7 +15,7 @@ type TimelineSwiperProps = {
 };
 
 export const TimelineSwiper: FC<TimelineSwiperProps> = ({ videosList, onSlideChange }) => {
-    const handleOnSlideChange = (event: any) => {
+    const handleOnSlideChange = (event) => {
         const currentIndex = event.activeIndex;
         const currentVideo = videosList?.[currentIndex];
 

@@ -20,27 +20,27 @@ export const TopBar = () => {
   const handleToggleTheme = useCallback(() => {
     toggleTheme();
     posthog.capture(`Theme toggled - ${theme}`, { theme })
-  }, [posthog, toggleTheme, theme]);
+  }, [toggleTheme, theme]);
 
   const handleLogoClick = useCallback(() => {
-    posthog.capture("Logo clicked")
-  }, [posthog]);
+    posthog.capture('Logo clicked')
+  }, []);
 
   const handleGithubClick = useCallback(() => {
     posthog.capture('Github clicked');
-  }, [posthog]);
+  }, []);
 
   const handleHamburgerClick = useCallback(() => {
     posthog.capture('Hamburger clicked');
-  }, [posthog]);
+  }, []);
 
   const handleHamburgerClickBlog = useCallback(() => {
     posthog.capture('Hamburger clicked - Blog');
-  }, [posthog]);
+  }, []);
 
   const handleHamburgerClickAbout = useCallback(() => {
     posthog.capture('Hamburger clicked - About');
-  }, [posthog]);
+  }, []);
 
   if (!isResolved) {
     return null;

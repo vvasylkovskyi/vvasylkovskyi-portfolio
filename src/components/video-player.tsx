@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
 import Plyr from 'plyr-react';
-import { FC } from 'react';
+import type { FC } from 'react';
 
 type VideoPlayerProps = {
     src: string;
