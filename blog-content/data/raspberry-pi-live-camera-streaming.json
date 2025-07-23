@@ -1,0 +1,14 @@
+{
+    "title": "Live Camera Streaming from Raspberry Pi with Camera Module and Picamera2 - the easy way",
+    "filename": "raspberry-pi-live-camera-streaming",
+    "date": "Jul 23, 2025",
+    "metaText": "Live stream video from a Raspberry Pi with the Sony IMX500 AI Camera using Picamera2. This guide shows how to serve MJPEG video over HTTP and display it simply with a native <img> tag in a web frontend—perfect for fast prototyping AI camera projects.",
+    "categories": [
+        "Video",
+        "Javascript",
+        "Raspberrypi",
+        "Picamera2",
+        "Live Streaming",
+        "HLS"
+    ]
+}

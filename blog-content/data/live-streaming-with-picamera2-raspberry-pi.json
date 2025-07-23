@@ -1,0 +1,15 @@
+{
+    "title": "Live Streaming - Raspberry pi streaming with Picamera2",
+    "filename": "live-streaming-with-picamera2-raspberry-pi",
+    "date": "Jul 23, 2025",
+    "metaText": "This guide explains how to build a live streaming setup using Raspberry Pi with Picamera2, FFmpeg, and FastAPI. It covers capturing video, converting it to HLS, serving segments via a web server, and managing streaming control through MQTT.",
+    "categories": [
+        "Video",
+        "Javascript",
+        "Raspberrypi",
+        "Picamera2",
+        "Live Streaming",
+        "HLS",
+        "AWS IoT Core"
+    ]
+}
