@@ -43,7 +43,6 @@ export const CameraRpiClientLive = () => {
 
     const startWebRTC = async () => {
         setState({ isLoading: true, isStreaming: false });
-        navigator.mediaDevices.getUserMedia({ video: true, audio: true })
 
         const pc = new RTCPeerConnection({
             iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
@@ -67,6 +66,7 @@ export const CameraRpiClientLive = () => {
                 videoRef.current.srcObject = stream;
                 // If you want to play the video automatically, you can uncomment the line below
                 // Required for mobile browsers (e.g., iOS) to play video automatically
+                videoRef.current.muted = true;
                 videoRef.current.play().catch((error) => {
                     console.error('Error playing video:', error);
                 });
@@ -76,7 +76,8 @@ export const CameraRpiClientLive = () => {
 
         // Add transceiver for video, receive-only mode
         pc.addTransceiver('video', { direction: 'recvonly' });
-
+        // const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        // stream.getTracks().forEach(track => pc.addTrack(track, stream));
         // Create SDP offer
         const offer = await pc.createOffer();
         await pc.setLocalDescription(offer);
