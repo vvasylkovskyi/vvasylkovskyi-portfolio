@@ -4,7 +4,20 @@
 
 In this notes, we’ll walk through setting up a live camera feed view on a Raspberry Pi using the [Picamera2 module](https://github.com/raspberrypi/picamera2/tree/main), specifically designed to work with the [Sony IMX500 AI Camera](https://www.raspberrypi.com/documentation/accessories/ai-camera.html). The goal is to serve a continuous video stream via HTTP and display it directly in a frontend web application using only a native `<img>` tag.
 
-This setup focuses on a proof-of-concept workflow, where simplicity and fast iteration matter more than production-grade video quality or audio support. We'll also note which system packages must be installed directly on the Raspberry Pi and how to enable your virtual environment to access them.
+This setup focuses on a proof-of-concept workflow, where simplicity and fast iteration matter more than production-grade video quality or audio support. We'll also note which system packages must be installed directly on the Raspberry Pi and how to enable your virtual environment to access them. 
+
+## Note on performance 
+
+I am also learning with you and I have ran some experiments. The protocol we are showing here is called Multipart JPEG stream (MJPEG). Note however, there may be issue to run this in production, that I noticed while doing my tests
+
+  - MJPEG uses `StreamedResponse` in HTTP, while this is fine, I had trouble running video reliably on mobile devices and aparently they have fault in implementing it
+  - Even though, I would cancel the streamed response from the client, it was hard to actually stop streaming, so this method wastes resources.
+
+## More Production Use Case
+
+If you want to do things well done, you should consider your use case and read more: 
+   - For streaming at scale and when latency is acceptable - Use HLS or DASH - [Live Streaming - Raspberry pi streaming with Picamera2](https://www.viktorvasylkovskyi.com/posts/raspberry-pi-live-camera-streaming)
+   - For real time streaming with zero latency - WebRTC - [WebRTC - Zero latency streaming with Raspberry pi streaming with Picamera2](https://www.viktorvasylkovskyi.com/posts/real-time-streaming-with-picamera2-raspberry-pi)
 
 ## Github Code
 
@@ -111,8 +124,6 @@ export default async function CameraRpi() {
 ## Final Thoughts
 
 With this simple but effective setup, we now have a live video feed being streamed from a Raspberry Pi using the IMX500 AI Camera and Picamera2, served via an HTTP endpoint and rendered in the frontend using standard web primitives. This is a great foundation for more advanced use cases such as applying real-time AI-based analysis, edge processing, or integrating with robotics.
-
-As always, this is just a starting point. For production use, consider exploring more robust streaming protocols, authentication layers, and hardware-accelerated encoders. But for prototyping AI camera solutions with Raspberry Pi, this setup is fast, minimal, and developer-friendly.
 
 
 

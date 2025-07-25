@@ -1,0 +1,15 @@
+{
+    "title": "WebRTC - Zero latency streaming with Raspberry pi streaming with Picamera2",
+    "filename": "real-time-streaming-with-picamera2-raspberry-pi",
+    "date": "Jul 25, 2025",
+    "metaText": "Explore how to achieve near-zero latency live streaming from a Raspberry Pi camera using WebRTC. This guide covers the full end-to-end implementation, replacing traditional HLS streaming with real-time WebRTC communication ideal for robotics and remote security applications.",
+    "categories": [
+        "Video",
+        "Javascript",
+        "Python",
+        "Raspberrypi",
+        "Picamera2",
+        "Live Streaming",
+        "WebRTC"
+    ]
+}

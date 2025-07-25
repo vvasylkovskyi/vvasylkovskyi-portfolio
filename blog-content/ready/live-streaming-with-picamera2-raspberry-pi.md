@@ -1,8 +1,26 @@
 # Live Streaming - Raspberry pi streaming with Picamera2
 
+I have been building my raspberry pi camera for some time now and one of my most desired features is the live streaming since it allows lots of cool robotics abilities, like we could stream video to multiple people at the same time or remotely see what the robot sees in real time. Turns out live streaming is quite a complex architecture involving, and lots of streaming protocols: 
+
+- HLS, DASH for stream, MJPEG
+- [WebRTC](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API) - for real time streaming 
+
+My goal is to build a real time camera with almost no latency, so that I can remotely access and control my robot. 
+I have been working on raspberry pi with camera module working on `Picamera2` software in python. Originally I attempted to do the streaming using multipart jpeg streaming at [Live Camera Streaming from Raspberry Pi with Camera Module and Picamera2 - the easy way](https://www.viktorvasylkovskyi.com/posts/raspberry-pi-live-camera-streaming). The problem with this approach is that while simple to do I noticed lack of compatibility on mobile devices, and problem with shutting down the open streaming connection, which was crashing my RPI. Besides it uses direct access to the device instead of MQTT which is not practical for production. 
+
+My next attempt is this note, implementing HLS. It is much more effective and production ready. Unfortunately after having implemented this, I was confronted with latency of approx. 5-10 seconds. While negligible for most use cases, it is impractical for real time remote control. If you are need remote control and almost zero latency you should consider [WebRTC](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API). I implemented WebRTC in my notes: [WebRTC - Zero latency streaming with Raspberry pi streaming with Picamera2](https://www.viktorvasylkovskyi.com/posts/real-time-streaming-with-picamera2-raspberry-pi). 
+
+Consider well what technology is best for your use case. If it is Streaming at scale, them keep reading below!
+
+## Github Code
+
+Full code available on https://github.com/viktorvasylkovskyi/rpi-camera. 
+
+## Live Streaming with HLS
+
 ![alt text](./live-streaming-with-picamera2-raspberry-pi/architecture.png)
 
-I have been building my raspberry pi camera for some time now and one of my most desired features is the live streaming since it allows lots of cool robotics abilities, like we could remotely see what the robot sees in real time. Turns out live streaming is quite a complex architecture involving: 
+Full End-to-End HLS requires the following steps: 
 
 - Streaming the binary data from raspberry pi camera to some IP
 - Converting the binary into live streaming protocols such as HLS or DASH
@@ -10,8 +28,6 @@ I have been building my raspberry pi camera for some time now and one of my most
 - Cleaning up these segments after live streaming is shut down
 - Optionally converting the live streaming to VOD on shutdown
 - Optionally, all of this could be turned on and off via event from the client to the MQTT broker.
-
-Here is what we are going to build
 
 In this notes we will walk through how to do that locally., i.e. on the `localhost`. Deploying all the things is the matter for another note: 
 
@@ -26,8 +42,6 @@ The system for live streaming is comprised by four actors:
 
 
 ## Preparing Raspberry pi with camera streaming
-
-I have been working on raspberry pi with camera module working on `Picamera2` software in python. Originally I attempted to do the streaming using multipart jpeg streaming at [Live Camera Streaming from Raspberry Pi with Camera Module and Picamera2 - the easy way](https://www.viktorvasylkovskyi.com/posts/raspberry-pi-live-camera-streaming). The problem with this approach is that while simple to do I noticed lack of compatibility on mobile devices, and problem with shutting down the open streaming connection, which was crashing my RPI. Besides it uses direct access to the device instead of MQTT which is not practical for production. 
 
 So here we are going to try out the streaming using Ffmpeg. According to the official Picamera2 documentation this is the code we need: 
 
@@ -469,8 +483,3 @@ export const CameraRpiClientLive: FC<CameraRpiClientProps> = ({ streamUrl }) => 
     );
 };
 ```
-
-
-
-
-

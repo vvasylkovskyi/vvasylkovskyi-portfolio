@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { WebRtcAnswer } from '@/types/video';
 
@@ -43,6 +43,7 @@ export const CameraRpiClientLive = () => {
 
     const startWebRTC = async () => {
         setState({ isLoading: true, isStreaming: false });
+        navigator.mediaDevices.getUserMedia({ video: true, audio: true })
 
         const pc = new RTCPeerConnection({
             iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
@@ -64,6 +65,8 @@ export const CameraRpiClientLive = () => {
             if (videoRef.current && videoRef.current.srcObject !== stream) {
                 console.log('>>> Attaching stream:', event.streams);
                 videoRef.current.srcObject = stream;
+                // If you want to play the video automatically, you can uncomment the line below
+                // Required for mobile browsers (e.g., iOS) to play video automatically
                 videoRef.current.play().catch((error) => {
                     console.error('Error playing video:', error);
                 });
@@ -77,21 +80,22 @@ export const CameraRpiClientLive = () => {
         // Create SDP offer
         const offer = await pc.createOffer();
         await pc.setLocalDescription(offer);
+        console.log('>>> Created SDP offer:', offer.sdp);
 
         // Wait for ICE gathering to complete
-        await new Promise<void>((resolve) => {
-            if (pc.iceGatheringState === 'complete') {
-                resolve();
-            } else {
-                function checkState() {
-                    if (pc.iceGatheringState === 'complete') {
-                        pc.removeEventListener('icegatheringstatechange', checkState);
-                        resolve();
-                    }
-                }
-                pc.addEventListener('icegatheringstatechange', checkState);
-            }
-        });
+        // await new Promise<void>((resolve) => {
+        //     if (pc.iceGatheringState === 'complete') {
+        //         resolve();
+        //     } else {
+        //         function checkState() {
+        //             if (pc.iceGatheringState === 'complete') {
+        //                 pc.removeEventListener('icegatheringstatechange', checkState);
+        //                 resolve();
+        //             }
+        //         }
+        //         pc.addEventListener('icegatheringstatechange', checkState);
+        //     }
+        // });
 
         // Send offer SDP to Pi
         await sendOffer(pc.localDescription!);
@@ -114,6 +118,24 @@ export const CameraRpiClientLive = () => {
 
         setState({ isLoading: false, isStreaming: false });
     };
+
+    useEffect(() => {
+        return () => {
+            stopWebRTC();
+        };
+    }, []);
+
+    useEffect(() => {
+        const handleBeforeUnload = (_: BeforeUnloadEvent) => {
+            stopWebRTC();
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);
 
     if (!state.isStreaming) {
         return <div className="camera__layout-wrapper">
