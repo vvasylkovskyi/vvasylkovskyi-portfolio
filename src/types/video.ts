@@ -15,3 +15,8 @@ export type LiveStreamResponse = {
     status: string;
     stream_url: string;
 }
+
+export type WebRtcAnswer = {
+    status: string;
+    webrtc_answer: string; // SDP answer for WebRTC
+}

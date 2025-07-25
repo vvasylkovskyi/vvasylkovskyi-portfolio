@@ -1,104 +1,121 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import Hls from 'hls.js';
+import { useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { WebRtcAnswer } from '@/types/video';
 
 type CameraRpiClientLiveState = {
-    streamUrl: string | null;
     isLoading: boolean;
+    isStreaming: boolean;
 }
 
 export const CameraRpiClientLive = () => {
     const videoRef = useRef<HTMLVideoElement | null>(null);
+    const pcRef = useRef<RTCPeerConnection | null>(null);
     const [state, setState] = useState<CameraRpiClientLiveState>({
-        streamUrl: null,
-        isLoading: false
+        isLoading: false,
+        isStreaming: false,
     });
 
-    useEffect(() => {
-        const video = videoRef.current;
-        if (!video || !state.streamUrl) {
-            return;
-        }
+    const sendOffer = async (offer: RTCSessionDescriptionInit) => {
+        // You should implement this function to send offer SDP to Pi via MQTT or your signaling channel
+        console.log('Sending offer SDP to Pi:', offer.sdp);
+        setState(s => ({ ...s, isStreaming: true, isLoading: false }));
+        const response = await fetch('/api/start-webrtc', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(offer),
+        });
 
-        if (Hls.isSupported()) {
-            const hls = new Hls({
-                xhrSetup: (xhr, url) => {
-                    // if segment url does not start with prefix, prepend it
-                    const prefix = '/api/live?stream_url=/hls/stream.m3u8';
-                    if (!url.startsWith(prefix)) {
-                        const segmentUrl = url.substring(url.lastIndexOf('/') + 1);
-                        xhr.open('GET', `${window.location.protocol}//${window.location.host}/api/live?stream_url=/hls/${segmentUrl}`);
+        const data: WebRtcAnswer = await response.json();
+        handleAnswer({ sdp: data.webrtc_answer, type: "answer" } as RTCSessionDescriptionInit);
+    };
+
+    // You should call this method when you receive the answer SDP from Pi via MQTT/signaling
+    const handleAnswer = async (answer: RTCSessionDescriptionInit) => {
+        console.log('Received answer SDP from Pi');
+        if (pcRef.current) {
+            await pcRef.current.setRemoteDescription(new RTCSessionDescription(answer));
+        }
+    };
+
+    const startWebRTC = async () => {
+        setState({ isLoading: true, isStreaming: false });
+
+        const pc = new RTCPeerConnection({
+            iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
+        });
+
+        pcRef.current = pc;
+
+        pc.onicecandidate = (event) => {
+            if (event.candidate) {
+                // Optionally send ICE candidates to Pi if needed via MQTT
+                console.log('>>> New ICE candidate:', event.candidate.candidate);
+            }
+        };
+
+        pc.ontrack = (event) => {
+            console.log('>>> Received remote track:', event.track);
+            console.log('>>> Event streams:', event.streams);
+            const [stream] = event.streams;
+            if (videoRef.current && videoRef.current.srcObject !== stream) {
+                console.log('>>> Attaching stream:', event.streams);
+                videoRef.current.srcObject = stream;
+                videoRef.current.play().catch((error) => {
+                    console.error('Error playing video:', error);
+                });
+                console.log('>>> Received remote stream');
+            }
+        };
+
+        // Add transceiver for video, receive-only mode
+        pc.addTransceiver('video', { direction: 'recvonly' });
+
+        // Create SDP offer
+        const offer = await pc.createOffer();
+        await pc.setLocalDescription(offer);
+
+        // Wait for ICE gathering to complete
+        await new Promise<void>((resolve) => {
+            if (pc.iceGatheringState === 'complete') {
+                resolve();
+            } else {
+                function checkState() {
+                    if (pc.iceGatheringState === 'complete') {
+                        pc.removeEventListener('icegatheringstatechange', checkState);
+                        resolve();
                     }
                 }
-            });
-            hls.loadSource(state.streamUrl);
-            hls.attachMedia(video);
-            // Jump to live edge after manifest is parsed
+                pc.addEventListener('icegatheringstatechange', checkState);
+            }
+        });
 
-            hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                const liveSync = hls.liveSyncPosition;
-                if (liveSync) {
-                    video.currentTime = liveSync;
-                }
-            });
+        // Send offer SDP to Pi
+        await sendOffer(pc.localDescription!);
+    };
 
-            hls.on(Hls.Events.ERROR, (_, data) => {
-                console.error('HLS.js error:', data);
-            });
-
-        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            // For Safari
-            video.src = state.streamUrl;
-        } else {
-            console.error('HLS not supported in this browser.');
+    const stopWebRTC = async () => {
+        if (pcRef.current) {
+            pcRef.current.close();
+            pcRef.current = null;
         }
-    }, [state.streamUrl]);
-
-    // const handleJumpToLiveView = () => {
-    //     if (videoRef.current) {
-    //         videoRef.current.currentTime = videoRef.current.duration; // Jump to the end of the live stream
-    //     }
-    // };
-
-    const handleStartLiveStream = async () => {
-        setState({ ...state, isLoading: true });
-        const response = await fetch('/api/start-live-stream');
-        const data = await response.json();
-        setState({
-            streamUrl: `/api/live?stream_url=${data.stream_url}`,
-            isLoading: false
+        if (videoRef.current) {
+            videoRef.current.srcObject = null;
+        }
+        await fetch('/api/stop-webrtc', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
         });
+
+        setState({ isLoading: false, isStreaming: false });
     };
 
-    const handleStopLiveStream = async () => {
-        await fetch('/api/stop-live-stream');
-        setState({
-            streamUrl: null,
-            isLoading: false
-        });
-    };
-
-    useEffect(() => {
-        return () => {
-            handleStopLiveStream();
-        };
-    }, []);
-
-    useEffect(() => {
-        const handleBeforeUnload = (_: BeforeUnloadEvent) => {
-            handleStopLiveStream();
-        };
-
-        window.addEventListener('beforeunload', handleBeforeUnload);
-
-        return () => {
-            window.removeEventListener('beforeunload', handleBeforeUnload);
-        };
-    }, []);
-
-    if (!state.streamUrl) {
+    if (!state.isStreaming) {
         return <div className="camera__layout-wrapper">
             {state.isLoading && <div className="player-component-wrapper player-loading-wrapper">
                 <p>Loading live stream... This usually takes a few seconds</p>
@@ -110,13 +127,14 @@ export const CameraRpiClientLive = () => {
 
             <div className="player-live-buttons-wrapper">
                 <Button
-                    onClick={handleStartLiveStream}
+                    onClick={startWebRTC}
                     variant="default"
+                    disabled={state.isLoading || state.isStreaming}
                 >
                     Start Live Stream
                 </Button>
 
-                <Button variant="secondary" onClick={handleStopLiveStream}>Stop Live Stream</Button>
+                <Button variant="secondary" onClick={stopWebRTC}>Stop Live Stream</Button>
             </div>
 
         </div>
@@ -135,13 +153,14 @@ export const CameraRpiClientLive = () => {
             </div>
             <div className="player-live-buttons-wrapper">
                 <Button
-                    onClick={handleStartLiveStream}
+                    onClick={startWebRTC}
                     variant="default"
+                    disabled={state.isLoading || state.isStreaming}
                 >
                     Start Live Stream
                 </Button>
 
-                <Button variant="secondary" onClick={handleStopLiveStream}>Stop Live Stream</Button>
+                <Button variant="secondary" onClick={stopWebRTC}>Stop Live Stream</Button>
 
                 {/* <Button variant="default" onClick={handleJumpToLiveView}>Jump to Live Point</Button> */}
 

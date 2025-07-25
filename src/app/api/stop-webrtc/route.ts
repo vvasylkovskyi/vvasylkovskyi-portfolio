@@ -1,8 +1,8 @@
-import { startLiveStream } from './start-live-stream';
+import { stopWebRtc } from './stop-webrtc';
 
 export async function GET(_: Request) {
     try {
-        const result = await startLiveStream();
+        const result = await stopWebRtc();
 
         return Response.json(result);
     } catch (error) {
