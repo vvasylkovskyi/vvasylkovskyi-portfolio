@@ -43,13 +43,11 @@ export const CameraRpiClientLive = () => {
 
     const startWebRTC = async () => {
         setState({ isLoading: true, isStreaming: false });
-
+        const response = await fetch("/api/turn-credentials");
+        const turnCredentials = await response.json();
+        console.log('>>> Received TURN credentials:', turnCredentials);
         const pc = new RTCPeerConnection({
-            iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, {
-                urls: 'turn:openrelay.metered.ca:80',
-                username: 'openrelayproject',
-                credential: 'openrelayproject'
-            }],
+            iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
         });
 
         pcRef.current = pc;

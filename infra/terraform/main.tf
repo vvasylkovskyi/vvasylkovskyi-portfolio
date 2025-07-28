@@ -63,6 +63,7 @@ module "ec2" {
               -e VIDEO_SERVICE_URL=${var.video_service_url} \
               -e NEXT_PUBLIC_POSTHOG_KEY=${module.secrets.secrets.posthog_key} \
               -e NEXT_PUBLIC_POSTHOG_HOST=${module.secrets.secrets.posthog_host} \
+              -e METERED_API_KEY_TURN_CREDENTIALS=${module.secrets.secrets.metered_api_key_turn_credentials} \
               vvasylkovskyi1/vvasylkovskyi-portfolio:${var.docker_image_hash_portfolio_fe}
             EOF
 }
