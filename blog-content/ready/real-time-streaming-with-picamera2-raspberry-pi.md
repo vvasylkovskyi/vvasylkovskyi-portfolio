@@ -1,8 +1,8 @@
 # WebRTC - Zero latency streaming with Raspberry pi streaming with Picamera2
 
-My goal is to create a live camera to use as a security or remote access for robotics projects. Previously I attempted live streaming at [Live Camera Streaming from Raspberry Pi with Camera Module and Picamera2 - the easy way](https://www.viktorvasylkovskyi.com/posts/raspberry-pi-live-camera-streaming). All was nice and dandy until I tested and observed that the live view had around 5-10 seconds delay. The results where not what I had expected so I had to change strategy. 
+My goal was simple: create a live camera stream from a Raspberry Pi that I could use for security or robotics projects — something actually real-time. I had previously tried a solution that used HLS streaming: [Live Camera Streaming from Raspberry Pi with Camera Module and Picamera2 - the easy way](https://www.viktorvasylkovskyi.com/posts/raspberry-pi-live-camera-streaming). But while it worked, the 5–10 seconds of delay made it a poor fit for anything requiring responsiveness.
 
-In this notes, we will implement live streaming with almost zero latency - ideal for real time camera view. This is achieved by implementing [WebRTC](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API). Here we will walk through about how to implement it end to end from camera to client device.
+In these notes, we’ll take things a step further by building a low-latency live camera feed using WebRTC — the same tech that powers Zoom, Google Meet, and other real-time video tools. The result is a Raspberry Pi camera that streams directly to your browser with near-zero latency. I'll walk you through everything: from how [WebRTC](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API) works under the hood, to configuring the Pi camera, to setting up the client. Full working code is included, so you can follow along or adapt it to your own use case.
 
 ## Github Code
 
@@ -20,30 +20,42 @@ The architecture required is similar to what we have done before in [Live Camera
 - Raspberry pi generates `sdp` answer for the client and attaches media handler to stream frames on demand
 - Finally, web server returns the answer to the client and the client can initiate the communication from the browser using `video` element. 
 
-## WebRTC under the hood
+## How WebRTC Works (A Quick Theory Primer)
 
-Feel free to skip this section if you want hands-on working example of WebRTC. If you are curious to understand how WebRTC works and delivers your media, then this section is a little overview. We build-up on [the excellent explanation about WebRTC by Metered](https://www.metered.ca/tools/openrelay/). 
+Feel free to skip this section if you just want the working code. But if you're curious how WebRTC actually pulls off low-latency magic, here’s a quick overview. We build-up on [the excellent explanation about WebRTC by Metered](https://www.metered.ca/tools/openrelay/). 
 
-Essentially WebRTC is based on Peer to Peer connection between devices, and a UDP transport protocol. The combination of both is what allows the WebRTC to be so fast and have so little latency. WebRTC is a protocol for establishing peer to peer communication between two machines. But establishing communication between two machines on the network is not that simple, so there are some caveats that are important to understand before implementing WebRTC. There are two main problems when establishing P2P connection: 
+WebRTC (Web Real-Time Communication) enables direct peer-to-peer communication between two devices, usually over UDP — a transport protocol known for its speed. The beauty of WebRTC lies in its ability to bypass traditional server relays and establish direct connections, significantly reducing latency.
 
- - Discovering peers IP addresses
- - Bypassing corporate or home router firewalls
+However, direct connections aren't always easy. Devices don’t usually know their own public IPs, and firewalls or NAT (Network Address Translation) often block inbound connections. WebRTC tackles these issues using a few smart components:
 
-### Discovering peers IP addresses - STUN Servers
+ - Discovering Peer IPs: The Role of STUN Servers
+ - Bypassing Firewalls: The Role of TURN Servers
 
-So you have two devices that want to start sending messages over the internet to each other, without intermediary service so how can we make them do that? First thing, each device needs to know who they want to talk to, and in the internet, the devices are identified by their IP addresses. But here is the catch, most of the devices do not know their IP addresses, because of the [IP depletion problem](https://en.wikipedia.org/wiki/IPv4_address_exhaustion). There are so many devices in the world, that it is not possible to give IP address to each of them. So each device actually have a private IP address, which is assigned to it by the router. The router itself is the one that has a public IP address. 
+### Discovering Peer IPs: The Role of STUN Servers
 
-If you have read about WebRTC, then you probably heard about STUN server. STUN server is what allows the devices to discover their public IP address. The assumption is that devices know the IP address of a STUN server, which is public, and they can ask it for the IP address of themselves. That is what devices do in WebRTC. So a device `A` can ask STUN server what is its IP address, and then send it to the device `B`. Device `B` does the same, and so they can now establish a direct peer to peer connection. Or can't they? 
+Most devices are hidden behind routers and don’t know their public IP address. That’s where STUN (Session Traversal Utilities for NAT) servers come in. STUN allows each device to discover its public-facing IP by pinging a known server on the internet and asking, “Hey, what’s my IP?”
+
+Once both peers have this info, they can try to connect directly — but this only works if their firewalls and NAT configurations allow it. Which brings us to...
 
 ### Bypassing corporate or home router firewalls - TURN Servers
 
-The above works fine when the devices are within the same network, but if they are not, then the router firewall will probably block the peer to peer connection because most of the routers don't just allow random device to talk to some of the devices in the private network for security reasons. There is a workaround though, which is well used in WebRTC. A router usually allows for the data to flow from the device `A` on the internet to the device `B` in the private network if the device `B` had initiated connection with the `A`. This is called [Symetric NAT](https://www.checkmynat.com/posts/understanding--symmetric-nat-limitations/). 
+In many networks (especially corporate or home setups), firewalls prevent unsolicited traffic from reaching internal devices. Even if both peers know each other’s IP addresses, the connection might still get blocked.
 
-So if two devices are on the different networks, they can start talking to each other using the TURN servers which are the relay servers. In this case, the connection is no longer peer to peer as the data has to pass through a centralized TURN server. This means, that if you want your data transmissions to work reliably in WebRTC, then you need both STUN and a TURN server. 
+Enter TURN (Traversal Using Relays around NAT) servers. TURN acts as a fallback: when direct peer-to-peer connections fail, all data is relayed through a centralized server. This isn't as fast as a direct connection, but it ensures reliability when NAT traversal fails.
+
+TL;DR: STUN helps discover your public IP. TURN relays your traffic when direct connection isn’t possible. WebRTC uses both as connection “candidates” and negotiates the best option through a process called ICE (Interactive Connectivity Establishment).
+
+### Exchanging SDP: How WebRTC Peers Communicate
+
+Before any data flows, peers must agree on how they’ll communicate — what codecs to use, what candidates they support, etc. This is done using SDP (Session Description Protocol) messages.
+
+Your browser (the client) generates an SDP offer, which is sent to the Raspberry Pi (the peer). The Pi responds with an answer, completing the negotiation. Once that handshake is complete, media streaming begins — efficiently and (if all goes well) peer-to-peer.
+
+For a deep dive, I recommend [Metered’s WebRTC guide](https://www.metered.ca/tools/openrelay/), which I’ve heavily leaned on throughout this project.
 
 ### Exchanging WebRTC sdp between client browser and raspberry pi
 
-For simplicity, I will omit the messages and API exchange between HTTP and MQTT. If you are interested in details on how to do it, you can read about it here [Live Camera Streaming from Raspberry Pi with Camera Module and Picamera2 - the easy way](https://www.viktorvasylkovskyi.com/posts/raspberry-pi-live-camera-streaming).
+For simplicity, I will omit the messages and API exchange between HTTP and MQTT. If you are interested in details on how to do it, you can read about it here [ive Streaming - Raspberry pi streaming with Picamera2](https://www.viktorvasylkovskyi.com/posts/live-streaming-with-picamera2-raspberry-pi).
 
 
 ## Preparing Raspberry pi with camera streaming
@@ -266,6 +278,60 @@ This API returns a list of ICE servers including TURN and STUN servers with cred
 
 Note, we need to fetch this as well on the device camera because both devices need to know the addresses of both TURN and STUN to relay data.
 
+### Sharing ICE Candidates with Peer
+
+Now that we have a list of possible peer to peer connections (STUN or TURN), we have to share the candidates with the peer. This can be done either by waiting for all candidates to be collected and send them in bulk to the peer, or by sending candidates one by one. The only way I managed to make it work is by sending them in bulk, [thankfully there is a comment on github of how to do it on browser](https://github.com/aiortc/aiortc/issues/1084#issuecomment-2106171488). 
+
+I am going to share the process here for completeness. Essentially, we need to wait for collecting of all the ICE candidates before sending the offer. Once we collect them all, we will append them to the offer. Note, the ICE candidates collection is trigerred by the `setLocalDescription`.  
+
+```typescript
+    const response = await fetch("/api/turn-credentials");
+    const turnCredentials = await response.json();
+    const peerConnection = new RTCPeerConnection({
+        iceServers: turnCredentials,
+    });
+
+    pcRef.current = peerConnection;
+    
+    // initialize candidates
+    const iceCandidates: RTCIceCandidateInit[] = [];
+
+    // Start promise, to await for the collection to be completed
+    const iceGatheringComplete = new Promise((resolve) => {
+        peerConnection!.onicegatheringstatechange = (event) => {
+
+            if (peerConnection!.iceGatheringState === 'complete') {
+                resolve(null);
+            }
+        };
+    });
+
+    // On the discovery of a candidate, add them to the list
+    peerConnection.onicecandidate = async (event: RTCPeerConnectionIceEvent) => {
+        if (event.candidate) {
+            iceCandidates.push(event.candidate.toJSON());
+        }
+    };
+
+    // ... rest of the offer initialization and media code ...
+
+    const offer = await peerConnection.createOffer();
+    
+    await peerConnection.setLocalDescription(offer); 
+
+    // Note, peerConnection.setLocalDescription - is what is going to trigger the "gathering" of ICE candidates
+    // So, we will await for the candidates collection here
+    await iceGatheringComplete;
+
+    // Here we already have all the candidates, so we will append them to the offer
+    offer.sdp += iceCandidates.map((candidate) => `a=${candidate.candidate}`).join('\r\n') + '\r\n';
+    
+    // Finally, send offer SDP to Pi
+    await sendOffer(peerConnection.localDescription!);
+```
+
+**Note:** It is crucial to collect the candidates before sending the offer. This is essentially the process that allows remote peer to know what is the best connection to use to establish data tranfer.
+
 ### WebRTC Samples 
 
 I found some samples from where you can learn how to use WebRTC effectively. Feel free to dive in - https://webrtc.github.io/samples/. Also, Metered offers free TURN and a very good explanation here https://www.metered.ca/tools/openrelay/.
@@ -273,7 +339,7 @@ I found some samples from where you can learn how to use WebRTC effectively. Fee
 
 ### Adding MQTT for managing Raspberry Pi Turn on and off the streaming
 
-Our `/start-streaming-service` and `/stop-streaming-service` will simple send messages via MQTT to the MQTT broker. We will assume that raspberry pi is subscribed to these messages and will be able to call `start_recording` and `stop_recording` on the `Picamera2`. 
+Our `/start-webrtc` and `/start-webrtc` will simple send messages via MQTT to the MQTT broker. We will assume that raspberry pi is subscribed to these messages and will be able to call `start_recording` and `stop_recording` on the `Picamera2`. 
 
 I will not dive deep into this in this article, but if you are curious feel free to visit my series on setting up MQTT for raspberry pi: 
 
@@ -281,199 +347,12 @@ I will not dive deep into this in this article, but if you are curious feel free
 - [Provisioning AWS IoT Core Certificates for Raspberry Pi for MQTT Broker with Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-aws-iot-core-for-raspberry-pi)
 - [AWS IoT Core - Implementing Publisher and Subscriber for MQTT in Python](https://www.viktorvasylkovskyi.com/posts/provisioning-aws-iot-core-python-implementation)
 
-
-For completeness though, I will leave my code here so you can see how everything can be orchestrated from web service, at least it works for me: 
-
-```python
-
-@videos_router.get("/start-streaming-service")
-async def start_streaming_service():
-    ffmpeg_service = FFmpegStreamingService()
-    ffmpeg_service.start()
-    stream_url = f"/hls/{ffmpeg_service.STREAM_NAME}.m3u8"
-    mqtt_client = AwsMQTTClient(MQTTClients.WEB_SERVICE.value)
-    event = CameraControlEvent(action=CameraAction.START_LIVE_STREAM)
-    mqtt_client.publish(MQTTTopics.CAMERA_CONTROL.value, event.json())
-
-    return {
-        "status": "Video streaming service started successfully",
-        "stream_url": stream_url,
-    }
-
-
-@videos_router.get("/stop-streaming-service")
-async def stop_streaming_service():
-    mqtt_client = AwsMQTTClient(MQTTClients.WEB_SERVICE.value)
-    ffmpeg_service = FFmpegStreamingService()
-    ffmpeg_service.stop()
-    event = CameraControlEvent(action=CameraAction.STOP_LIVE_STREAM)
-    mqtt_client.publish(MQTTTopics.CAMERA_CONTROL.value, event.json())
-    return {
-        "status": "Video streaming service stopped successfully",
-    }
-
-```
-
-### Adding Wait for stream to start
-
-The code above has an issue at `start-streaming-service`, it assumes that the communication to raspberry pi and streaming is instantaneous and returns the URL to the client. This may cause bugs where client tries to fetch the manifest that doesn't exist yet. So let's add the waiting function, we will wait in the FastAPI endpoint until FFmpeg generates first segments - this way we can ensure the client that they can start playback without any issues: 
-
-```python
-@videos_router.get("/start-streaming-service")
-async def start_streaming_service():
-    ffmpeg_service = FFmpegStreamingService()
-    stream_url = f"/hls/{ffmpeg_service.STREAM_NAME}.m3u8"
-    mqtt_client = AwsMQTTClient(MQTTClients.WEB_SERVICE.value)
-
-    event = CameraControlEvent(action=CameraAction.START_LIVE_STREAM)
-    mqtt_client.publish(MQTTTopics.CAMERA_CONTROL.value, event.json())
-
-    ffmpeg_service.start()
-    # Wait for 10 seconds to ensure the stream is available
-    success = await ffmpeg_service.start_and_wait(10)
-
-    if not success:
-        return {
-            "status": "error",
-            "message": "Stream failed to become available in time",
-        }
-
-    return {
-        "status": "Video streaming service started successfully",
-        "stream_url": stream_url,
-    }
-```
-
-Now let's implement the `start_and_wait` on Ffmpeg service: 
-
-```python
-    async def start_and_wait(
-        self, timeout_seconds: float = 5.0, poll_interval: float = 0.2
-    ) -> bool:
-        if not self.process:
-            self.start()
-        else:
-            logger.info("FFmpeg process already running, skipping start.")
-
-        manifest_path = os.path.join(self.HLS_DIR, f"{self.STREAM_NAME}.m3u8")
-
-        waited = 0.0
-        while not os.path.exists(manifest_path) and waited < timeout_seconds:
-            await asyncio.sleep(poll_interval)
-            waited += poll_interval
-
-        if os.path.exists(manifest_path):
-            logger.success("Stream manifest is now available.")
-            return True
-        else:
-            logger.error("Timed out waiting for manifest to appear.")
-            return False
-```
-
-We are basically putting our process to `sleep` and when using `asyncio` coroutine until the file appears in the desired location. Using `asyncio` allows us to await in a non-blocking manner. So Ffmpeg is waiting for the raspberry pi to start streaming data into it's UDP service and once it receives data ffmpeg will create first segments. That is when we will return the URL to the client.
-
-### Clean the segments on stop streaming 
-
-Now, the last piece of the backend puzzle is to ensure that when start streaming begins, the "old live" view doesn't show up. This is accomplished by cleaning up the segments from the folder essentially. Let's write this function in ffmpeg service: 
-
-```python
-    def cleanup(self):
-        """Remove the manifest and all segment files."""
-        manifest_path = os.path.join(self.HLS_DIR, f"{self.STREAM_NAME}.m3u8")
-        segment_pattern = os.path.join(self.HLS_DIR, f"{self.STREAM_NAME}_*.ts")
-
-        try:
-            # Remove manifest file
-            if os.path.exists(manifest_path):
-                os.remove(manifest_path)
-                logger.info(f"Removed manifest file: {manifest_path}")
-
-            # Remove segment files
-            segments = glob.glob(segment_pattern)
-            for segment_file in segments:
-                os.remove(segment_file)
-            logger.info(f"Removed {len(segments)} segment files.")
-        except Exception as e:
-            logger.error(f"Failed to cleanup HLS files: {e}")
-```
-
-Now we have to just invoke it on stop-streaming: 
-
-```python
-@videos_router.get("/stop-streaming-service")
-async def stop_streaming_service():
-    ...
-    ffmpeg_service.cleanup()
-    ...
-    return {
-        "status": "Video streaming service stopped successfully",
-    }
-```
-
-
-## Building Javascript Web Client 
-
-Now the client has to do the following: 
-
-1. start streaming by calling `/start-streaming-service`
-2. Fetch segments by using `stream_url`. 
-
-All we need is a very little JS to orchestrate these API calls. I will leave you do it. The last piece will be to put the segments into the `<video>` HTML element. Natively, only Safari and iOS support HLS, so for best compatibility across all the browsers I am using `hls.js` which essentially polyfills the browsers that don't support it. This way the live stream can be played across all of the browsers. I am using a simple video element for such playback.
-
-```javascript
-"use client";
-
-import { FC, useEffect, useRef } from "react";
-import Hls from 'hls.js';
-
-type CameraRpiClientProps = {
-    streamUrl: string;
-};
-
-export const CameraRpiClientLive: FC<CameraRpiClientProps> = ({ streamUrl }) => {
-    const videoRef = useRef<HTMLVideoElement | null>(null);
-
-    useEffect(() => {
-        const video = videoRef.current;
-        if (!video) {
-            return;
-        }
-
-        if (Hls.isSupported()) {
-            const hls = new Hls();
-            hls.loadSource(streamUrl);
-            hls.attachMedia(video);
-            hls.on(Hls.Events.ERROR, (event, data) => {
-                console.error("HLS.js error:", data);
-            });
-        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            // For Safari
-            video.src = streamUrl;
-        } else {
-            console.error("HLS not supported in this browser.");
-        }
-    }, [streamUrl]);
-
-    return (
-        <div className="camera__layout-wrapper">
-            <div className="player-component-wrapper">
-                <video
-                    ref={videoRef}
-                    controls
-                    autoPlay
-                    muted
-                    playsInline
-                    style={{ width: '100%' }}
-                />
-            </div>
-        </div>
-    );
-};
-```
-
 ## Conclusion
 
-And that is it, you should be able to see your raspberry pi streaming to the web browser. Let me know if you succeeded in the comments below! 
+And there you go — a real-time camera stream from Raspberry Pi to your browser using WebRTC. It’s fast, it’s lightweight, and it opens up a ton of possibilities for remote robotics, surveillance, or even DIY video chat setups.
 
+I won’t lie — getting this working wasn’t entirely straightforward. I wrestled with latency issues, ICE candidate timing, TURN server configuration, and plenty of other edge cases. But it was all worth it the moment I saw that buttery-smooth, zero-lag video feed in the browser.
 
+Big shoutout to [Metered Open Relay](https://www.metered.ca/tools/openrelay) for their excellent free TURN service and documentation — without it, I might still be stuck refreshing Firefox in frustration.
 
+If you manage to get it working or have any questions, feel free to leave a comment — happy to help or learn from your setup!
