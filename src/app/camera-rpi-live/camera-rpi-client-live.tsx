@@ -45,20 +45,45 @@ export const CameraRpiClientLive = () => {
         setState({ isLoading: true, isStreaming: false });
         const response = await fetch("/api/turn-credentials");
         const turnCredentials = await response.json();
-        const pc = new RTCPeerConnection({
+        const peerConnection = new RTCPeerConnection({
             iceServers: turnCredentials,
         });
 
-        pcRef.current = pc;
+        pcRef.current = peerConnection;
 
-        pc.onicecandidate = (event) => {
+        const iceCandidates: RTCIceCandidateInit[] = [];
+
+        const iceGatheringComplete = new Promise((resolve) => {
+            peerConnection!.onicegatheringstatechange = (event) => {
+                console.log('icegatheringstatechange -> ', peerConnection?.iceGatheringState);
+
+                if (peerConnection!.iceGatheringState === 'complete') {
+                    console.log('iceCandidates -> ', iceCandidates);
+                    resolve(null);
+                }
+            };
+        });
+
+        peerConnection.oniceconnectionstatechange = (event) => {
+            console.log('iceconnectionstatechange -> ', peerConnection?.iceConnectionState);
+        };
+
+        peerConnection.onsignalingstatechange = (event) => {
+            console.log('signalingstatechange -> ', peerConnection?.signalingState);
+        };
+
+        // peerConnection.onicecandidateerror = (event) => {
+        //     console.error('icecandidateerror -> ', peerConnection?.iceConnectionState);
+        // };
+
+        peerConnection.onicecandidate = async (event: RTCPeerConnectionIceEvent) => {
             if (event.candidate) {
-                // Optionally send ICE candidates to Pi if needed via MQTT
-                console.log('>>> New ICE candidate:', event.candidate.candidate);
+                console.log('icecandidate -> ', event.candidate);
+                iceCandidates.push(event.candidate.toJSON());
             }
         };
 
-        pc.ontrack = (event) => {
+        peerConnection.ontrack = (event) => {
             console.log('>>> Received remote track:', event.track);
             console.log('>>> Event streams:', event.streams);
             const [stream] = event.streams;
@@ -76,31 +101,41 @@ export const CameraRpiClientLive = () => {
         };
 
         // Add transceiver for video, receive-only mode
-        pc.addTransceiver('video', { direction: 'recvonly' });
+        peerConnection.addTransceiver('video', { direction: 'recvonly' });
         // const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         // stream.getTracks().forEach(track => pc.addTrack(track, stream));
         // Create SDP offer
-        const offer = await pc.createOffer();
-        await pc.setLocalDescription(offer);
+
+        const offer = await peerConnection.createOffer();
+
+        await peerConnection.setLocalDescription(offer);
         console.log('>>> Created SDP offer:', offer.sdp);
+        // Send ICE Candidates with the offer (we are not trickleing it)
+
 
         // Wait for ICE gathering to complete
         // await new Promise<void>((resolve) => {
-        //     if (pc.iceGatheringState === 'complete') {
+        //     if (peerConnection.iceGatheringState === 'complete') {
         //         resolve();
         //     } else {
         //         function checkState() {
-        //             if (pc.iceGatheringState === 'complete') {
-        //                 pc.removeEventListener('icegatheringstatechange', checkState);
+        //             if (peerConnection.iceGatheringState === 'complete') {
+        //                 peerConnection.removeEventListener('icegatheringstatechange', checkState);
         //                 resolve();
         //             }
         //         }
-        //         pc.addEventListener('icegatheringstatechange', checkState);
+        //         peerConnection.addEventListener('icegatheringstatechange', checkState);
         //     }
         // });
 
+        await iceGatheringComplete;
+        offer.sdp += iceCandidates.map((candidate) => `a=${candidate.candidate}`).join('\r\n') + '\r\n';
+
+        console.log('>>> Created SDP offer:', offer.sdp);
+
+
         // Send offer SDP to Pi
-        await sendOffer(pc.localDescription!);
+        await sendOffer(peerConnection.localDescription!);
     };
 
     const stopWebRTC = async () => {

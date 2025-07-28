@@ -20,6 +20,27 @@ The architecture required is similar to what we have done before in [Live Camera
 - Raspberry pi generates `sdp` answer for the client and attaches media handler to stream frames on demand
 - Finally, web server returns the answer to the client and the client can initiate the communication from the browser using `video` element. 
 
+## WebRTC under the hood
+
+Feel free to skip this section if you want hands-on working example of WebRTC. If you are curious to understand how WebRTC works and delivers your media, then this section is a little overview. We build-up on [the excellent explanation about WebRTC by Metered](https://www.metered.ca/tools/openrelay/). 
+
+Essentially WebRTC is based on Peer to Peer connection between devices, and a UDP transport protocol. The combination of both is what allows the WebRTC to be so fast and have so little latency. WebRTC is a protocol for establishing peer to peer communication between two machines. But establishing communication between two machines on the network is not that simple, so there are some caveats that are important to understand before implementing WebRTC. There are two main problems when establishing P2P connection: 
+
+ - Discovering peers IP addresses
+ - Bypassing corporate or home router firewalls
+
+### Discovering peers IP addresses - STUN Servers
+
+So you have two devices that want to start sending messages over the internet to each other, without intermediary service so how can we make them do that? First thing, each device needs to know who they want to talk to, and in the internet, the devices are identified by their IP addresses. But here is the catch, most of the devices do not know their IP addresses, because of the [IP depletion problem](https://en.wikipedia.org/wiki/IPv4_address_exhaustion). There are so many devices in the world, that it is not possible to give IP address to each of them. So each device actually have a private IP address, which is assigned to it by the router. The router itself is the one that has a public IP address. 
+
+If you have read about WebRTC, then you probably heard about STUN server. STUN server is what allows the devices to discover their public IP address. The assumption is that devices know the IP address of a STUN server, which is public, and they can ask it for the IP address of themselves. That is what devices do in WebRTC. So a device `A` can ask STUN server what is its IP address, and then send it to the device `B`. Device `B` does the same, and so they can now establish a direct peer to peer connection. Or can't they? 
+
+### Bypassing corporate or home router firewalls - TURN Servers
+
+The above works fine when the devices are within the same network, but if they are not, then the router firewall will probably block the peer to peer connection because most of the routers don't just allow random device to talk to some of the devices in the private network for security reasons. There is a workaround though, which is well used in WebRTC. A router usually allows for the data to flow from the device `A` on the internet to the device `B` in the private network if the device `B` had initiated connection with the `A`. This is called [Symetric NAT](https://www.checkmynat.com/posts/understanding--symmetric-nat-limitations/). 
+
+So if two devices are on the different networks, they can start talking to each other using the TURN servers which are the relay servers. In this case, the connection is no longer peer to peer as the data has to pass through a centralized TURN server. This means, that if you want your data transmissions to work reliably in WebRTC, then you need both STUN and a TURN server. 
+
 ### Exchanging WebRTC sdp between client browser and raspberry pi
 
 For simplicity, I will omit the messages and API exchange between HTTP and MQTT. If you are interested in details on how to do it, you can read about it here [Live Camera Streaming from Raspberry Pi with Camera Module and Picamera2 - the easy way](https://www.viktorvasylkovskyi.com/posts/raspberry-pi-live-camera-streaming).
@@ -174,9 +195,6 @@ v=0\\r\\no=- 3962438243 3962438243 IN IP4 0.0.0.0\\r\\ns=-\\r\\nt=0 0\\r\\na=gro
             const [stream] = event.streams;
             if (videoRef.current && videoRef.current.srcObject !== stream) {
                 videoRef.current.srcObject = stream;
-                // If you want to play the video automatically, you can uncomment the line below
-                // Required for mobile browsers (e.g., iOS) to play video automatically
-                navigator.mediaDevices.getUserMedia({ video: true, audio: true })
                 videoRef.current.play();
             }
         };
@@ -186,19 +204,71 @@ Remember the `PicameraVideoTrack` ? This is the `event.streams[0]` from the code
 
 So far it will all play for desktop browsers
 
-4. **A note for mobile devices**, we must request both camera and microphone access via:
+### Adding TURN Server
+
+The above works just fine as long as the devices are on the same network. If they are not, then we need to provide the TURN servers. I have created an account on [Open Relay](https://www.metered.ca/tools/openrelay/) because I found them on the web and they offer free TURN servers up to 20GB. The only difference with the TURN server is that we need to update a WebRTC ICE servers like follows: 
+
 
 ```javascript
-navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+    const startWebRTC = async () => {
+        const response = await fetch("/api/turn-credentials");
+        const turnCredentials = await response.json();
+        const pc = new RTCPeerConnection({
+            iceServers: turnCredentials,
+        });
+        ...
 ```
 
-If the user denies permissions, no error dialog may appear in iOS Safari — the stream may just silently fail.
+Note our TURN credentials are a list of servers that can be provided on demand using API. I am using my BFF backend service to fetch the `turn-credentials` using the Metered API Key like this:
+ 
+```javascript
+// /api/turn-credentials
 
+export const getIceServers = async (): Promise<VideoResponse> => {
+    try {
+        const response = await fetch(`https://your-domain.metered.live/api/v1/turn/credentials?apiKey=${process.env.METERED_API_KEY_TURN_CREDENTIALS}`);
+        return response.json();
+    } catch (e) {
+        throw new Error(`Error While Fetching Video: ${e}`);
+    }
+};
+```
 
+This API returns a list of ICE servers including TURN and STUN servers with credentials as follows: 
+
+```json
+[
+    {
+        "urls": "stun:stun.relay.metered.ca:80"
+    },
+    {
+        "urls": "turn:standard.relay.metered.ca:80",
+        "username": "username",
+        "credential": "password"
+    },
+    {
+        "urls": "turn:standard.relay.metered.ca:80?transport=tcp",
+        "username": "username",
+        "credential": "password"
+    },
+    {
+        "urls": "turn:standard.relay.metered.ca:443",
+        "username": "username",
+        "credential": "password"
+    },
+    {
+        "urls": "turns:standard.relay.metered.ca:443?transport=tcp",
+        "username": "username",
+        "credential": "password"
+    }
+]
+```
+
+Note, we need to fetch this as well on the device camera because both devices need to know the addresses of both TURN and STUN to relay data.
 
 ### WebRTC Samples 
 
-I found some samples from where you can learn how to use WebRTC effectively. Feel free to dive in - https://webrtc.github.io/samples/. 
+I found some samples from where you can learn how to use WebRTC effectively. Feel free to dive in - https://webrtc.github.io/samples/. Also, Metered offers free TURN and a very good explanation here https://www.metered.ca/tools/openrelay/.
 
 
 ### Adding MQTT for managing Raspberry Pi Turn on and off the streaming
