@@ -64,18 +64,6 @@ export const CameraRpiClientLive = () => {
             };
         });
 
-        peerConnection.oniceconnectionstatechange = (event) => {
-            console.log('iceconnectionstatechange -> ', peerConnection?.iceConnectionState);
-        };
-
-        peerConnection.onsignalingstatechange = (event) => {
-            console.log('signalingstatechange -> ', peerConnection?.signalingState);
-        };
-
-        // peerConnection.onicecandidateerror = (event) => {
-        //     console.error('icecandidateerror -> ', peerConnection?.iceConnectionState);
-        // };
-
         peerConnection.onicecandidate = async (event: RTCPeerConnectionIceEvent) => {
             if (event.candidate) {
                 console.log('icecandidate -> ', event.candidate);
