@@ -14,7 +14,7 @@ Consider well what technology is best for your use case. If it is Streaming at s
 
 ## Github Code
 
-Full code available on https://github.com/viktorvasylkovskyi/rpi-camera. 
+Full code available on https://github.com/vvasylkovskyi/rpi-camera. 
 
 ## Live Streaming with HLS
 

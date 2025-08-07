@@ -165,7 +165,7 @@ Through meticulous implementation of the subtitles, and adherence to best practi
 
 Refer to the MDN documentation on VTTCue and the WebVTT API for more detailed information on leveraging these technologies to create an accessible and engaging video experience.
 
-As usual with my blogs, you can [check out the full code here in my github repository](https://github.com/viktorvasylkovskyi/mse-with-web-vtt), or [watch the demo](https://viktorvasylkovskyi.github.io/mse-with-web-vtt/). Happy coding!
+As usual with my blogs, you can [check out the full code here in my github repository](https://github.com/vvasylkovskyi/mse-with-web-vtt), or [watch the demo](https://viktorvasylkovskyi.github.io/mse-with-web-vtt/). Happy coding!
 
 ## References
 

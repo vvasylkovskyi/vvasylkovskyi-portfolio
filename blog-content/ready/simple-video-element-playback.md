@@ -180,4 +180,4 @@ This approach is particularly useful for implementing custom video controls or i
 
 In this article, we've explored the essentials of adding video content to web pages, tracking the current time and duration of a video element, and even simulating seeking behavior. Understanding these properties is essential for creating dynamic video experiences. Additionally, we've seen how to simulate seeking behavior by changing the current time programmatically, opening up possibilities for interactive video applications.
 
-For the full code and resources related to this tutorial, you can visit the [GitHub repository](https://github.com/viktorvasylkovskyi/barebones-mp4-player). Stay tuned for our next article, where we'll explore even more exciting features and techniques for web video development. Happy coding!
+For the full code and resources related to this tutorial, you can visit the [GitHub repository](https://github.com/vvasylkovskyi/barebones-mp4-player). Stay tuned for our next article, where we'll explore even more exciting features and techniques for web video development. Happy coding!

@@ -1,8 +1,8 @@
 # Provision DNS records with Terraform
 
-In the previous notes we talked about how to setup the ec2 instance inside of the VPC on the subnet. We managed to access to this instance via SSH by providing ssh key in security groups. All is fine and dandy until now, but when we want to run a real application, we want to expose it on HTTP (and later HTTPS).
+In the previous notes we talked about how to setup the ec2 instance inside of the VPC on the subnet. We managed to access to this instance via SSH by providing ssh key in security groups. If you haven't read about it, fear not, you can still go back and read it: [Deploying EC2 instance on AWS with Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-ec2-on-aws-with-terraform).
 
-In this note, I will walk you through how to do it using terraform. In practice, we will spawn a simple http server on our ec2 instance, and provide `Route53` DNS records to access to this application, so that we will move from:
+All is fine and dandy until now, but when we want to run a real application, we want to expose it on HTTP (and later HTTPS). In this note, I will walk you through how to do it using terraform. In practice, we will spawn a simple http server on our ec2 instance, and provide `Route53` DNS records to access to this application, so that we will move from:
 
 ```bash
 http://52.206.93.210/
@@ -110,4 +110,4 @@ And compare the name servers if they are correct. Once they are correct, your DN
 
 ## Conclusion
 
-And that is a wrap! Now we have the DNS records pointing to our Ec2 instance. Next, let's explore about how to add SSL to this domain and enable HTTPS.
+And that is a wrap! Now we have the DNS records pointing to our Ec2 instance. Next, let's explore about how to add SSL to this domain and enable HTTPS. Continue reading the [Provision CloudFront CDN with Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-cloudfront-with-terraform). Setting up CloudFront is one of the way to achieve SSL in AWS.

@@ -1,0 +1,13 @@
+{
+    "title": "AWS IoT Core - Implementing Advanced MQTT RPC pattern",
+    "filename": "iot-mqtt-advanced-patterns",
+    "date": "Aug 7, 2025",
+    "metaText": "Learn how to implement an advanced MQTT RPC (Remote Procedure Call) pattern using AWS IoT Core, enabling synchronous-like communication over asynchronous MQTT. This guide builds on previous tutorials and introduces a robust, production-ready RPC client in Python with timeout handling, unsubscription, and request correlation.",
+    "categories": [
+        "Terraform",
+        "IOT",
+        "EC2",
+        "MQTT",
+        "AWS"
+    ]
+}

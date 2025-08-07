@@ -6,7 +6,7 @@ In these notes, we’ll take things a step further by building a low-latency liv
 
 ## Github Code
 
-Full code available on https://github.com/viktorvasylkovskyi/rpi-camera. 
+Full code available on https://github.com/vvasylkovskyi/rpi-camera. 
 
 ## Real Time Streaming with WebRTC
 
@@ -346,6 +346,7 @@ I will not dive deep into this in this article, but if you are curious feel free
 - [Provisioning AWS IoT Core Certificates for Ec-2 instance - MQTT Subscriber with Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-aws-iot-core-for-ec-2)
 - [Provisioning AWS IoT Core Certificates for Raspberry Pi for MQTT Broker with Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-aws-iot-core-for-raspberry-pi)
 - [AWS IoT Core - Implementing Publisher and Subscriber for MQTT in Python](https://www.viktorvasylkovskyi.com/posts/provisioning-aws-iot-core-python-implementation)
+- [AWS IoT Core - Implementing Advanced MQTT RPC pattern](https://www.viktorvasylkovskyi.com/posts/iot-mqtt-advanced-patterns).
 
 ## Conclusion
 

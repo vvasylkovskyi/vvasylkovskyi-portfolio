@@ -1,0 +1,10 @@
+{
+    "title": "Raspberry pi - Health Check to get your device health",
+    "filename": "raspberry-pi-device-basics",
+    "date": "July 31, 2025",
+    "metaText": "Learn how to implement a basic health check system for your Raspberry Pi devices using Python. This guide covers monitoring CPU, memory, disk usage, and uptime with psutil, and communicating device status over MQTT for reliable remote device management—ideal for business or IoT applications.",
+    "categories": [
+        "Raspberry Pi",
+        "Python"
+    ]
+}

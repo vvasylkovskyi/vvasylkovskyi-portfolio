@@ -14,7 +14,7 @@ In this article, we are going to enhance our MSE player playback with an Encrypt
 
 ## Setup
 
-Lets setup our project. You can download full base project from my [github repository](https://github.com/viktorvasylkovskyi/barebones-mse-playback-with-multi-renditions), or start you own from scratch.
+Lets setup our project. You can download full base project from my [github repository](https://github.com/vvasylkovskyi/barebones-mse-playback-with-multi-renditions), or start you own from scratch.
 
 In case you choose to start a new project, and you want to follow up, we are going to be using a simple webpack dev server. You can read more details on the setup in this article [link to webpack setup article].
 

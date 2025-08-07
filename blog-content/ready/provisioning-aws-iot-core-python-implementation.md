@@ -167,6 +167,20 @@ class AwsMQTTClient:
             self.logger.error(f"Error during disconnect: {e}")
             self.logger.debug(traceback.format_exc())
 
+    async def unsubscribe(self, topic):
+        self.logger.info(f"Unsubscribing from topic '{topic}'...")
+
+        try:
+            unsubscribe_future, packet_id = self.mqtt_connection.unsubscribe(topic)
+            await asyncio.wrap_future(unsubscribe_future)
+            self.logger.success(
+                f"Successfully unsubscribed from topic '{topic}' with packet ID {packet_id}"
+            )
+        except Exception as e:
+            self.logger.error(f"Failed to unsubscribe from topic '{topic}': {e}")
+            self.logger.debug(traceback.format_exc())
+            raise
+
 ```
 
 ## Code overview
@@ -403,15 +417,5 @@ As you can see I have received logs successfully! You can also test your IoT pub
 
 ## Conclusion and Next Steps 
 
-Whoa! That was a lot! We’ve covered the full journey from provisioning secure certificates on AWS IoT Core to implementing a Python MQTT client on the Raspberry Pi and a web server subscriber. This setup enables reliable, secure bi-directional communication between your device and cloud services—bringing your Raspberry Pi to life as a true IoT citizen. With the foundation in place, you’re ready to build rich IoT applications powered by AWS and Python. Hope you enjoyed, and please let me know if you have any question in comments. 
-
-When building this project I noticed an interesting IoT foundation: running MQTT web socket and a camera sensor in the same process is brittle and doesn't adhere to the right SRP (Single Responsibility Principle). It is even more challenging to scale on-device sensors, since now we need all of them to share same memory space and resources. 
-
-A natural improvement is to decouple each task: 
-
-  - A process for MQTT Web Socket - this one is responsible for sending and receiving messages that we built today,
-  - A process for Camera sensor - it will receive camera feed data,
-  - A process for another sensor
-
-Having multiple processes simplifies development and improves resilience of the system. But another challenge arises, how do processes communicate? This what we will cover in the next notes. TBD
+Whoa! That was a lot! We’ve covered the full journey from provisioning secure certificates on AWS IoT Core to implementing a Python MQTT client on the Raspberry Pi and a web server subscriber. This setup enables reliable, secure bi-directional communication between your device and cloud services—bringing your Raspberry Pi to life as a true IoT citizen. With the foundation in place, you’re ready to build rich IoT applications powered by AWS and Python. Hope you enjoyed, and please let me know if you have any question in comments. Continue learning MQTT in the next notes: [AWS IoT Core - Implementing Advanced MQTT RPC pattern](https://www.viktorvasylkovskyi.com/posts/iot-mqtt-advanced-patterns).
 

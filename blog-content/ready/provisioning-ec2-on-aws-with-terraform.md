@@ -327,4 +327,4 @@ ssh ubuntu@52.206.93.210
 
 ## Conclusion
 
-And that's a wrap! Next you should explore how to run a server (perhaps in the docker container) in you instance, and expose it on DNS with SSL. We will cover it in the future.
+And that's a wrap! Next you should explore how to run a server (perhaps in the docker container). This was a rather simple example - like a hello world in infrastructure as code. Let's continue iterating and [Provision DNS records with Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-dns-records-with-terraform).

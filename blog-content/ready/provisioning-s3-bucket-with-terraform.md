@@ -10,7 +10,7 @@ Also, a useful notes in case you are new to the terraform modules - [Provisionin
 
 ## Code on Github
 
-Full code available on [`https://github.com/viktorvasylkovskyi/viktorvasylkovskyi-infra/tree/vv-s3-bucket-v4`](https://github.com/viktorvasylkovskyi/viktorvasylkovskyi-infra/tree/vv-s3-bucket-v4). You can clone that and apply the infra yourself, all you need to do is to modify the variables for your domain.
+Full code available on [`https://github.com/vvasylkovskyi/viktorvasylkovskyi-infra/tree/vv-s3-bucket-v4`](https://github.com/vvasylkovskyi/viktorvasylkovskyi-infra/tree/vv-s3-bucket-v4). You can clone that and apply the infra yourself, all you need to do is to modify the variables for your domain.
 
 ## S3 bucket module 
 

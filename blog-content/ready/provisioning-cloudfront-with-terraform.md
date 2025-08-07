@@ -1,6 +1,12 @@
 # Provision CloudFront CDN with Terraform
 
-Previously we have seen how to setup an EC-2 instance, run a simple web server and expose it at your domain using Route53. This allows us to access our web server using HTTP at port 80. The natural next step in that setup is to use HTTPS (HTTP + SSL) and enforce access at port 443 instead. We will do it here by adding Cloudfront and ACM to our terraform setup. Let's dive in.
+Previously we have seen how to setup an EC-2 instance, run a simple web server and expose it at your domain using Route53. This allows us to access our web server using HTTP at port 80. If you haven't read about it, please refer to the previous notes:
+
+- [Deploying EC2 instance on AWS with Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-ec2-on-aws-with-terraform)
+- [Provision DNS records with Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-dns-records-with-terraform)
+
+
+The natural next step in that setup is to use HTTPS (HTTP + SSL) and enforce access at port 443 instead. We will do it here by adding Cloudfront and ACM to our terraform setup. Let's dive in.
 
 ## Disclaimer
 
@@ -10,7 +16,7 @@ It is a good practice to place HTTPS termination in different place in architect
 
 I will confess that it is not super easy to add CloudFront + ACM for HTTPS for a beginner, so I will break down the steps from simplest cloud architecture to most complicated one hopefully clarifying the steps and the reason for taking them.
 
-First step to add an HTTPS using Cloudfront is naturally to create a Cloudfront distribution. Cloudfront distribution is a CDN network that expands copies of your data towards other geografical locations. From the programmer point of view, Cloudfront is a URL - the distribution URL that uses the content from the `origin`. Hence these are the two fundamental pieces that we need for now to make sure the distribution works. So let's dive in.
+First step to add an HTTPS using Cloudfront is naturally to create a Cloudfront distribution. Cloudfront distribution is a CDN network that expands copies of your data towards other geographical locations. From the programmer point of view, Cloudfront is a URL - the distribution URL that uses the content from the `origin`. Hence these are the two fundamental pieces that we need for now to make sure the distribution works. So let's dive in.
 
 ### Adding Cloudfront - Creating Origin Server
 
@@ -90,7 +96,7 @@ resource "aws_cloudfront_distribution" "cdn" {
 }
 ```
 
-Whoa! that is alot of configs. One of the main pieces there is the `target_origin_id`. This will be pointing to our `origin.your-domain.com`. For now we will use `cloudfront_default_certificate` which is CloudFront certificate.
+Whoa! that is a lot of configs. One of the main pieces there is the `target_origin_id`. This will be pointing to our `origin.your-domain.com`. For now we will use `cloudfront_default_certificate` which is CloudFront certificate.
 
 Let's add a test output:
 
@@ -120,7 +126,7 @@ I started this notes explaining how to add HTTPS using CloudFront, but I ended-u
 
 ### ACM Certificate for HTTPS
 
-Cloudfront requires SSL certificates to be in `us-east-1` region regardles of where our resources are. So we will begin by adding a new provider:
+Cloudfront requires SSL certificates to be in `us-east-1` region regardless of where our resources are. So we will begin by adding a new provider:
 
 ```tf
 # ssl.tf
@@ -442,3 +448,5 @@ We have covered quite a bit of things today:
 - HTTPS access via CloudFront
 - DNS validation using Route 53
 - A secure, CDN-backed endpoint for your EC2 app at https://www.your-domain.com
+
+At this point you are well equipped to set you application in production as you now have HTTPS and a Ec-2 instance and can access to it via your domain name. There are plenty of choice of securing your infra even more. As a natural follow up now can be a good time to take a break and polish things. Let's do it in the next notes - [Saving Terraform State in a Remote Backend on AWS with S3 and DynamoDB](https://www.viktorvasylkovskyi.com/posts/terraform-state-in-s3-dynamodb-backend).

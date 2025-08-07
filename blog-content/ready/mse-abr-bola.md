@@ -226,7 +226,7 @@ As you can see, our ABR started from the lowest, 320x180 and quickly ramped up t
 
 We have delved into the intricacies of BOLA, a sophisticated ABR algorithm that significantly enhances the video streaming experience. Its utility-based approach to managing video quality in response to buffer levels exemplifies the power of adaptive streaming.
 
-For those keen to explore further, the [complete code](https://github.com/viktorvasylkovskyi/mse-abr-bola) and [live demo](https://viktorvasylkovskyi.github.io/mse-abr-bola/) are available for review and experimentation. Happy coding, and may your streams flow without a hitch!
+For those keen to explore further, the [complete code](https://github.com/vvasylkovskyi/mse-abr-bola) and [live demo](https://viktorvasylkovskyi.github.io/mse-abr-bola/) are available for review and experimentation. Happy coding, and may your streams flow without a hitch!
 
 ## References
 

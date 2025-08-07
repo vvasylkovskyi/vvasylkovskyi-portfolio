@@ -10,7 +10,7 @@ Make sure you have base running, I suggest having a look at my previous notes: [
 
 ## Github Code
 
-Full code available on `https://github.com/viktorvasylkovskyi/viktorvasylkovskyi-infra/tree/vv-https-server-ec2-and-load-balancer-v2`. You can clone that and apply the infra yourself, all you need to do is to modify the variables for your domain.
+Full code available on `https://github.com/vvasylkovskyi/viktorvasylkovskyi-infra/tree/vv-https-server-ec2-and-load-balancer-v2`. You can clone that and apply the infra yourself, all you need to do is to modify the variables for your domain.
 
 ## Overview
 
@@ -327,4 +327,4 @@ Note replace `nginx/nginx` with your docker image.
 
 Let's run `terraform init` to install the modules and then `terraform apply --auto-approve` and see our domain working! 
 
-For simplicity purposes here we only provide the modules code, and I will leave to you, felow reader to glue them together using your `main.tf` in the Root Module. Personally I enjoy working with terraform modules because it makes the infrastructure very easy to maintain. Additionally the dependencies between modules are visible in the root module due to the `variables` and `outputs` passed around from the modules. I hope you managed to make it work. If you have some issue please let me know and I will be glad to help. Happy coding!
+For simplicity purposes here we only provide the modules code, and I will leave to you, fellow reader to glue them together using your `main.tf` in the Root Module. Personally I enjoy working with terraform modules because it makes the infrastructure very easy to maintain. Additionally the dependencies between modules are visible in the root module due to the `variables` and `outputs` passed around from the modules. I hope you managed to make it work. If you have some issue please let me know and I will be glad to help. Happy coding!

@@ -139,7 +139,7 @@ The terraform code I used for my instance is the same as above, with the ssh key
 
 ```hcl
 module "ec2" {
-  source              = "git::https://github.com/viktorvasylkovskyi/viktorvasylkovskyi-infra.git//modules/ec2?ref=main"
+  source              = "git::https://github.com/vvasylkovskyi/viktorvasylkovskyi-infra.git//modules/ec2?ref=main"
   ...
   ssh_public_key      = file("~/.ssh/${var.ssh_public_key_name}.pub")
   ssh_public_key_name = var.ssh_public_key_name

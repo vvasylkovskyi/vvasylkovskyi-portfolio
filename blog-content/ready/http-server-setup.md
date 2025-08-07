@@ -84,7 +84,7 @@ This will launch the Express server, allowing it to listen on port 4000 and hand
 
 ## Summary
 
-This post outlines the setup of a Node.js Express server for serving an HTML file while handling CORS issues. It includes `server.js` and `index.html` code snippets, npm-based dependency management, and launching the server on port 4000. This concise guide helps you establish a functional HTTP server. For further details, refer to the provided reference link. For full code, refer to this [github repo](https://github.com/viktorvasylkovskyi/http-server).
+This post outlines the setup of a Node.js Express server for serving an HTML file while handling CORS issues. It includes `server.js` and `index.html` code snippets, npm-based dependency management, and launching the server on port 4000. This concise guide helps you establish a functional HTTP server. For further details, refer to the provided reference link. For full code, refer to this [github repo](https://github.com/vvasylkovskyi/http-server).
 
 Farewell and happy coding!
 

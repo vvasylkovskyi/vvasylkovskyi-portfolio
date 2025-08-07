@@ -6,7 +6,7 @@ We have also advanced into making our servers stateless, by removing the data fr
 
 ## Github Code
 
-Full code available on `https://github.com/viktorvasylkovskyi/viktorvasylkovskyi-infra/tree/vv-rds-with-ec2-v3`. You can clone that and apply the infra yourself, all you need to do is to modify the variables for your domain.
+Full code available on `https://github.com/vvasylkovskyi/viktorvasylkovskyi-infra/tree/vv-rds-with-ec2-v3`. You can clone that and apply the infra yourself, all you need to do is to modify the variables for your domain.
 
 ## Overview 
 

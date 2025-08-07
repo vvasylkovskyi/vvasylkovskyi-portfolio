@@ -20,7 +20,7 @@ security_group.tf
 terraform.tfvars
 ```
 
-There is not much code, so I will paste here the repository for us to fork from. The repository can be found [https://github.com/viktorvasylkovskyi/viktorvasylkovskyi-infra](https://github.com/viktorvasylkovskyi/viktorvasylkovskyi-infra).
+There is not much code, so I will paste here the repository for us to fork from. The repository can be found [https://github.com/vvasylkovskyi/viktorvasylkovskyi-infra](https://github.com/vvasylkovskyi/viktorvasylkovskyi-infra).
 
 Make sure to clone it, run `terraform init` and `terraform apply --auto-approve`. Check you EIP address in console and access it via SSH using `ssh ubuntu@ip-address` to double check that the instance loaded correctly. 
 
@@ -393,4 +393,6 @@ You can apply both environments using `terraform apply`. Just jump into the fold
 
 ## Conclusion
 
-By modularizing our Terraform code, we make our infrastructure more organized, reusable, and easier to maintain. This approach not only saves time as our projects grow, but also helps us avoid duplication and mistakes. With modules, scaling and evolving your infrastructure becomes a much smoother process. If needed, you can find full code here - `https://github.com/viktorvasylkovskyi/viktorvasylkovskyi-infra`. Keep iterating, keep improving, and happy hacking!
+By modularizing our Terraform code, we make our infrastructure more organized, reusable, and easier to maintain. This approach not only saves time as our projects grow, but also helps us avoid duplication and mistakes. With modules, scaling and evolving your infrastructure becomes a much smoother process. If needed, you can find full code here - `https://github.com/vvasylkovskyi/viktorvasylkovskyi-infra`. 
+
+Next we are going to [Provisioning Application Load Balancer and connecting it to Ec-2 instance using Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-alb-as-ssl-termination-and-ec2). Keep iterating, keep improving, and happy hacking! 

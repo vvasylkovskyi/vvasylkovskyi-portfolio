@@ -6,7 +6,7 @@ In this article, we'll take our MSE player's capabilities to the next level by i
 
 ## Setting the Stage
 
-Before we delve deeper into EME and its implementation, let's set up our project. You can either download the complete base project from our [GitHub repository](https://github.com/viktorvasylkovskyi/barebones-mse-playback) or create your own from scratch.
+Before we delve deeper into EME and its implementation, let's set up our project. You can either download the complete base project from our [GitHub repository](https://github.com/vvasylkovskyi/barebones-mse-playback) or create your own from scratch.
 
 If you opt to start a new project and wish to follow along, we'll be using a straightforward HTTP server. For detailed setup instructions, please refer to our article on [HTTP server setup](link to HTTP server setup article).
 
@@ -152,7 +152,7 @@ Now, let's attempt playback and see the decryption in action!
 
 In this article, we explored the intricate world of EME with MSE, bringing secure media playback to life. We covered key concepts such as encrypting content, handling encryption keys, and the step-by-step process of decrypting protected content. By implementing EME, you can ensure a seamless and secure media experience on the web.
 
-For the complete code and a hands-on experience, visit the [GitHub repository](https://github.com/viktorvasylkovskyi/barebones-mse-encrypted-eme-playback). Happy Coding!
+For the complete code and a hands-on experience, visit the [GitHub repository](https://github.com/vvasylkovskyi/barebones-mse-encrypted-eme-playback). Happy Coding!
 
 ## References
 

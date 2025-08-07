@@ -21,7 +21,7 @@ If you want to do things well done, you should consider your use case and read m
 
 ## Github Code
 
-Full code available on https://github.com/viktorvasylkovskyi/rpi-camera. 
+Full code available on https://github.com/vvasylkovskyi/rpi-camera. 
 
 ## Installing the system-wide packages 
 

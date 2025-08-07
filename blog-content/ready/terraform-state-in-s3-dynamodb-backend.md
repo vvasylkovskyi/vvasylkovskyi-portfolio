@@ -2,7 +2,7 @@
 
 I've been writing quite a bit of infrastructure as code using Terraform recently, and I've noticed an important behavior. Whenever I run terraform apply, the changes are applied to the cloud (AWS, in my case). However, if I switch to a different laptop and pull the code repository, I can't run terraform apply there—the Terraform state isn't synchronized across machines.
 
-As you may have noticed, each time Terraform applies changes, it updates the terraform.tfstate file, which contains a JSON representation of the current infrastructure state. By default, this file is stored locally. To collaborate effectively with teammates—or, as in my case, to work across multiple laptops—we need to store the Terraform state in a shared location. In other words, the key to solving our problem is to find a reliable way to share Terraform state.
+As you may have noticed, each time Terraform applies changes, it updates the terraform.`tfstate` file, which contains a JSON representation of the current infrastructure state. By default, this file is stored locally. To collaborate effectively with teammates—or, as in my case, to work across multiple laptops—we need to store the Terraform state in a shared location. In other words, the key to solving our problem is to find a reliable way to share Terraform state.
 
 ## Pre-requisites
 
@@ -190,4 +190,4 @@ terraform apply --auto-approve -lock=false
 
 # Conclusion
 
-And that’s a wrap! With Terraform state now stored remotely in AWS S3 and locked via DynamoDB, you’re one step closer to effective collaboration across machines and teams. Hope you found this guide helpful. Happy coding!
+And that’s a wrap! With Terraform state now stored remotely in AWS S3 and locked via DynamoDB, you’re one step closer to effective collaboration across machines and teams. Hope you found this guide helpful. The continuation choice of what to do it endless. A common requirement of many applications is to retrieve secrets for the machines securely, and our Ec-2 machine is no different. Naturally, next step is to learn how to [Provision AWS Secret Manager and Store Secrets Securely](provisioning-aws-secret-manager-and-securing-secretshttps://www.viktorvasylkovskyi.com/posts/). Happy learning!

@@ -8,13 +8,10 @@ This shared setup is still not complete because the secrets remain on the user m
 
 We assume that you already have VPC and a sample EC-2 instance. If not, I recommend setting up based on the following notes: 
 - [Deploying EC2 instance on AWS with Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-ec2-on-aws-with-terraform)
-- [Provision Datadog Observability on Ec-2 with Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-datadog-on-ec2-with-terraform)
-- [Provision Pagerduty with Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-pagerduty-terraform)
 
-The Datadog Observability is a setup example that enables our Ec-2 with observability, which means that ec-2 instance requires access Datadog API key. Since that key will be stored in AWS secrets manager, it is a great use case for us to learn about how to give access to instance to the secret. 
+You web application may need to have a environment variable like an API key. That key should be stored in AWS secrets manager, it is a great use case for us to learn about how to give access to instance to the secret. 
 
 ## Creating a Secret in AWS Secret Manager
-
 
 Now lets add the actual secrets. We need to add secrets only once, and then reference them. This is the process that we will repeat everytime the secret has to be updated. Let's do this from a command line using `aws` cli: 
 
@@ -23,14 +20,12 @@ aws secretsmanager create-secret \
     --name "<your-service>/<some-path>/credentials" \
     --description "Application credentials" \
     --secret-string '{
-        "datadog_api_key": "your-api-key",
-        "datadog_app_key": "your-app-key",
-        "pagerduty_token": "your-token"
+        "my_api_key": "your-api-key",
     }'
 ```
 
 
-This command actually the actual secret values. For this example we only using Datadog API and Pagerduty API keys for demo. If everything goes well, you should see an output like below: 
+This command will create the secret values. If everything goes well, you should see an output like below: 
 
 ```sh
 {
@@ -95,29 +90,10 @@ locals {
 Since the secret is a JSON string, we use `jsondecode` to convert this into Terraform map. And now we can easily access to our secrets in terraform for example by using it like this: 
 
 ```tf
-local.secrets.pagerduty_token
+local.secrets.my_api_key
 ```
 
 Let's apply the changes here to ensure nothing breaks so far. Run: `terraform apply --auto-approve`
-
-### Update Terraform code to use secrets
-
-We can now update the code to use the secrets, lets update our providers for example: 
-
-```hcl
-# main.tf
-
-provider "datadog" {
-  api_key = local.secrets.datadog_api_key
-  app_key = local.secrets.datadog_app_key
-  api_url = var.datadog_api_url
-}
-
-provider "pagerduty" {
-  token          = local.secrets.pagerduty_token
-  service_region = var.pagerduty_service_region
-}
-```
 
 ## Accessing Secrets from EC-2 instance
 
@@ -228,33 +204,23 @@ resource "aws_instance" "my_app" {
 }
 ```
 
-And finally, let's make our ec-2 instance use the new secret:
+### Update Terraform code to use secrets
+
+We can now update the code to use the secrets:
 
 ```hcl
 # ec2.tf
-
 resource "aws_instance" "my_app" {
-  # ... existing configuration ...
+  ...
 
-  user_data = templatefile("${path.module}/templates/user_data.tpl", {
-    datadog_api_key = local.secrets.datadog_api_key
-  })
-
-  iam_instance_profile = aws_iam_instance_profile.secrets_manager_profile.name
+  user_data = <<-EOF
+            #!/bin/bash
+            export API_KEY=${local.secrets.my_api_key}
+          EOF
 }
 ```
 
-and the `user_data.tpl` is as follows: 
-
-
-```bash
-#!/bin/bash
-sudo yum update -y || sudo apt-get update -y
-sudo yum install -y python3 || sudo apt-get install -y python3
-DD_API_KEY=${datadog_api_key} DD_SITE="datadoghq.eu" bash -c "$(curl -L https://install.datadoghq.com/scripts/install_script_agent7.sh)" &
-echo "<html><body><h1>Hello from Terraform EC2!</h1></body></html>" > index.html
-nohup python3 -m http.server 80 &
-```
+The `user_data` is a script that runs on our `ec-2` once it is turned on. In this example we are declaring `API_KEY` environment variable based on what is in `my_api_key` in AWS Secrets Manager.
 
 ### Outputs
 
@@ -290,3 +256,5 @@ Let's run `terraform apply --auto-approve` and see if it worked! Open the app ag
 Now your secrets are no longer sitting on your laptop — they’re stored securely in AWS Secrets Manager and accessed safely by your EC2 instances using IAM roles. This setup keeps your infrastructure cleaner, safer, and easier to manage as your team and stack grow.
 
 From here, you can build on this foundation with things like secret rotation or using secrets in containers. But for now, you’ve made a solid move toward a more secure and scalable setup.
+
+So what is next? I suggest we solidify this EC-2 web server infrastructure by starting to use terraform modules: [Provisioning EC2 Instances with Terraform Modules – Best Practices Guide](https://www.viktorvasylkovskyi.com/posts/terraform-modularizing)
