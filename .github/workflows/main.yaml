@@ -61,7 +61,7 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          cd vvasylkovskyi--infra
+          cd vvasylkovskyi-infra
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
