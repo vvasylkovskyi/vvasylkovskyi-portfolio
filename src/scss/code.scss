@@ -136,7 +136,9 @@ pre {
   }
 }
 
-.hljs.typescript {
+.hljs.typescript,
+.hljs.py,
+.hljs.python {
   color: #d4d4d4;
 
   .hljs-comment {
@@ -283,6 +285,8 @@ pre {
 }
 
 .hljs.json {
+  color: #d4d4d4;
+
   .hljs-comment {
     color: #608b4e;
   }

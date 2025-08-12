@@ -1,8 +1,8 @@
 import { stopWebRtc } from './stop-webrtc';
 
-export async function GET(_: Request) {
+export async function GET(request: Request) {
     try {
-        const result = await stopWebRtc();
+        const result = await stopWebRtc(request);
 
         return Response.json(result);
     } catch (error) {

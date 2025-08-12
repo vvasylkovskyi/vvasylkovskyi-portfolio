@@ -6,11 +6,15 @@ import LayoutInner from './layout-inner';
 import StyledComponentsRegistry from './registry';
 import { ThemeScript } from './theme-script';
 import { PostHogProvider } from './providers';
-
+import { ClerkProvider } from '@clerk/nextjs';
+import { shadcn } from '@clerk/themes'
 export const metadata: Metadata = {
   title: 'Viktor Vasylkovskyi',
   description: 'Full stack',
 };
+
+
+
 
 export default function RootLayout({
   children,
@@ -18,10 +22,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
-      <head>
-        <link rel='icon' href='/logo-simbol-moon.svg' type='image/svg+xml' />
-        <script
+    <ClerkProvider appearance={{
+      baseTheme: [shadcn],
+      variables: {
+        // colorMuted: 'red', // define your own muted color
+      }
+    }} >
+      <html lang='en'>
+        <head>
+          <link rel='icon' href='/logo-simbol-moon.svg' type='image/svg+xml' />
+          {/* <script
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
@@ -33,15 +43,16 @@ export default function RootLayout({
               })();
             `,
           }}
-        />
-      </head>
-      <body className='antialiased'>
-        <StyledComponentsRegistry>
-          <ThemeScript />
-          <PostHogProvider><LayoutInner>{children}</LayoutInner></PostHogProvider>
+        /> */}
+        </head>
+        <body className='antialiased'>
+          <StyledComponentsRegistry>
+            <ThemeScript />
+            <PostHogProvider><LayoutInner>{children}</LayoutInner></PostHogProvider>
 
-        </StyledComponentsRegistry>
-      </body>
-    </html>
+          </StyledComponentsRegistry>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

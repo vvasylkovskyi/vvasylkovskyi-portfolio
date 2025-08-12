@@ -239,7 +239,7 @@ p,
 label,
 span,
 li {
-  color: var(--primary-text-color);
+  // color: var(--primary-text-color);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -285,7 +285,7 @@ html body[data-scroll-locked] {
 }
 
 a {
-  color: var(--primary-color);
+  // color: var(--primary-color);
   font-weight: $font-weight-bold;
 }
 

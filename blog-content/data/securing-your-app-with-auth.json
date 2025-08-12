@@ -1,0 +1,14 @@
+{
+    "title": "Full-stack JWT Authentication with Clerk, NextJS, FastAPI and Terraform",
+    "filename": "securing-your-app-with-auth",
+    "date": "Aug 12, 2025",
+    "metaText": "Learn how to implement secure, end-to-end authentication using Clerk with Next.js, FastAPI, and Terraform. Covers JWT validation, route protection, and production deployment best practices.",
+    "categories": [
+        "NextJS",
+        "Typescript",
+        "Python",
+        "JWT",
+        "Terraform",
+        "Clerk"
+    ]
+}

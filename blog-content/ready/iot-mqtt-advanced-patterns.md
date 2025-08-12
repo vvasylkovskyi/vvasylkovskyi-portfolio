@@ -23,7 +23,6 @@ result: dict = await mqtt_rpc_client.call(MQTTTopics.DEVICE_CONTROL.value, event
 Note, we are publishing to the topic, and receive reply before sending HTTP response to the client. 
 
 ## Implementing MQTT RPC
-![alt text](./iot-mqtt-advanced-patterns/image.png)
 
 The basic idea is to wrap the MQTT publish/subscribe calls into an "RPC" inspired from https://github.com/rse/mqtt-json-rpc.
 

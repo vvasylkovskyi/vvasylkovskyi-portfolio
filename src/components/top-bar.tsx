@@ -12,6 +12,14 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 import { posthog } from 'posthog-js';
+import {
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from '@clerk/nextjs'
+import { Button } from '@/components/ui/button';
 
 export const TopBar = () => {
   const pathname = usePathname();
@@ -100,7 +108,15 @@ export const TopBar = () => {
                 Blog
               </Link>
             </nav> */}
-
+            <SignedOut>
+              <SignInButton><Button size="sm" variant="secondary">Sign In</Button></SignInButton>
+              <SignUpButton>
+                <Button size="sm" variant="default">Sign Up</Button>
+              </SignUpButton>
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
             <nav className='flex items-center gap-4 text-sm xl:gap-6 navigation-menu-item'>
               <Link
                 href='https://github.com/vvasylkovskyi'
@@ -121,7 +137,7 @@ export const TopBar = () => {
                 />
               </Link>
             </nav>
-            <nav className='flex items-center gap-4 text-sm xl:gap-6 navigation-menu-item'>
+            {/* <nav className='flex items-center gap-4 text-sm xl:gap-6 navigation-menu-item'>
               <button className='toggle_mode__wraper' onClick={handleToggleTheme}>
                 <Image
                   src={theme === 'dark' ? '/moon.svg' : '/sun.svg'}
@@ -131,7 +147,7 @@ export const TopBar = () => {
                   height={20}
                 />
               </button>
-            </nav>
+            </nav> */}
             <nav className='flex items-center gap-4 text-sm xl:gap-6 navigation-menu-item'>
               <DropdownMenu>
                 <DropdownMenuTrigger className='toggle_mode__wraper' onClick={handleHamburgerClick}>

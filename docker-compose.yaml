@@ -1,19 +1,29 @@
 services:
-  # frontend:
-  #   container_name: nextjs-frontend
-  #   build:
-  #     context: .
-  #     dockerfile: ./deploy/Dockerfile
-  # #   # image: vvasylkovskyi1/vvasylkovskyi-portfolio:latest
-  # #   # restart: '${DOCKER_RESTART_POLICY:-unless-stopped}'
-  #   env_file:
-  #     - .env
-  #   ports:
-  #     - '80:80'
-  #   networks:
-  #     - app-network
+  frontend:
+    container_name: nextjs-frontend
+    build:
+      context: .
+      dockerfile: ./deploy/Dockerfile
+  #   # image: vvasylkovskyi1/vvasylkovskyi-portfolio:latest
+  #   # restart: '${DOCKER_RESTART_POLICY:-unless-stopped}'
+    env_file:
+      - .env
+    ports:
+      - '80:80'
+    networks:
+      - app-network
   #   environment:
   #     - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
+
+  product_app:
+    container_name: product_app
+    image: vvasylkovskyi1/rpi-product-app:acb03544ca21104f5fe384120503f052c3fcb17d
+    # env_file:
+    #   - .env
+    ports:
+      - '3000:3000'
+    networks:
+      - app-network
 
   # db:
   #   image: postgres:16

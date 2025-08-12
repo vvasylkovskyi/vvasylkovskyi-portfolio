@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { WebRtcAnswer } from '@/types/video';
+import { useAuth } from '@clerk/nextjs';
 
 type CameraRpiClientLiveState = {
     isLoading: boolean;
@@ -10,6 +11,8 @@ type CameraRpiClientLiveState = {
 }
 
 export const CameraRpiClientLive = () => {
+    const { isLoaded, isSignedIn, userId, sessionId, getToken } = useAuth();
+
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const pcRef = useRef<RTCPeerConnection | null>(null);
     const [state, setState] = useState<CameraRpiClientLiveState>({
@@ -21,10 +24,12 @@ export const CameraRpiClientLive = () => {
         // You should implement this function to send offer SDP to Pi via MQTT or your signaling channel
         console.log('Sending offer SDP to Pi:', offer.sdp);
         setState(s => ({ ...s, isStreaming: true, isLoading: false }));
+        const token = await getToken();
         const response = await fetch('/api/start-webrtc', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify(offer),
         });
@@ -43,7 +48,14 @@ export const CameraRpiClientLive = () => {
 
     const startWebRTC = async () => {
         setState({ isLoading: true, isStreaming: false });
-        const response = await fetch("/api/turn-credentials");
+
+        const token = await getToken();
+        const response = await fetch("/api/turn-credentials", {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
         const turnCredentials = await response.json();
         const peerConnection = new RTCPeerConnection({
             iceServers: turnCredentials,
@@ -134,10 +146,13 @@ export const CameraRpiClientLive = () => {
         if (videoRef.current) {
             videoRef.current.srcObject = null;
         }
+
+        const token = await getToken();
         await fetch('/api/stop-webrtc', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
             },
         });
 
