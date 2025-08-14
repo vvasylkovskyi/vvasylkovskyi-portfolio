@@ -367,8 +367,13 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
 
 To use our Clerk auth provider in production, we need to accomplish the [production requirements as prescribed by Clerk team](https://clerk.com/docs/deployments/overview?_gl=1*9s214t*_gcl_au*MTA2OTUzNDc4MS4xNzUxOTA4MTY2*_ga*ODA0OTMyMzc5LjE3NTE5MDgxNjY.*_ga_1WMF5X234K*czE3NTUwMDExNzkkbzEwJGcxJHQxNzU1MDAxMTg1JGo1NCRsMCRoMA..): 
 
+  - Add API Keys
   - Setup social connection credentials
   - Connect domains
+
+### Add API Keys
+
+Production API keys differ from development, so we need to make sure to push the new keys to production. More infromation on this can be found on [Clerk API Keys docs](https://dashboard.clerk.com/apps/app_310hsBfCVoMVW6Wx5wfjvpmPcKe/instances/ins_311IHCJFRpRiJV782iWzBUjsfl7/api-keys).
 
 ### Setup Social Connection Credentials
 

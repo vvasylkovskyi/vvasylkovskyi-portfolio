@@ -1,0 +1,15 @@
+{
+    "title": "Mastering FastAPI with PostgreSQL: From Setup to Database-Driven APIs",
+    "filename": "python-fast-api-postgresql-complete-guide",
+    "date": "Aug 14, 2025",
+    "metaText": "Learn how to build a Python FastAPI web server fully integrated with a PostgreSQL database. This step-by-step guide covers environment setup, database connection, CRUD operations with SQLModel, and proper migrations using Alembic for a production-ready workflow. Perfect for developers looking to combine FastAPI and PostgreSQL efficiently.",
+    "categories": [
+        "Web Development",
+        "Python",
+        "FastAPI",
+        "PostgreSQL",
+        "Alembic",
+        "SQLModel",
+        "Migrations"
+    ]
+}

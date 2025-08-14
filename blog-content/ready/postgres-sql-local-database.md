@@ -208,3 +208,5 @@ export const getBlogsData = async (): Promise<PostType[]> => {
 ## Conclusion
 
 That’s it! You now have a fully working local PostgreSQL setup running in Docker, complete with schema initialization and seed data—ready to power your frontend. This setup mirrors production patterns closely, so moving to a remote database later should feel familiar. Happy building!
+
+In the next notes we will explore how to do deploy our database into AWS Cloud. Feel free to explore it at [Provisioning PostgresSQL RDBMS on AWS with Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-postgresql-on-aws-terraform).
