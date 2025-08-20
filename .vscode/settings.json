@@ -1,64 +1,11 @@
 {
-  /* ---- Python ---- */
-  "[python]": {
-    // -- Ruff
-    "editor.defaultFormatter": "charliermarsh.ruff",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.stylelint": "explicit"
   },
-  // -- Ruff
-  "ruff.importStrategy": "fromEnvironment",
-  // -- Languange Server: (Windsurf) BasedPyright
-  "windsurfPyright.analysis.extraPaths": [
-    "${workspaceFolder}/src"
-  ],
-  "editor.formatOnSave": true,
-  "windsurfPyright.analysis.typeCheckingMode": "basic",
-  "windsurfPyright.analysis.diagnosticSeverityOverrides": {
-    "reportArgumentType": "hint",
-    "reportAssignmentType": "hint",
-    "reportAttributeAccessIssue": "hint",
-    "reportCallIssue": "hint",
-    "reportIndexIssue": "hint",
-    "reportInvalidTypeForm": "hint",
-    "reportOptionalMemberAccess": "hint",
-    "reportReturnType": "hint",
-    "reportGeneralTypeIssues": "hint",
-    "reportOptionalSubscript": "hint",
-    "reportOptionalIterable": "hint",
-    "reportOperatorIssue": "hint",
-    "reportRedeclaration": "hint",
-    "reportUnusedCoroutine": "hint",
-    "reportOptionalCall": "hint",
-    "reportPrivateImportUsage": "hint"
-  },
-  // -- Extra paths
-  "python.autoComplete.extraPaths": [
-    "${workspaceFolder}/src"
-  ],
-  // -- Pytest
-  "python.testing.pytestEnabled": true,
-  "python.testing.pytestArgs": [
-    "--color=yes",
-    "-vvv",
-    "-s",
-    "--no-cov",
-    "tests/"
-  ],
-  /* ---- TOML ---- */
-  "[toml]": {
-    "editor.defaultFormatter": "tamasfe.even-better-toml"
-  },
-  "evenBetterToml.formatter.alignComments": true,
-  "evenBetterToml.formatter.alignEntries": true,
-  "evenBetterToml.formatter.allowedBlankLines": 2,
-  "evenBetterToml.formatter.arrayAutoCollapse": true,
-  "evenBetterToml.formatter.columnWidth": 120,
-  "evenBetterToml.formatter.indentString": "  ",
-  "evenBetterToml.formatter.reorderArrays": true,
-  "evenBetterToml.formatter.reorderKeys": true,
-  "evenBetterToml.formatter.trailingNewline": true,
-  "python.languageServer": "None",
-  "makefile.configureOnOpen": false,
-  "cSpell.words": [
-    "vvasylkovskyi"
-  ]
+  "editor.tabSize": 2,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "files.trimTrailingWhitespace": true,
+  "javascript.validate.enable": false,
 }

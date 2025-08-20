@@ -23,12 +23,13 @@ import { Button } from '@/components/ui/button';
 
 export const TopBar = () => {
   const pathname = usePathname();
-  const { theme, toggleTheme, isResolved } = useTheme();
+  // const { theme, toggleTheme, isResolved } = useTheme();
+  const { theme } = useTheme();
 
-  const handleToggleTheme = useCallback(() => {
-    toggleTheme();
-    posthog.capture(`Theme toggled - ${theme}`, { theme })
-  }, [toggleTheme, theme]);
+  // const handleToggleTheme = useCallback(() => {
+  //   toggleTheme();
+  //   posthog.capture(`Theme toggled - ${theme}`, { theme })
+  // }, [toggleTheme, theme]);
 
   const handleLogoClick = useCallback(() => {
     posthog.capture('Logo clicked')
@@ -50,9 +51,9 @@ export const TopBar = () => {
     posthog.capture('Hamburger clicked - About');
   }, []);
 
-  if (!isResolved) {
-    return null;
-  }
+  // if (!isResolved) {
+  //   return null;
+  // }
 
   return (
     <div className='top-bar-header z-50 w-full'>

@@ -5,11 +5,12 @@ import { useTheme } from '@/hooks/useTheme'
 // Powered by Giscus. Find documentation here - https://giscus.app/
 
 export const GiscusComments = () => {
-    const { theme, isResolved } = useTheme();
+    const { theme } = useTheme();
+    // const { theme, isResolved } = useTheme();
 
-    if (!isResolved) {
-        return null;
-    }
+    // if (!isResolved) {
+    //     return null;
+    // }
 
     return <div className='giscus'>
         <script src="https://giscus.app/client.js"

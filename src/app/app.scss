@@ -6,7 +6,7 @@
 @import '../scss/post-item.scss';
 @import '../scss/home.scss';
 @import '../scss/post.scss';
-@import "../scss/project.scss";
+@import '../scss/project.scss';
 
 :root {
   --markdown-h1-font-size: #{$font-size-4xl};
@@ -109,13 +109,13 @@
   color: var(--primary-color) !important;
 }
 
-.plyr--full-ui input[type="range"] {
+.plyr--full-ui input[type='range'] {
   color: var(--primary-color) !important;
 }
 
 .plyr--video .plyr__control:focus-visible,
 .plyr--video .plyr__control:hover,
-.plyr--video .plyr__control[aria-expanded="true"] {
+.plyr--video .plyr__control[aria-expanded='true'] {
   background: var(--primary-color) !important;
 }
 
@@ -136,7 +136,6 @@
   width: 100%;
   height: 50vh;
   position: relative;
-  margin-top: calc($topbar-height * -2);
   width: 100%;
 }
 
@@ -163,7 +162,6 @@
   justify-content: center;
   gap: $spacing-4;
 }
-
 
 .swiper-slide {
   width: 250px;
@@ -204,17 +202,12 @@
 }
 
 @media (min-width: 768px) {
-  .player-component-wrapper {
-    margin-top: 0;
-  }
-
   .plyr--video {
     width: 800px;
     height: 50vh;
     border-radius: $radii-md;
   }
 }
-
 
 h1,
 h2,
@@ -328,7 +321,6 @@ body {
   background-color: var(--background-app-color);
 }
 
-
 .main-content {
   padding: 0;
   max-width: $max-width--desktop;
@@ -363,7 +355,6 @@ body {
   overflow: hidden;
   background-color: var(--background-app-color);
   padding: $app-padding-mobile;
-
 }
 
 .background {
@@ -376,7 +367,7 @@ body {
   -webkit-flex-shrink: 0;
   -ms-flex-negative: 0;
   flex-shrink: 0;
-  background-image: radial-gradient(#5EEAD4 0%, rgba(94, 234, 212, 0) 60%);
+  background-image: radial-gradient(#5eead4 0%, rgba(94, 234, 212, 0) 60%);
   z-index: 0;
   left: 30%;
   top: -20%;
@@ -409,7 +400,6 @@ body {
   letter-spacing: -0.025em;
   font-weight: $font-weight-semibold;
 }
-
 
 .blogs__grid {
   display: grid;
@@ -554,7 +544,6 @@ body {
   }
 }
 
-
 .toggle_mode__wraper {
   display: flex;
   align-items: center;
@@ -586,7 +575,6 @@ body {
 }
 
 @media (min-width: 992px) {
-
   .blogs__grid {
     grid-template-columns: 1fr 1fr;
     gap: $blog-grid-gap;

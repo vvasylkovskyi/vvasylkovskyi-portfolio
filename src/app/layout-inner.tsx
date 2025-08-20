@@ -16,7 +16,7 @@ export default function LayoutInner({
   const content = (
 
     <div
-      className={`app-container app-container--${theme}} p${pathname === '/' ? 'app-container--home' : ''}`}
+      className={`app-container app-container--${theme} p${pathname === '/' ? 'app-container--home' : ''}`}
     >
       <TopBar />
       <div className={`main-content ${pathname === '/about' ? 'main-content--about' : ''}`}>
