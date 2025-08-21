@@ -21,6 +21,8 @@ export type BatteryInfo = {
   voltage: string;
   current: string;
   charging_status: string;
+  energy_consumption: string;
+  remaining_battery_time: string;
 };
 
 export type DeviceInfo = {

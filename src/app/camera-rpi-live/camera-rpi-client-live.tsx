@@ -3,6 +3,7 @@ import {
   FullScreenLoadingSpinner,
   LoadingSpinner,
   ProgressLoader,
+  SmallLoadingSpinner,
 } from '@/components/atoms/loading-spinner/loading-spinner';
 import { Button } from '@/components/ui/button';
 import { ConnectionStatus } from '@/types/device-types';
@@ -21,6 +22,8 @@ type CameraRpiClientLiveState = {
   uptimeSeconds: number;
   batteryTemperature: string;
   batteryChargingStatus: string;
+  batteryConsumption: string;
+  batteryTimeLeft: string;
 };
 
 export const CameraRpiClientLive = () => {
@@ -46,10 +49,12 @@ export const CameraRpiClientLive = () => {
     uptimeSeconds: 0,
     batteryTemperature: 'unknown',
     batteryChargingStatus: 'unknown',
+    batteryConsumption: 'unknown',
+    batteryTimeLeft: 'unknown',
   });
 
   const getDeviceInfo = useCallback(async () => {
-    setState({ ...state, isLoading: true, isLoaded: false });
+    setState((prevState) => ({ ...prevState, isLoading: true }));
     const token = await getToken();
     const response = await fetch('/api/get-device-info', {
       method: 'GET',
@@ -68,6 +73,8 @@ export const CameraRpiClientLive = () => {
       uptimeSeconds: data.uptimeSeconds,
       batteryTemperature: data.batteryTemperature,
       batteryChargingStatus: data.batteryChargingStatus,
+      batteryConsumption: data.batteryConsumption,
+      batteryTimeLeft: data.batteryTimeLeft,
       isLoaded: true,
       isLoading: false,
     }));
@@ -78,10 +85,11 @@ export const CameraRpiClientLive = () => {
       return;
     }
 
+    setState({ ...state, isLoading: true, isLoaded: false });
     getDeviceInfo();
   }, [state, getDeviceInfo]);
 
-  if (state.isLoading || !state.isLoaded) {
+  if (state.isLoading && !state.isLoaded) {
     return <FullScreenLoadingSpinner message={'Collecting Device Info...'} />;
   }
 
@@ -105,6 +113,14 @@ export const CameraRpiClientLive = () => {
               <span className='camera__stats__label'>Battery Level: </span>
               <span className='camera__stats__value'>{`${state.batteryLevel}`}</span>
             </div>
+            <div className='camera__stats__item'>
+              <span className='camera__stats__label'>Energy Consumption: </span>
+              <span className='camera__stats__value'>{`${state.batteryConsumption}`}</span>
+            </div>
+            <div className='camera__stats__item'>
+              <span className='camera__stats__label'>Battery Time Left: </span>
+              <span className='camera__stats__value'>{`${state.batteryTimeLeft}`}</span>
+            </div>
           </div>
           <div className='camera-stats__bottom'>
             <div className='camera-stats__item'>
@@ -122,6 +138,12 @@ export const CameraRpiClientLive = () => {
             <div className='camera-stats__item'>
               <span className='camera-stats__label'>Battery Charging Status: </span>
               <span className='camera-stats__value'>{`${state.batteryChargingStatus}`}</span>
+            </div>
+            <div style={{ marginTop: '10px' }}>
+              <Button onClick={() => getDeviceInfo()} variant='default'>
+                Refresh Device Info
+                {state.isLoading && <SmallLoadingSpinner />}
+              </Button>
             </div>
           </div>
         </div>

@@ -5,7 +5,6 @@ Previously we have seen how to setup an EC-2 instance, run a simple web server a
 - [Deploying EC2 instance on AWS with Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-ec2-on-aws-with-terraform)
 - [Provision DNS records with Terraform](https://www.viktorvasylkovskyi.com/posts/provisioning-dns-records-with-terraform)
 
-
 The natural next step in that setup is to use HTTPS (HTTP + SSL) and enforce access at port 443 instead. We will do it here by adding Cloudfront and ACM to our terraform setup. Let's dive in.
 
 ## Disclaimer
@@ -118,11 +117,7 @@ Run `terraform apply` and observe the `cloudfront_distribution_domain_name` outp
 d123456789abcdef.cloudfront.net.
 ```
 
-If everything went well then you should be able to open the URL in the browser.
-
-## Conclusion
-
-I started this notes explaining how to add HTTPS using CloudFront, but I ended-up realizing that two concepts at the same time can be confusing so I decided to split them in two. This way, we can test things in sequence, and ensure that all the preconditions work for SSL. Next let's explore about how to add SSL certificate to our CloudFront distribution.
+If everything went well then you should be able to open the URL in the browser. I started this notes explaining how to add HTTPS using CloudFront, but I ended-up realizing that two concepts at the same time can be confusing so I decided to split them in two. This way, we can test things in sequence, and ensure that all the preconditions work for SSL. Next let's explore about how to add SSL certificate to our CloudFront distribution.
 
 ### ACM Certificate for HTTPS
 

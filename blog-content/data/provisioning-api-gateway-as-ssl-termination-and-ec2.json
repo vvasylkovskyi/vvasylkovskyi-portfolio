@@ -1,0 +1,7 @@
+{
+  "title": "Provisioning API Gateway as SSL Termination and connecting it to EC2 instance using Terraform",
+  "filename": "provisioning-api-gateway-as-ssl-termination-and-ec2",
+  "date": "Aug 21, 2025",
+  "metaText": "Learn how to provision an AWS API Gateway and connect it to an EC2 instance using Terraform, including SSL termination with ACM and DNS routing via Route 53. This guide offers a cost-effective alternative to ALB or CloudFront for personal projects, with step-by-step Terraform examples and security considerations.",
+  "categories": ["AWS", "Terraform", "SSL", "AWS API Gateway", "EC2"]
+}

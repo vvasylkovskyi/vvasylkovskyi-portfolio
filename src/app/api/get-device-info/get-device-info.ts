@@ -13,6 +13,8 @@ export type GetDeviceInfoResponse = {
   uptimeSeconds: number;
   batteryTemperature: string;
   batteryChargingStatus: string;
+  batteryConsumption: string;
+  batteryTimeLeft: string;
 };
 
 export const getDeviceInfo = async (token: string): Promise<GetDeviceInfoResponse> => {
@@ -53,6 +55,8 @@ export const getDeviceInfo = async (token: string): Promise<GetDeviceInfoRespons
         batteryTemperature: '0',
         batteryChargingStatus: 'unknown',
         batteryLevel: '0',
+        batteryConsumption: 'unknown',
+        batteryTimeLeft: 'unknown',
       };
     }
 
@@ -70,6 +74,8 @@ export const getDeviceInfo = async (token: string): Promise<GetDeviceInfoRespons
       batteryTemperature: batteryInfo.temperature,
       batteryChargingStatus: batteryInfo.charging_status,
       batteryLevel: batteryInfo.charge_level,
+      batteryConsumption: batteryInfo.energy_consumption,
+      batteryTimeLeft: batteryInfo.remaining_battery_time,
     };
   } catch (e) {
     console.error('Error fetching device info:', e);
@@ -80,6 +86,8 @@ export const getDeviceInfo = async (token: string): Promise<GetDeviceInfoRespons
       batteryTemperature: '0',
       batteryChargingStatus: 'unknown',
       batteryLevel: '0',
+      batteryConsumption: 'unknown',
+      batteryTimeLeft: 'unknown',
     };
   }
 };

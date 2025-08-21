@@ -1,12 +1,12 @@
 # Provisioning Application Load Balancer and connecting it to Ec-2 instance using Terraform
 
-In this notes we will continue improving on our infrastructure by adding HTTPS to our web app. In AWS the most simple way that I have found to do this well is by using Load Balancer as HTTPS proxy. We will do something unconventional, which is use Load Balancer and only 1 machine - EC-2 instance. People may argue that load balancer should point to a cluster. That's a valid argument. In my opinion, if you are a startup with not many customers or running a personal project, then maintaining a cluster may be too complicated and unnecessarily expensive. 
+In this notes we will continue improving on our infrastructure by adding HTTPS to our web app. In AWS the most simple way that I have found to do this well is by using Load Balancer as HTTPS proxy. We will do something unconventional, which is use Load Balancer and only 1 machine - EC-2 instance. People may argue that load balancer should point to a cluster. That's a valid argument. In my opinion, if you are a startup with not many customers or running a personal project, then maintaining a cluster may be too complicated and unnecessarily expensive.
 
-The easiest way to have https on web app using IaC is in my opinion using AWS load balancer, ACM for certificate management, some DNS, and finally the EC-2 to run docker image. 
+The easiest way to have https on web app using IaC is using AWS load balancer, ACM for certificate management, some DNS, and finally the EC-2 to run docker image.
 
 ## Prerequisites
 
-Make sure you have base running, I suggest having a look at my previous notes: [Provisioning EC-2 Instance on Terraform using Modules and best practices](https://www.viktorvasylkovskyi.com/posts/terraform-modularizing). There we setup basic http server using EC-2. 
+Make sure you have base running, I suggest having a look at my previous notes: [Provisioning EC-2 Instance on Terraform using Modules and best practices](https://www.viktorvasylkovskyi.com/posts/terraform-modularizing). There we setup basic http server using EC-2.
 
 ## Github Code
 
@@ -14,19 +14,19 @@ Full code available on `https://github.com/vvasylkovskyi/viktorvasylkovskyi-infr
 
 ## Overview
 
-We will do the following: 
+We will do the following:
 
-  - Modify Network so that we have two subnets with two availability zones. This is required for load balancer to work.
-  - Provision SSL certificate using ACM, for load balancer
-  - Provision Load Balancer itself, and make it proxy requests to EC-2 instance
-  - Update Route53 to point our DNS to the Load Balancer
-  - Update EC-2 Instance to serve app from docker container
+- Modify Network so that we have two subnets with two availability zones. This is required for load balancer to work.
+- Provision SSL certificate using ACM, for load balancer
+- Provision Load Balancer itself, and make it proxy requests to EC-2 instance
+- Update Route53 to point our DNS to the Load Balancer
+- Update EC-2 Instance to serve app from docker container
 
 ## Modify Network module to have multiple availability zones
 
-In the `modules/network`, change the `main.tf` to include multiple availability zones: 
+In the `modules/network`, change the `main.tf` to include multiple availability zones:
 
-For simplicity, we will define only two public subnets, without private subnets. 
+For simplicity, we will define only two public subnets, without private subnets.
 
 #### List Availability Zones
 
@@ -42,7 +42,7 @@ This resource returns a list of all AZ available in the region configured in the
 
 #### Add two public subnets
 
-We will be using the terraform `count` directive. `count` is used as a loop, so we can define some resource multiple times. Since we only need two public subnets, naturaly the `count=2`. Let's write two public subnets: 
+We will be using the terraform `count` directive. `count` is used as a loop, so we can define some resource multiple times. Since we only need two public subnets, naturaly the `count=2`. Let's write two public subnets:
 
 ```hcl
 # subnet.tf
@@ -72,7 +72,7 @@ resource "aws_route_table" "public" {
 
 ```
 
-The above code will create a route table for our VPC. The `route` says that all the outbound traffic `0.0.0.0/0` will be directed to the internet via the VPC's Internet Gateway. This piece of code essentially makes our subnet using this route table *public*. Now this route table is attached to our VPC, but not to subnet. To attach it to our two subnets, we need to create an association between subnets and this route table: 
+The above code will create a route table for our VPC. The `route` says that all the outbound traffic `0.0.0.0/0` will be directed to the internet via the VPC's Internet Gateway. This piece of code essentially makes our subnet using this route table _public_. Now this route table is attached to our VPC, but not to subnet. To attach it to our two subnets, we need to create an association between subnets and this route table:
 
 ```hcl
 resource "aws_route_table_association" "public" {
@@ -82,7 +82,7 @@ resource "aws_route_table_association" "public" {
 }
 ```
 
-Finally, we will make our route table a main one, just to leave explicit association. 
+Finally, we will make our route table a main one, just to leave explicit association.
 
 ```hcl
 resource "aws_main_route_table_association" "public_main" {
@@ -177,7 +177,7 @@ Now that we have network and SSL certificate, we can start provisioning load bal
 
 ### Creating ALB
 
-First, let's create ALB resource: 
+First, let's create ALB resource:
 
 ```hcl
 # modules/alb/main.tf
@@ -187,22 +187,21 @@ resource "aws_lb" "my_app" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [var.security_group]
-  subnets            = var.subnets 
+  subnets            = var.subnets
 }
 ```
 
-Load balancer will to be inserted our public subnet (hence the `internal=false`), i.e, in a subnet that has access to the public network via gateway. We have only one subnet - `aws_subnet.my_app.id` so the choice is obvious. The `security_groups` have to allow ingress to port `443` that we will define in a moment. Finally the `load_balancer_type=application` is the typical for most web applications. Alternatives are `network` and `gateway` which you are welcome to explore on your own. 
+Load balancer will to be inserted our public subnet (hence the `internal=false`), i.e, in a subnet that has access to the public network via gateway. We have only one subnet - `aws_subnet.my_app.id` so the choice is obvious. The `security_groups` have to allow ingress to port `443` that we will define in a moment. Finally the `load_balancer_type=application` is the typical for most web applications. Alternatives are `network` and `gateway` which you are welcome to explore on your own.
 
 The security group for ALB needs to allow igress for 443 (SSL) and egress for everything is fine for now.
 
-Note we are passing multiple `subnets` created in the network module above. 
-
+Note we are passing multiple `subnets` created in the network module above.
 
 ### Provision ALB Target Group and ALB Listener
 
-The ALB Listener and ALB Target Group are input and output rules of ALB. We will define that ALB accepts requests at port 443 and use `certificate_arn` our SSL certificate. The only action ALB will do is HTTPS termination and then a simple forward to the ALB Target group - our cluster. 
+The ALB Listener and ALB Target Group are input and output rules of ALB. We will define that ALB accepts requests at port 443 and use `certificate_arn` our SSL certificate. The only action ALB will do is HTTPS termination and then a simple forward to the ALB Target group - our cluster.
 
-**Begin with defining ALB Listener:** 
+**Begin with defining ALB Listener:**
 
 ```hcl
 # modules/alb/main.tf
@@ -224,7 +223,7 @@ resource "aws_lb_listener" "https" {
 
 ```
 
-And now, we have to define our target group: `target_group_arn`. 
+And now, we have to define our target group: `target_group_arn`.
 
 **Defining our Target Group:**
 
@@ -269,7 +268,7 @@ Note port 80 is the HTTP but it is fine, since we already checked for SSL at the
 
 ## Update Route53 to Point to ALB
 
-We have HTTPS on our ALB, now we have to make DNS point to ALB. 
+We have HTTPS on our ALB, now we have to make DNS point to ALB.
 
 ```hcl
 # modules/dns/main.tf
@@ -282,7 +281,7 @@ resource "aws_route53_record" "record" {
   zone_id = aws_route53_zone.main.zone_id
   name    = var.domain_name
   type    = "A"
-    
+
   alias {
     name                   = var.aws_lb_dns_name
     zone_id                = var.aws_lb_zone_id
@@ -293,7 +292,7 @@ resource "aws_route53_record" "record" {
 
 ## Update Ec-2 launch to serve app from Docker Container
 
-For the Ec-2 we can simply start the docker image using our `user_data`. Here is how we can do that: 
+For the Ec-2 we can simply start the docker image using our `user_data`. Here is how we can do that:
 
 ```
 # modules/ec2/main.tf
@@ -321,10 +320,10 @@ resource "aws_instance" "portfolio" {
 }
 ```
 
-Note replace `nginx/nginx` with your docker image. 
+Note replace `nginx/nginx` with your docker image.
 
 ## Conclusion
 
-Let's run `terraform init` to install the modules and then `terraform apply --auto-approve` and see our domain working! 
+Let's run `terraform init` to install the modules and then `terraform apply --auto-approve` and see our domain working!
 
 For simplicity purposes here we only provide the modules code, and I will leave to you, fellow reader to glue them together using your `main.tf` in the Root Module. Personally I enjoy working with terraform modules because it makes the infrastructure very easy to maintain. Additionally the dependencies between modules are visible in the root module due to the `variables` and `outputs` passed around from the modules. I hope you managed to make it work. If you have some issue please let me know and I will be glad to help. Happy coding!

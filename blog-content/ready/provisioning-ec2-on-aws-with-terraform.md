@@ -249,7 +249,6 @@ The last piece of infrastructure is the security group. Let's add it. The only r
 # security_group.tf
 
 resource "aws_security_group" "my_app" {
-  name   = "SSH port for API"
   vpc_id = aws_vpc.main.id
 
   ingress {

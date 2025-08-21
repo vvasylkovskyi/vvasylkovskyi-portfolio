@@ -1,7 +1,11 @@
 import './loading-spinner.scss';
 
-export const LoadingSpinner = () => {
-  return <span className='loader'></span>;
+export const SmallLoadingSpinner = () => {
+  return <span className={`loader-small`}></span>;
+};
+
+export const LoadingSpinner = ({ color }: { color?: string }) => {
+  return <span className={`loader ${color ? 'loader--' + color : ''}`}></span>;
 };
 
 export const ProgressLoader = () => {
