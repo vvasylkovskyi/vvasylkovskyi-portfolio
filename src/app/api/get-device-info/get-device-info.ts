@@ -5,6 +5,7 @@ import {
   DeviceInfo,
   DeviceInfoResponse,
 } from '@/types/device-types';
+import { GenericResponse } from '@/types/http-response';
 
 export type GetDeviceInfoResponse = {
   connectionStatus: ConnectionStatus;
@@ -60,9 +61,11 @@ export const getDeviceInfo = async (token: string): Promise<GetDeviceInfoRespons
       };
     }
 
-    const deviceInfoResponseJson: DeviceInfoResponse = await deviceInfoResponse.json();
-    const deviceInfo: DeviceInfo = deviceInfoResponseJson.data.health_check_info;
-    const batteryInfoResponseJson: BatteryInfoResponse = await batteryInfoResponse.json();
+    const deviceInfoResponseJson: GenericResponse<DeviceInfoResponse> =
+      await deviceInfoResponse.json();
+    const deviceInfo: DeviceInfo = deviceInfoResponseJson.data?.health_check_info;
+    const batteryInfoResponseJson: GenericResponse<BatteryInfoResponse> =
+      await batteryInfoResponse.json();
     const batteryInfo: BatteryInfo = batteryInfoResponseJson.data.battery_info;
 
     return {

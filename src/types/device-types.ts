@@ -4,15 +4,11 @@ export enum ConnectionStatus {
 }
 
 export type DeviceInfoResponse = {
-  data: {
-    health_check_info: DeviceInfo;
-  };
+  health_check_info: DeviceInfo;
 };
 
 export type BatteryInfoResponse = {
-  data: {
-    battery_info: BatteryInfo;
-  };
+  battery_info: BatteryInfo;
 };
 
 export type BatteryInfo = {
@@ -31,4 +27,17 @@ export type DeviceInfo = {
   disk_percent: number;
   uptime_seconds: number;
   device_id: string;
+};
+
+export type RegisterDeviceResponse = {
+  status: string;
+  data: {
+    deviceId: string;
+    certificatePem: string;
+    privateKey: string;
+    publicKey: string;
+    certificateArn: string;
+    endpoint: string;
+    policyName: string;
+  };
 };
