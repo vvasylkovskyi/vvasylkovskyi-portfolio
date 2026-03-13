@@ -1,0 +1,7 @@
+{
+  "title": "API keys - Generating Long-lived tokens for backend access",
+  "filename": "securing-your-app-with-auth-api-keys",
+  "date": "Aug 22, 2025",
+  "metaText": "This guide provides a comprehensive walkthrough for generating long-lived API keys for backend access. Perfect for developers looking to secure their applications.",
+  "categories": ["Python", "API Keys", "JWT"]
+}

@@ -12,13 +12,7 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 import { posthog } from 'posthog-js';
-import {
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from '@clerk/nextjs'
+import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import { Button } from '@/components/ui/button';
 
 export const TopBar = () => {
@@ -32,7 +26,7 @@ export const TopBar = () => {
   // }, [toggleTheme, theme]);
 
   const handleLogoClick = useCallback(() => {
-    posthog.capture('Logo clicked')
+    posthog.capture('Logo clicked');
   }, []);
 
   const handleGithubClick = useCallback(() => {
@@ -110,9 +104,15 @@ export const TopBar = () => {
               </Link>
             </nav> */}
             <SignedOut>
-              <SignInButton><Button size="sm" variant="secondary">Sign In</Button></SignInButton>
+              <SignInButton>
+                <Button size='sm' variant='secondary'>
+                  Sign In
+                </Button>
+              </SignInButton>
               <SignUpButton>
-                <Button size="sm" variant="default">Sign Up</Button>
+                <Button size='sm' variant='default'>
+                  Sign Up
+                </Button>
               </SignUpButton>
             </SignedOut>
             <SignedIn>
@@ -170,8 +170,9 @@ export const TopBar = () => {
                   <Link href='/' onClick={handleHamburgerClickBlog}>
                     <DropdownMenuItem className='dropdown-menu-item'>
                       <div
-                        className={`navigation-menu-item navigation-menu-item--blog ${pathname === '/' ? 'navigation-menu-item--active' : ''
-                          }`}
+                        className={`navigation-menu-item navigation-menu-item--blog ${
+                          pathname === '/' ? 'navigation-menu-item--active' : ''
+                        }`}
                       >
                         Notes
                       </div>
@@ -180,8 +181,9 @@ export const TopBar = () => {
                   <Link href='/about' onClick={handleHamburgerClickAbout}>
                     <DropdownMenuItem className='dropdown-menu-item'>
                       <div
-                        className={`navigation-menu-item navigation-menu-item--blog ${pathname === '/about' ? 'navigation-menu-item--active' : ''
-                          }`}
+                        className={`navigation-menu-item navigation-menu-item--blog ${
+                          pathname === '/about' ? 'navigation-menu-item--active' : ''
+                        }`}
                       >
                         About
                       </div>
@@ -190,8 +192,9 @@ export const TopBar = () => {
                   <Link href='/camera-rpi'>
                     <DropdownMenuItem className='dropdown-menu-item'>
                       <div
-                        className={`navigation-menu-item navigation-menu-item--blog ${pathname === '/camera-rpi' ? 'navigation-menu-item--active' : ''
-                          }`}
+                        className={`navigation-menu-item navigation-menu-item--blog ${
+                          pathname === '/camera-rpi' ? 'navigation-menu-item--active' : ''
+                        }`}
                       >
                         Raspberry Camera Feed
                       </div>
@@ -200,10 +203,22 @@ export const TopBar = () => {
                   <Link href='/camera-rpi-live'>
                     <DropdownMenuItem className='dropdown-menu-item'>
                       <div
-                        className={`navigation-menu-item navigation-menu-item--blog ${pathname === '/camera-rpi' ? 'navigation-menu-item--active' : ''
-                          }`}
+                        className={`navigation-menu-item navigation-menu-item--blog ${
+                          pathname === '/camera-rpi' ? 'navigation-menu-item--active' : ''
+                        }`}
                       >
                         Raspberry Camera Live Feed
+                      </div>
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link href='/cloud-meter'>
+                    <DropdownMenuItem className='dropdown-menu-item'>
+                      <div
+                        className={`navigation-menu-item navigation-menu-item--blog ${
+                          pathname === '/cloud-meter' ? 'navigation-menu-item--active' : ''
+                        }`}
+                      >
+                        Cloud Meter
                       </div>
                     </DropdownMenuItem>
                   </Link>

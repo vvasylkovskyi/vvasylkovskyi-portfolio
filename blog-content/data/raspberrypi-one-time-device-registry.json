@@ -1,0 +1,7 @@
+{
+  "title": "Registering IoT Device to AWS Cloud with One Install script",
+  "filename": "raspberrypi-one-time-device-registry",
+  "date": "Aug 22, 2025",
+  "metaText": "This guide provides a comprehensive walkthrough for registering a Raspberry Pi as an IoT device in the AWS Cloud using a single installation script. Perfect for developers looking to streamline their IoT deployments.",
+  "categories": ["Python", "Raspberrypi", "AWS IoT Core", "JWT", "Ansible"]
+}
