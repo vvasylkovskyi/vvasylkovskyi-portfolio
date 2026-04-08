@@ -856,6 +856,31 @@ I have Grafana Loki configured with Grafana Alloy logs collection, and I can see
 
 ![alt text](./open-claw-setup/grafana-systemd-logs.png)
 
+This means there are two ways to pull logs from my `openclaw`:
+
+1. Make it a `systemd` service
+2. Run it inside a `docker` container.
+
+The first option is easier - avoid the potential of having to deal with scoped permissions inside docker, which might limit features. The docker would be more secure though, if configured in the right way, would prevent `openclaw` from having access to unwanted files (e.g. potentially deleting the whole file system).
+
+Meanwhile I found this project - https://github.com/wwlarsww/lobster-cage. Could be interesting
+
+### Installing as System Service
+
+To address both reliability and lack of logs, I built an automation that installs OpenClaw as Systemd.
+
+### Running elevate commands
+
+I wanted to install `ansible` on my Raspberry Pi so that it installs packages on itself, but ran into the following issue:
+
+```sh
+sudo apt-get update && sudo apt-get install -y ansible
+
+elevated exec is unavailable in this Discord session
+```
+
+To solve this, we need to `enable elevated exec for Discord in OpenClaw`.
+
 ### The System Load Overload
 
 Once I ran the Codex, my system basically overload. Why is that? I asked my bot, it didn't know, and I had no longs. Turns out metrics are only one piece of it.
