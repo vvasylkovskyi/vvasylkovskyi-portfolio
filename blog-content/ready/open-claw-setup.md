@@ -881,6 +881,45 @@ elevated exec is unavailable in this Discord session
 
 To solve this, we need to `enable elevated exec for Discord in OpenClaw`.
 
+This is essentially a config like this:
+
+```json
+{
+  "tools": {
+    "elevated": {
+      "enabled": true,
+      "allowFrom": {
+        "discord": ["12354...."]
+      }
+    }
+  }
+}
+```
+
+You can ask your bot what is the discord ID, he knows. On the Pi, we can do the following:
+
+```sh
+openclaw config set tools.elevated.enabled true --strict-json
+openclaw config set tools.elevated.allowFrom.discord '["12354...."]' --strict-json
+openclaw config validate
+openclaw gateway restart
+```
+
+**Notes:**
+
+- `12354....` is the Discord user id from this chat
+- `tools.elevated.enabled` turns the feature on
+- `tools.elevated.allowFrom.discord` allowlists you for Discord-originated sessions
+
+restart the gateway after config edits, otherwise OpenClaw will continue pretending nothing changed
+
+Then from Discord you can use either:
+
+- `/elevated on` — elevated host exec, approvals still apply
+- `/elevated full` — elevated host exec without exec approvals
+
+In your case, since this session is already direct-host and the failure was the elevated gate itself, enabling the config above should be enough for me to run the install command from Discord.
+
 ### The System Load Overload
 
 Once I ran the Codex, my system basically overload. Why is that? I asked my bot, it didn't know, and I had no longs. Turns out metrics are only one piece of it.
