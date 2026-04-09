@@ -1481,6 +1481,29 @@ Codex MUST NOT:
 
 `````
 
+### Installing Tmux
+
+#### Stale task tmux problem.
+
+Found the issue: the mailbox worker picked up an old stale task and launched Codex with the wrong prompt. I’m doing the one allowed recovery now — stop stale worker/Codex, restart clean, resend the correct task.
+
+1. Need to clear stale files
+2. Need to handle task IDs to avoid problems
+
+### Overall skills progress
+
+Overall now we have 3 skills, each have proven good reliability in specific tasks:
+
+- codex-orchestrated-dev - provides good workflow information - validate loop
+- multi_agent_coordination - is good for communication via tmux and spawning agents
+- documentation-with-diagrams - provides good documentation guidelines
+
+However, all these skills are not use reliably, so we need to design the flow so that the only valid path is all of these skills.
+
+### Too much bloated instructions to the Codex Problem
+
+OpenClaw is sending very large prompt with too many instructions to Codex and little context. `Background task timed out: codex-iac-entrypoints-followup (run e98d1d55).`. Need to improve that
+
 ## Failing Overnight - Improving Reliability
 
 Once again, my bot has died overnight. I didn't have no logs no anything because it essentially runs via `openclaw` cmd which means that the logs are stored in stout - so no way to have them available unless we have terminal session always running.
