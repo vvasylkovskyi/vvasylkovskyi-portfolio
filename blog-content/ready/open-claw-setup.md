@@ -1013,7 +1013,7 @@ Initially I thought that I did the first step, but I didn't. While my OpenClaw n
 
 **Increase Timeout on Codex**
 
-I increased the timeout of ACP job to 30 minutes, as there is evidence that for long running tasks, Codex might spend lots of time figuring out how to solve the task.
+I increased the timeout of ACP job to 30 minutes, as there is evidence that for long running tasks, Codex might spend lots of time figuring out how to solve the task - https://github.com/openclaw/openclaw/issues/38419
 
 ```sh
 openclaw config set plugins.entries.acpx.config.timeoutSeconds 1800
@@ -1106,6 +1106,380 @@ Examples:
 Do not give a vague failure message.
 
 ```
+
+## Giving up on ACP - Experiment with background task SKILL.md
+
+There are lots of open issues with using ACP:
+
+- https://github.com/openclaw/openclaw/issues/29195
+- https://github.com/openclaw/openclaw/issues/38419
+
+Alternatively, I stumbled on a `SKILL.md` - https://github.com/openclaw/openclaw/blob/main/skills/coding-agent/SKILL.md. That essentially provides a set of rules to spawn background tasks.
+
+So we did the following:
+
+1. update the coordinator skill so ACP is no longer mandatory
+2. copy the coding-agent skill into your workspace as the local execution skill we rely on going forward
+
+**Overall OpenClaw is working relatively well alone**
+
+For now, for the tasks I am running, OpenClaw seems to work well alone - long running coding tasks. But how about multiple parallel tasks? E.g.:
+
+- CLI work
+- Backend API building
+- Documentation app updating
+- Reviewing work
+
+### Tmux - Multi Agents
+
+It seems that Claude Code uses multiple agents. Agent Teams was shipped alongside Opus 4.6 in February 2026. One session acts as a team lead, spawning independent teammates that communicate through a mailbox system and shared task list. Under the hood, teammates are spawned as separate Claude Code processes in tmux panes — not via the API.
+
+Seems to be inline with this:
+
+- https://x.com/elvissun/status/2025920521871716562
+- https://dev.to/klement_gunndu/inside-claude-codes-hidden-multi-agent-architecture-ne4
+
+#### Skills for Tmux comms
+
+I built two things:
+
+- Skill for openclaw to instruct it how to communicate with the agent
+- agent.md for the codex also to instruct it how to communicate with openclaw
+
+**SKILL.md**
+
+````sh
+# OpenClaw ↔ Codex Coordination Skill
+
+This skill defines how OpenClaw coordinates work with a Codex worker using a filesystem mailbox and tmux.
+
+---
+
+## Mailbox Layout
+
+```
+
+~/agent-mailbox/
+codex/
+inbox.json # OpenClaw → Codex (tasks)
+outbox.json # Codex → OpenClaw (results)
+
+````
+
+Do not use other paths.
+
+---
+
+## Message Schemas
+
+### inbox.json (OpenClaw writes)
+
+```json
+{
+  "from": "OPENCLAW",
+  "to": "CODEX",
+  "task_id": "unique-slug-or-uuid",
+  "type": "one_shot | persistent",
+  "prompt": "Full task description including worker prompt contract",
+  "sent_at": "ISO8601"
+}
+```
+
+### outbox.json (Codex writes)
+
+```json
+{
+  "from": "CODEX",
+  "to": "OPENCLAW",
+  "task_id": "echo task_id from inbox",
+  "status": "ready | in_progress | done | failed",
+  "result": {
+    "summary": "One sentence of what was done",
+    "files_modified": ["relative/path/to/file.ts"],
+    "validation_output": "Test output or relevant stdout",
+    "error": null
+  },
+  "updated_at": "ISO8601"
+}
+```
+
+---
+
+## Environment Setup
+
+```bash
+mkdir -p ~/agent-mailbox/codex
+
+tmux list-windows -t agents | grep -q codex || \
+  tmux new-window -t agents -n codex
+```
+
+---
+
+## Spawn Codex
+
+```bash
+tmux send-keys -t agents:codex \
+  "codex --agent-file ~/.codex/AGENTS.md" Enter
+```
+
+---
+
+## Writing a Task
+
+```bash
+TASK_ID="task-$(date +%s)"
+TMP=$(mktemp)
+
+cat > "$TMP" <<EOF
+{
+  "from": "OPENCLAW",
+  "to": "CODEX",
+  "task_id": "$TASK_ID",
+  "type": "one_shot",
+  "prompt": "YOUR PROMPT HERE",
+  "sent_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+}
+EOF
+
+mv "$TMP" ~/agent-mailbox/codex/inbox.json
+```
+
+---
+
+## Polling for Result
+
+```bash
+while true; do
+  STATUS=$(jq -r '.status' ~/agent-mailbox/codex/outbox.json 2>/dev/null)
+  RESULT_TASK=$(jq -r '.task_id' ~/agent-mailbox/codex/outbox.json 2>/dev/null)
+
+  if [ "$STATUS" = "done" ] || [ "$STATUS" = "failed" ]; then
+    if [ "$RESULT_TASK" = "$TASK_ID" ]; then
+      break
+    fi
+  fi
+
+  sleep 3
+done
+
+cat ~/agent-mailbox/codex/outbox.json
+```
+
+---
+
+## Agent Type Selection
+
+| Type       | Use when            | Behavior                    |
+| ---------- | ------------------- | --------------------------- |
+| one_shot   | Single bounded task | Executes once and stops     |
+| persistent | Iterative work      | Keeps polling for new tasks |
+
+Default: `one_shot`
+
+---
+
+## Worker Prompt Contract (REQUIRED)
+
+Every task **must include**:
+
+```
+Repo path: /path/to/repo
+Branch: feature/branch-name
+PR context: #123
+
+Plan:
+- Approved plan summary
+
+Implementation scope:
+- Explicit tasks
+
+Constraints and non-goals:
+- What NOT to do
+
+Validation commands:
+- npm test / pytest / etc
+
+Definition of done:
+- Exact criteria
+```
+
+Codex will not ask clarifying questions.
+
+---
+
+## Stuck Detection
+
+```bash
+find ~/agent-mailbox/codex/outbox.json -mmin +5 2>/dev/null && \
+jq -r '.status' ~/agent-mailbox/codex/outbox.json | \
+grep -q "in_progress" && echo "CODEX STUCK"
+```
+
+---
+
+## Recovery Procedure
+
+```bash
+tmux send-keys -t agents:codex "q" Enter
+sleep 2
+tmux send-keys -t agents:codex "" Enter
+
+tmux send-keys -t agents:codex \
+  "codex --agent-file ~/.codex/AGENTS.md" Enter
+```
+
+Retry task once after restart.
+
+---
+
+## Scaling (Future)
+
+```
+~/agent-mailbox/codex/inbox/{task_id}.json
+~/agent-mailbox/codex/outbox/{task_id}.json
+```
+
+Do not implement yet.
+
+`````
+
+**AGENTS.md**
+
+````sh
+# Codex Worker — Agent Communication Protocol
+
+This file defines how Codex operates as a worker agent using a filesystem mailbox.
+
+---
+
+## Mailbox Layout
+
+```
+~/agent-mailbox/
+  codex/
+    inbox.json
+    outbox.json
+```
+
+Do not modify structure.
+
+---
+
+## Message Schemas
+
+### inbox.json (read-only)
+
+```json
+{
+  "from": "OPENCLAW",
+  "to": "CODEX",
+  "task_id": "unique id",
+  "type": "one_shot | persistent",
+  "prompt": "task description",
+  "sent_at": "ISO8601"
+}
+```
+
+### outbox.json (write-only)
+
+```json
+{
+  "from": "CODEX",
+  "to": "OPENCLAW",
+  "task_id": "...",
+  "status": "ready | in_progress | done | failed",
+  "result": {
+    "summary": "...",
+    "files_modified": [],
+    "validation_output": "...",
+    "error": null
+  },
+  "updated_at": "ISO8601"
+}
+```
+
+---
+
+## Startup Behavior
+
+```bash
+mkdir -p ~/agent-mailbox/codex
+
+echo '{"status":"ready","agent":"CODEX","updated_at":"'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"}' \
+> ~/agent-mailbox/codex/outbox.json
+```
+
+---
+
+## Task Execution Lifecycle
+
+When a new `task_id` appears:
+
+1. Write `in_progress` immediately
+2. Execute task exactly as described
+3. Run validation commands from prompt
+4. If validation fails:
+
+   * Attempt one fix
+   * Re-run validation
+5. Write final result (`done` or `failed`)
+
+---
+
+## Atomic Write Requirement
+
+```bash
+TMP=$(mktemp)
+
+cat > "$TMP" << 'EOF'
+{ ...result JSON... }
+EOF
+
+mv "$TMP" ~/agent-mailbox/codex/outbox.json
+```
+
+---
+
+## Persistent Mode
+
+```bash
+LAST_TASK_ID=""
+
+while true; do
+  TASK_ID=$(jq -r '.task_id' ~/agent-mailbox/codex/inbox.json 2>/dev/null)
+  TYPE=$(jq -r '.type' ~/agent-mailbox/codex/inbox.json 2>/dev/null)
+
+  if [ "$TASK_ID" != "$LAST_TASK_ID" ] && [ -n "$TASK_ID" ]; then
+    LAST_TASK_ID="$TASK_ID"
+    # execute task
+  fi
+
+  [ "$TYPE" = "terminate" ] && break
+
+  sleep 5
+done
+```
+
+---
+
+## Execution Rules (STRICT)
+
+Codex MUST:
+
+* Follow prompt exactly
+* Run validation before reporting success
+* Report assumptions in `result.summary` if needed
+
+Codex MUST NOT:
+
+* Modify `inbox.json`
+* Report `done` before validation passes
+* Spawn other agents
+* Work outside defined scope
+* Ask clarifying questions
+
+`````
 
 ## Failing Overnight - Improving Reliability
 
