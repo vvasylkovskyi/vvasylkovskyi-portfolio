@@ -844,6 +844,160 @@ codex
 
 In my case, codex could write well. I asked the bot to check again, If Codex works directly but not through OpenClaw, then OpenClaw is probably constraining the session via ACP. Let's check the config... It suddenly started working. Unexpected...
 
+**OpenClaw was using Codex CLI directly instead of ACP :facepalm:**
+
+It turns out that OpenClaw has remembered that ACP had issues, and decided to invoke Codex directly from now on. This was super unexpected. Once I figured that out, I asked it to retest again and turns out the protocol was setup correctly :facepalm:...
+
+#### Creating a Skill for OpenClaw
+
+This calles in for improving the OpenClaws understanding about what is my favourite workflow. So far the pattern that I have felt that makes sense is the following:
+
+1. OpenClaw is my frontline AI assitant. It understands what I want to be done.
+2. If the task is complex, OpenClaw should create a plan - a markdown file in the code repository. Open a PR and share link to PR with me (Viktor), so I can review and give a go-no-go. Once the plan is correct, we can move forward. If there is ambiguity or uncertainty about what to do next, OpenClaw should ask me questions, and we clarify them. Note, that if the task is trivial and there are no questions, then we might skip the documentation step. Only use it for hard tasks. Make sure that Viktor provides a way to validate that the feature is done.
+3. OpenClaw should write prompt to the agent harness - Codex. Then it spawn Codex agent via ACP
+4. The Codex is expected to write the code. For writing code effectively, the prompt to Codex should include the validation loop:
+   - How to test that things are working?
+   - What is the definition of done?
+   - How to loop through the coding-validation-coding-validation process until reached the definition of done.
+5. OpenClaw must listen to Codex work in some way and ensure that the code was done.
+6. OpenClaw will open a PR in the end and hand it over to me.
+
+The skill was created in the following folder: `~/.openclaw/workspace/skills/codex-orchestrated-dev/SKILL.md`:
+
+```sh
+---
+name: codex-orchestrated-dev
+description: Coordinate Viktor's non-trivial coding work with OpenClaw as the frontline assistant and Codex via ACP as the implementation worker. Use when a repo task needs planning, clarification, validation criteria, delegated coding, iterative test/fix loops, ACP run monitoring, and a final PR handoff. Prefer this for complex project work in `~/.openclaw/workspace/git/`.
+---
+
+# Codex Orchestrated Dev
+
+Use this for non-trivial coding work.
+
+## Workflow
+
+1. Understand the requested outcome.
+2. Decide whether the task is trivial or non-trivial.
+3. If non-trivial, write a short plan in `docs/` and open a PR for review.
+4. Ask Viktor focused questions if there is real ambiguity.
+5. After approval, delegate implementation to Codex via ACP.
+6. Give Codex a standard validation loop.
+7. Monitor the ACP run.
+8. Verify the result yourself.
+9. Hand Viktor the PR.
+
+## Delegation rule
+
+For delegated coding work, use **Codex via ACP**.
+
+Do **not** use direct Codex CLI as the normal fallback path.
+
+If ACP fails, OpenClaw is the fallback:
+- explain the failure clearly
+- identify which layer failed
+- do not silently switch to direct CLI unless Viktor explicitly wants that
+
+## When to skip docs-first
+
+Skip the plan PR only when the task is small, obvious, low-risk, and easy to validate.
+
+Use docs-first when scope, behavior, architecture, or validation is unclear enough that Viktor should review the plan first.
+
+## Plan PR requirements
+
+For non-trivial work, add a short markdown file under `docs/` with:
+- goal
+- requested behavior
+- proposed implementation
+- open questions
+- validation approach
+- definition of done
+
+Open the PR and send Viktor the link. Continue implementation in the same PR only after approval.
+
+## Standard Codex ACP prompt contract
+
+Every Codex ACP prompt should include:
+- repo path
+- branch / PR context
+- approved plan summary
+- exact implementation scope
+- constraints and non-goals
+- validation commands
+- definition of done
+- instruction to iterate until validation passes or a real blocker remains
+- required final summary
+
+## Required validation loop
+
+Tell Codex to:
+1. implement
+2. run validation
+3. inspect failures
+4. fix
+5. rerun validation
+6. repeat until done or blocked
+
+Always include explicit validation such as tests, lint, typecheck, build, or clear manual checks.
+
+## Required final summary from Codex
+
+Ask Codex to report:
+- files changed
+- commands run
+- validation results
+- whether definition of done was met
+- blockers, if any
+
+## ACP run monitoring
+
+OpenClaw should monitor ACP runs as they progress.
+
+At minimum, report:
+- when Codex starts
+- if Codex is blocked
+- when Codex finishes
+- what validation passed or failed
+
+Heartbeat can be used as a backup to catch stuck or forgotten runs, but normal monitoring should come from the ACP run itself when possible.
+
+## Failure reporting
+
+If ACP fails, say which layer failed:
+- gateway / auth
+- ACP session spawn
+- writable permissions
+- repo / cwd setup
+- validation failure
+- git / PR failure
+
+Do not collapse all failures into a vague “Codex failed.”
+
+## Coordinator duties
+
+OpenClaw must:
+- decide whether docs-first is needed
+- ask clarifying questions when needed
+- prepare the Codex ACP prompt carefully
+- monitor Codex output
+- verify validation actually passed
+- summarize what changed
+- open or update the PR
+- give Viktor the final PR link
+
+Do not hand off blindly.
+
+## Done means
+
+Before handoff, confirm:
+- requested change is implemented
+- validation passed, or any remaining blocker is clearly explained
+- docs are updated if needed
+- PR is current
+- Viktor has the PR link and a short summary
+
+```
+
 ## Failing Overnight - Improving Reliability
 
 Once again, my bot has died overnight. I didn't have no logs no anything because it essentially runs via `openclaw` cmd which means that the logs are stored in stout - so no way to have them available unless we have terminal session always running.
@@ -919,6 +1073,28 @@ Then from Discord you can use either:
 - `/elevated full` — elevated host exec without exec approvals
 
 In your case, since this session is already direct-host and the failure was the elevated gate itself, enabling the config above should be enough for me to run the install command from Discord.
+
+## Message streaming
+
+I want to see a progress as it arrives instead of sitting in the dark for minutes while my agent is tackling compex work. In the bot sends a full wall of text. To fix that, there is a streaming config. There are several modes:
+
+**Modes**
+
+- `off` — send only final reply
+- `partial` — send a temp message and edit it as text arrives
+- `block` — chunked block streaming
+- `progress` — maps to partial on Discord
+
+We will use `partial`.
+
+```sh
+openclaw config set channels.discord.streaming partial
+openclaw gateway restart
+```
+
+Now we can see messages being updated, so the streaming works.
+
+**Note**, Discord edit-based streaming can hit rate limits, which is why it’s off by default.
 
 ### The System Load Overload
 
