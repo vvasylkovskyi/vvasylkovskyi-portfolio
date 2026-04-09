@@ -1004,9 +1004,12 @@ Asked bot to update the skill so that codex plans and then writes commits and pu
 
 #### Background task timed out: ACP background task (run e169d2e4).
 
-After writing `SKILLS.md` to my agent clearly describing the workflow where it should report the progress back to me, I got an error `Background task timed out: ACP background task (run e169d2e4)`. While my OpenClaw now has clear workflow, it invokes the Codex to execute coding task. But Codex doesn't have the workflow itself, it is not aware that it should follow the skill.
+After writing `SKILLS.md` to my agent clearly describing the workflow where it should report the progress back to me, I got an error `Background task timed out: ACP background task (run e169d2e4)`. To solve the timeout of Codex there are two things that we have to do:
 
-So, it is time to give a `SKILL.md` file to Codex. For Codex, worker instructions should live in `AGENTS.md`, Global worker instructions live at `~/.codex/AGENTS.md`.
+1. Instruct Codex to report progress step by step and break big task in smaller tasks,
+2. Maybe increase the timeout configuration on Codex.
+
+Initially I thought that I did the first step, but I didn't. While my OpenClaw now has clear workflow, it invokes the Codex to execute coding task. But Codex doesn't have the workflow itself, it is not aware that it should follow the skill. So, it is time to give a `SKILL.md` file to Codex. For Codex, worker instructions should live in `AGENTS.md`, Global worker instructions live at `~/.codex/AGENTS.md`.
 
 ## Failing Overnight - Improving Reliability
 
