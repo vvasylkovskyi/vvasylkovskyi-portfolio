@@ -998,6 +998,16 @@ Before handoff, confirm:
 
 ```
 
+### Addressing long silence during long coding tasks
+
+Asked bot to update the skill so that codex plans and then writes commits and pushes them, which then will notify me.
+
+#### Background task timed out: ACP background task (run e169d2e4).
+
+After writing `SKILLS.md` to my agent clearly describing the workflow where it should report the progress back to me, I got an error `Background task timed out: ACP background task (run e169d2e4)`. While my OpenClaw now has clear workflow, it invokes the Codex to execute coding task. But Codex doesn't have the workflow itself, it is not aware that it should follow the skill.
+
+So, it is time to give a `SKILL.md` file to Codex. For Codex, worker instructions should live in `AGENTS.md`, Global worker instructions live at `~/.codex/AGENTS.md`.
+
 ## Failing Overnight - Improving Reliability
 
 Once again, my bot has died overnight. I didn't have no logs no anything because it essentially runs via `openclaw` cmd which means that the logs are stored in stout - so no way to have them available unless we have terminal session always running.
