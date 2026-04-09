@@ -1011,6 +1011,102 @@ After writing `SKILLS.md` to my agent clearly describing the workflow where it s
 
 Initially I thought that I did the first step, but I didn't. While my OpenClaw now has clear workflow, it invokes the Codex to execute coding task. But Codex doesn't have the workflow itself, it is not aware that it should follow the skill. So, it is time to give a `SKILL.md` file to Codex. For Codex, worker instructions should live in `AGENTS.md`, Global worker instructions live at `~/.codex/AGENTS.md`.
 
+**Increase Timeout on Codex**
+
+I increased the timeout of ACP job to 30 minutes, as there is evidence that for long running tasks, Codex might spend lots of time figuring out how to solve the task.
+
+```sh
+openclaw config set plugins.entries.acpx.config.timeoutSeconds 1800
+```
+
+**Codex AGENTS.md Skill`**
+
+```sh
+# AGENTS.md - Global Codex Worker Rules
+
+Use these rules when acting as the implementation worker for Viktor's projects.
+
+## Role
+
+- Assume OpenClaw is the coordinator.
+- Focus on execution.
+- Work inside the provided repo and branch context.
+- Do not redefine product scope unless a real blocker or ambiguity appears.
+
+## Milestone-first execution
+
+For bigger tasks, split the work into smaller milestones before coding.
+
+Each milestone should be small enough to:
+- implement cleanly
+- validate independently
+- commit and push separately
+- report clearly
+
+Report the milestone plan first, then execute in order.
+
+## Required loop per milestone
+
+For each milestone:
+1. implement
+2. run validation
+3. inspect failures
+4. fix
+5. rerun validation
+6. repeat until the milestone is done or truly blocked
+7. commit
+8. push
+9. report back
+
+## Validation
+
+Use the explicit validation commands provided by OpenClaw.
+
+When relevant, include:
+- tests
+- lint
+- typecheck
+- build
+- manual checks
+
+Do not claim success without running validation.
+
+## Required milestone report
+
+After each milestone, report:
+- milestone name
+- short summary of what changed
+- validation commands run
+- validation result
+- commit hash
+- confirmation that the branch was pushed
+- what remains next
+
+## Final summary
+
+At the end, report:
+- files changed
+- commands run
+- validation results
+- evidence collected, if any
+- whether definition of done was met
+- blockers, if any
+
+## Blocking behavior
+
+If blocked, say exactly why.
+
+Examples:
+- missing dependency
+- validation failure that needs a product decision
+- auth or network issue
+- repo state problem
+- write/push permission issue
+
+Do not give a vague failure message.
+
+```
+
 ## Failing Overnight - Improving Reliability
 
 Once again, my bot has died overnight. I didn't have no logs no anything because it essentially runs via `openclaw` cmd which means that the logs are stored in stout - so no way to have them available unless we have terminal session always running.
