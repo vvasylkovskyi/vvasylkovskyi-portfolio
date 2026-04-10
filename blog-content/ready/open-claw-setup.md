@@ -610,6 +610,25 @@ The files that need configuring are `.md` files that sit at
 ~/.openclaw/workspace/USER.md
 ```
 
+### Making PR handoff mandatory
+
+One workflow change I made after using OpenClaw on real repo work: if the bot changes code in one of my repositories, the task is not complete until it actually opens a PR and sends me the PR link.
+
+That sounds obvious in hindsight, but it matters because for my setup deployment happens from the PR flow. A local edit plus a passing build is still not enough if nothing was pushed for review and merge.
+
+So I updated `~/.openclaw/workspace/AGENTS.md` to make that explicit:
+
+- if OpenClaw changes code in a repo, it must create or update a branch
+- commit the change
+- push it
+- open or update the PR
+- send me the PR link
+- only skip this if I explicitly say the change should stay local or no PR is needed
+
+I also wrote the same rule into the daily memory note so it becomes part of the remembered workflow, not just a one-off correction.
+
+This is a good example of where the right fix is not personality (`SOUL.md`) but process (`AGENTS.md`). If deployment depends on PRs, the rule should live in the operating instructions, not in vibes.
+
 ## Installing Codex harness
 
 We have established that Codex and Claude Code likes are agents especialized in writing code, so while OpenClaw is great at talking to us, the coding will be delegated to Codex in this case. The protocol to delegate from OpenClaw to Codex is `ACP` [(Agent Communication Protocol)](https://agentcommunicationprotocol.dev/introduction/welcome). In this protocol, OpenClaw acts as coordinator, and delegates to Codex coding tasks via ACP. Codex will run as a background task and assynchronously will send message back to OpenClaw once finished.
