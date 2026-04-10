@@ -616,14 +616,11 @@ One workflow change I made after using OpenClaw on real repo work: if the bot ch
 
 That sounds obvious in hindsight, but it matters because for my setup deployment happens from the PR flow. A local edit plus a passing build is still not enough if nothing was pushed for review and merge.
 
-So I updated `~/.openclaw/workspace/AGENTS.md` to make that explicit:
+So I updated `~/.openclaw/workspace/AGENTS.md` to make that explicit, with these exact bullets:
 
-- if OpenClaw changes code in a repo, it must create or update a branch
-- commit the change
-- push it
-- open or update the PR
-- send me the PR link
-- only skip this if I explicitly say the change should stay local or no PR is needed
+- If you changed code in a repo, the task is not complete until you create or update a branch, commit, push, open or update the PR, and send Viktor the PR link
+- Treat PR handoff as mandatory for Viktor's repo work because deployment depends on it
+- Only skip the PR flow if Viktor explicitly says the change should stay local or no PR is needed
 
 I also wrote the same rule into the daily memory note so it becomes part of the remembered workflow, not just a one-off correction.
 
