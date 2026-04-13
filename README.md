@@ -53,6 +53,10 @@ For any questions, collaboration ideas, or professional inquiries, you can reach
 
 Thank you for checking out my portfolio — I hope it inspires your next project!
 
+## Test Note
+
+This is a clearly marked README-only test change for PR validation.
+
 ---
 
 *Viktor Vasylkovskyi*  
