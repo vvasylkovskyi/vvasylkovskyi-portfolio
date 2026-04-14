@@ -566,6 +566,7 @@ Follow through prompts. Make sure to create a token here https://github.com/sett
 - `read:org` - Read org and team membership, read org projects
 - `repo` - Full control of private repositories
 - `workflow` - Update Github Actions (useful for bot to be able to build pipelines)
+- `project` - Full Controll to create and read issues in the projects
 
 ### Ensure Github SSH
 
@@ -589,6 +590,22 @@ cat ~/.ssh/id_ed25519.pub
 # add key to GitHub
 ssh -T git@github.com
 git remote set-url origin git@github.com:OWNER/REPO.git
+```
+
+### Set Github identity
+
+Needs identity for commits and push:
+
+```sh
+git config --global credential.helper store # Store - stores your credentials in plain text at ~/.git-credentials
+git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+```
+
+Then verify:
+
+```sh
+git config --global --list
 ```
 
 ## Moving to Codex
@@ -1503,6 +1520,742 @@ However, all these skills are not use reliably, so we need to design the flow so
 ### Too much bloated instructions to the Codex Problem
 
 OpenClaw is sending very large prompt with too many instructions to Codex and little context. `Background task timed out: codex-iac-entrypoints-followup (run e98d1d55).`. Need to improve that
+
+### 10th April - Improving Prompts
+
+- Removed ACP from configs
+- Moved workflow to `AGENTS.md` and `TOOLS.md` to ensure they pick up always. Reference skills in `AGENTS.md`
+- Cleaned up `SKILL.md` files
+- Added clearer commands to tmux - how to spawn agent
+- Added folders with `task_id` to avoid stale task id issue.
+
+#### Improvement evidence
+
+- The Openclaw now always uses tmux
+- the Openclaw spawns task_id
+- OpenClaw writes task into task folder, but seems that also needs to send a prompt because codex is interactive
+- It seems that sending enter triggered codex. But still getting issues with permissions to write into folder. Need to investigate it further to make it well done.
+
+### 12th April - Building Scripts for Tmux spawning agents
+
+- `spawn-agent.sh` - Spawns agent (Creates a tmux session + git worktree)
+- `cleanup-worktrees.sh`
+- `check-agents.sh`
+- `review-pr.sh`
+
+Make them executable:
+
+```sh
+chmod +x spawn-agent.sh check-agents.sh cleanup-worktrees.sh
+```
+
+I also created a `active-tasks.json` with the following content:
+
+```json
+{
+  "tasks": []
+}
+```
+
+After spawning first task, the registry got with the following content, indicating running task.
+
+```json
+{
+  "tasks": [
+    {
+      "id": "feat-custom-templates-3",
+      "tmuxSession": "codex-feat-custom-templates-3",
+      "agent": "codex",
+      "repo": "iac-toolbox-cli",
+      "repoPath": "/home/vvasylkovskyi/.openclaw/workspace/git/iac-toolbox-cli",
+      "worktree": "/home/vvasylkovskyi/.openclaw/workspace/worktrees/feat-custom-templates-3",
+      "branch": "feat/custom-templates-3",
+      "startedAt": 1776023448308,
+      "status": "running",
+      "attempts": 1,
+      "notifyOnComplete": true
+    }
+  ]
+}
+```
+
+#### Using Tmux to monitor sessions
+
+To monitor, run:
+
+```sh
+tmux attach -t <tmux_session_name> # Enters terminal session with full control
+tmux capture-pane -t codex-feat-custom-templates-4 -p # Captures the screen
+```
+
+#### Using worktrees
+
+Everytime `spawn-agent.sh` is invoked, a new folder is created with full repository contents - this is called a worktree. Once in the worktree, the new git branch is created. This ensures that multiple agents can work in their own context without running over each others changes. This is a bit of an overkill for us right now, but sets a good architecture, but good to have a foundation.
+
+#### Adding to AGENTS.md and TOOLS.md
+
+The `spawn-agent.sh` is the main action we are testing right now. So far it has been a great progress since our agent is not spawning codex reliably and codex is actually writing code, and updating progress. The task is not that complex - migrate from npm to pnpm on small project.
+
+#### Test
+
+**Prompt written to codex**
+
+```sh
+› Repo path: /home/vvasylkovskyi/.openclaw/workspace/git/iac-toolbox-cli
+  Branch / PR context: create branch chore/pnpm-migration from current main and open/update a PR.
+  Approved plan summary: migrate this repo from npm to pnpm. This is a small obvious package-manager migration, no docs-first proposal
+  needed.
+  Exact task scope:
+  - Switch the project to pnpm instead of npm.
+  - Update package metadata and scripts as appropriate for pnpm.
+  - Replace npm-specific script invocations in package.json with pnpm-friendly equivalents where needed.
+  - Remove package-lock.json and generate pnpm-lock.yaml.
+  - Update README and any repo docs/configs that mention npm commands so they use pnpm.
+  - Add any standard pnpm files only if actually useful (for example packageManager field or .npmrc) but keep changes minimal.
+  - Ensure install/dev/build/lint/format flows work with pnpm.
+  Constraints / non-goals:
+  - Do not make unrelated code changes.
+  - Do not change runtime behavior of the CLI beyond package-manager migration.
+  - Keep the diff focused and tidy.
+  Validation commands:
+  - pnpm install
+  - pnpm run build
+  - pnpm run typecheck
+  - pnpm run lint
+  - pnpm run format:check
+  Definition of done:
+  - Repo uses pnpm cleanly.
+  - Lockfile is pnpm-lock.yaml, not package-lock.json.
+  - Docs mention pnpm, not npm, where relevant.
+  - Validation commands pass.
+  - Commit, push branch, and open/update a PR.
+  - Report back with PR link, commit hash, files changed, and validation summary.
+  Milestone expectation:
+  - If you hit any non-obvious migration issue, report a milestone before broadening scope.
+```
+
+The prompt is quite full, inscludes validation commands, and git ops lifecycle.
+
+- Codex is writing code and validating
+- Codex is updating the `.openclaw/agent-mailbox/codex/chore-pnpm-migration/outbox.json`.
+
+**Issue:** - OpenClaw is not responding to progress that is reported by Codex in `outbox.json`. Left me without answer again.
+
+To solve this, we added `WAKE_TRIGGER` that Codex has to send to OpenClaw once finished:
+
+```sh
+WAKE_TRIGGER="When completely finished, write the outbox to \$CODEX_MAILBOX/outbox.json with status done, then run this command to notify OpenClaw immediately:
+openclaw system event --text \"Done: $TASK_ID\" --mode now"
+```
+
+## 13th April - Fixing WakeUp Trigger and check-agents.sh
+
+- `check-agents.sh` - was fixed.
+
+1. First look at `active-tasks.json` and tasks folders `outbox.json` and see which are signaled as "done" by Codex, but not in active tasks
+2. Check the PRs from `outbox.json` and see if the CI/CD is passed.
+3. If yes, update the `active-tasks.json`
+
+### Setting up HEARTBEAT.md
+
+**Heartbeat: Setup the config**:
+
+```json
+{
+  "agents": {
+    "defaults": {
+      "heartbeat": {
+        "every": "10m",
+        "target": "last",
+        "directPolicy": "allow",
+        "lightContext": true,
+        "isolatedSession": true,
+        "activeHours": {
+          "start": "08:00",
+          "end": "23:00",
+          "timezone": "Europe/Lisbon"
+        }
+      }
+    }
+  }
+}
+```
+
+**Heartbeat: Setup `HEARTBEAT.md`**:
+
+```sh
+# HEARTBEAT.md
+tasks:
+  - name: check-active-tasks
+    interval: 20s
+    prompt: |
+      Run ~/.openclaw/workspace/scripts/check-agents.sh and report the result.
+      If any task just completed, notify Viktor via Discord.
+      If any task is stuck or failed, report it clearly.
+      If all tasks are running normally, reply HEARTBEAT_OK.
+
+  - name: morning-scan
+    interval: 24h
+    prompt: |
+      Morning scan (run once per day):
+      1. Check active-tasks.json for any overnight results
+      2. Check git log on active repos for unreviewed commits
+      3. Summarize what completed overnight and what needs attention
+      Send Viktor a morning briefing on Discord.
+
+- If nothing needs attention across all tasks, reply HEARTBEAT_OK.
+- Never spam. One message per real event.
+- Load the codex-orchestrated-dev and multi_agent_coordination skills
+  before spawning any new Codex task.
+```
+
+`every: "5s"` in `openclaw.json` — how often the gateway wakes OpenClaw to run a heartbeat turn at all. This is the outer tick.
+`interval: 20s` in `HEARTBEAT.md` tasks block — how often that specific named task runs within heartbeat turns. The task only fires if enough time has passed since it last ran.
+
+The flow is:
+
+```sh
+every 5s → gateway wakes OpenClaw → reads HEARTBEAT.md →
+  checks if check-active-tasks is due (every 20s) →
+  if due: runs it | if not due: HEARTBEAT_OK
+```
+
+Hearbeat is built into gateway itself. To check if heartbeat is running, check the logs: `openclaw logs 2>/dev/null | grep -i heartbeat | tail -20`.
+
+### Notify me on Discord
+
+There is an API:
+
+```sh
+openclaw message send --channel discord --target user:758709623544086558 --message "hey"
+```
+
+We will want to do two things:
+
+1. Notify user on the channel where the work is ongoing, using the channel ID and looking at finished codex tasks
+2. Potentially, heartbeat specific channel.
+
+#### Notify In The Channel
+
+We will add `channel` into `spawn-agent.sh`. The channel is the new field that we will propagate into:
+
+- `spawn-agent.sh`
+- `check-agents.sh`
+- `AGENTS.md`
+- `TOOLS.md`
+- 2 skills - workflow and agents communications
+
+The flow is then to use the hearbeat to ensure notification. We are adding new heartbeat task:
+
+```sh
+tasks:
+  - name: on-agent-complete
+    interval: 5s
+    prompt: |
+        Check if any system events arrived since last heartbeat.
+        If so, run bash ~/.openclaw/workspace/scripts/check-agents.sh immediately
+        and report results to Viktor in Discord.
+        Otherwise reply HEARTBEAT_OK.
+```
+
+This task, will trigger the `check-agents.sh` which contains the new API to send message like follows:
+
+```sh
+notify() {
+  local msg="$1"
+  openclaw message send \
+    --channel discord \
+    --target "channel:$CHANNEL" \
+    --message "$msg" \
+    2>/dev/null || echo "$LOG_PREFIX WARN: discord notify failed for $TASK_ID"
+}
+```
+
+The idea is to ensure that `check-agents.sh` is invoked by the heartbeat, and to programmatically trigger heartbeat. To trigger it, we use `codex` that will invoke the `WAKE_UP` once it finishes:
+
+```sh
+WAKE_TRIGGER="When completely finished, write the outbox to \$CODEX_MAILBOX/outbox.json with status done, then run this command to wake OpenClaw immediately:
+openclaw system event --text \"Task $TASK_ID completed\" --mode now"
+```
+
+Where the `openclaw system event --mode now` wakes up the heartbeat. Then it will see that `check-agents.sh` needs to be invoked as per heartbeat task, which in turn will ensure that the discord message is sent.
+
+Useful to check `openclaw logs --follow` at this point.
+
+#### Improving Channel Notifications - using Agent
+
+The above example is better because now we have a trigger that sends a hardcoded message into discord. But what we really want is the protocol where agents can communicate. In particular, now Codex has to send prompt to OpenClaw.
+
+Here is how it is done. On CLI, one can invoke agent in a headless mode:
+
+```sh
+openclaw agent --agent main --message "Consume ~/.openclaw/agent-mailbox/codex/$TASK_ID/outbox.json, read the matching task in ~/.openclaw/agent-mailbox/active-tasks.json, get its channel field, and send the user an update to that Discord channel." --channel discord --deliver
+```
+
+The above command invokes LLM, however, it does not have ability to send to Discord, due to lack of Skill. But `openclaw message send` is the first-class CLI for outbound Discord delivery, and it does not depend on the agent having an internal message tool.
+
+Right now the solution is broken, but we will revisit later. The Heartbeat eventually fixes that.
+
+```sh
+OpenClaw (orchestrator)
+    ↓
+spawn-agent.sh
+    ↓
+Codex (tmux worker)
+    ↓
+outbox.json (mailbox)
+    ↓
+??? ← THIS is the broken part
+    ↓
+Discord user
+```
+
+Although the latency due to heartbeat feels slow, in the larger work this might be an optimization issue. We will move on to the next milestone - giving the agent access to broader scope.
+
+### Github Project/Issues based workflow
+
+The evolution of our setup is to give more autonomy to the OpenClaw agent. Rather than having to write prompts into the chat for everything I want it to do, I would like my OpenClaw agent to read the issues from the board directly. So first thing I did was to create a Github Project and two issues. Then I gave my bot better token with permissions to read project:
+
+```sh
+gh auth refresh -s read:project
+```
+
+Once, manually asking the agent worked:
+
+```sh
+here is the project https://github.com/orgs/IaC-Toolbox/projects/1/views/2
+
+This project includes work across all the repos in IAC-toolbox (currently 4 repos). Sometimes you might have to create a repo. The repos are always here ~/.openclaw/workspace/git/
+
+There currently are two issues. Are you able to read them and start work?
+```
+
+I want to move onto building a proper workflow to the agent now.
+
+#### Adding Project to Github
+
+An important bit is to add project scope into the Github Token so that the bot can read the issues in the project. I basically regenerated new token with `project` permissions here.
+
+#### Github Issues based workflow - manual test
+
+When I say:
+
+```sh
+@Planalto (Viktor's AI) Hey, can you look at the project https://github.com/orgs/IaC-Toolbox/projects/1
+
+And handle these two issues right now
+```
+
+The bot spawned two agents to handle issues independently, which is wild, and super cool! Time to wire this up into our workflow.
+
+```sh
+✅ PR #21 ready for review — issue-19-single-wizard
+Completed docs-first plan and single Ink wizard UI with arrow navigation; pushed branch and opened PR #21 linked to issue #19.
+https://github.com/IaC-Toolbox/iac-toolbox-cli/pull/21
+Planalto (Viktor's AI)
+
+✅ PR #22 ready for review — issue-18-pnpm
+Migrated iac-toolbox-cli to pnpm, validated, committed, pushed, and opened PR #22 linked to issue #18.
+https://github.com/IaC-Toolbox/iac-toolbox-cli/pull/22
+```
+
+**Issue Github Merge Problems**
+
+The issue that I bumped into quickly is the merge conflicts. There are two levels of problems here:
+
+1. The conficts before merging. Essentially an easy problem because we can solve confict by rebasing branch and asking AI to resolve
+2. The conflicts after merging. How can we trigger code rebases on the branches of the PRs after merging single PR. Potentially Github Webhooks would be an interesting thing to look at here.
+
+## Periodic Cleanup
+
+### Clean old sessions
+
+```sh
+openclaw sessions # Check sessions
+```
+
+Created a script: `.openclaw/scripts/clean-openclaw-sessions.sh`.
+
+```sh
+chmod +x ~/.openclaw/scripts/clean-openclaw-sessions.sh
+bash ~/.openclaw/scripts/clean-openclaw-sessions.sh
+```
+
+## 14th April - Obsidian Vault Integration
+
+What many call a second brain - obsidian vault integration with OpenClaw is a powerful addition because it provides a markdown store - also known as scratchpad. It is powerful because now our agent has freedom to store its findings in some place. It thus becomes a source of truth, not only of the findings but also of the business context - I can write to Obsidian notes and the agent has access to it.
+
+To illustrate the power, imagine a system where agent can produce its own work:
+
+![alt text](./open-claw-setup/obsidian-openclaw-system.png)
+
+### Creating an Obsidian Vault
+
+The most straightforward thing to do here is to convert current workspace into obsidian vault. This has several advantages:
+
+- All the agent markdown files are version managed in github
+- They can be integrated with Obsidian App and modified from anywhere
+
+Let's get to business and set this up. First we create a repo where obsidian will exist. For that we need to create a `.obsidian` folder in it.
+
+```sh
+cd ~/.openclaw/workspace
+git init
+git remote add origin https://github.com/IaC-Toolbox/openclaw-obsidian-workspace.git
+mkdir .obsidian
+echo "# My Brain" > README.md
+git add . && git commit -m "init vault"
+```
+
+Then in Obsidian: Open folder as vault → point to that folder. Obsidian creates .obsidian/ config files automatically. Add .obsidian/ to .gitignore (it's local config) or commit it if you want settings synced.
+
+Now your vault lives at `~/.openclaw/workspace/vault/`.
+
+### Add Context and Memory Folders
+
+The new structure includes the business context at `/context`, so the overall structure is as follows:
+
+```sh
+workspace/
+  INDEX.md                        ← read first, every session
+  SOUL.md                         ← core identity and behavior
+  USER.md                         ← user preferences and working style
+  IDENTITY.md
+  AGENTS.md
+  TOOLS.md
+  HEARTBEAT.md
+
+  context/                        ← always load before any task
+    iac-toolbox.md
+    homelab.md
+
+  skills/                         ← load on demand, only what the task needs
+    codex-orchestrated-dev/
+    multi_agent_coordination/
+    pr_refresh_and_conflict_resolution/
+    documentation-with-diagrams/
+    github-scan/
+    issue-writing/
+    ansible/
+
+  memory/
+    openclaw/                     ← agent writes findings here after each task
+      YYYY-MM-DD-{repo}-{task}.md
+    MEMORY.md                     ← long-term curated memory
+```
+
+### Wire it in AGENTS.md and TOOLS.md
+
+Next, we are adding it to OpenClaw `AGENTS.md` and `TOOLS.md` to wire them up.
+
+### Adding Issue Writing Skill and Github Scanning Skill
+
+Given that our agent will take down notes of what it found that needs to be done while doing the work, the next actionable piece is to create an issue from finding. This would help closing the loop on finding, i.e., the created issues will be actionable and future work for the agent itself. Just like a good dev.
+
+Furthermore, the Github Scanning Skill is the skill that lets the agent scan github for issues to solve.
+
+### How to Actually Close the loop - making agent autonomous developer
+
+We have all the pieces:
+
+- Read business context from vault
+- Create Issues
+- Solve Issues and Create PRs
+- Update findings in vault and create more issues
+
+So how to make agent work day and night in this loop? Assuming vault a source of truth that might get new business info. That is what we will cover here.
+
+#### Starting at Vault - HEARTBEAT.md
+
+The first step is to tell agent to periodically check the into vault for new business info in `HEARTBEAT.md`, then create issues from it. We need a clear definion of:
+
+- This is a feature to implement
+- This feature is already tracked on github project
+
+The naive approach is to let llm bruteforce github project and compare with the markdown text. But this would be expensive. Instead, I created the following system:
+
+1. The `/context/roadmap` folder contains the business features to implement. Typically it is me who has to populate those
+2. The markdown files inside will contain the roadmap items/features. We now have clear definion of what is the feature to implement
+3. The definition of tracked or not will live in adjacent `.json` that contains metadata of the issue tracking this feature, etc.
+
+**Roadmap Text to Structured Metadata**
+
+I have created a first roadmap item: `.openclaw/workspace/context/roadmap/milestone-0-raspberrypi-cli.md` which is a simple text I wrote in 5 minutes with my wishlist.
+
+At the beginning of the run, the LLM will read the roadmap text and it will use the `issue-writing` skill to extract the relevant metadata for the issues such as title, summary, etc. It will use the schema from the skill to populate the metadata json next to roadmap file `.openclaw/workspace/context/roadmap/milestone-0-raspberrypi-cli.metadata.json`:
+
+```sh
+{
+  "roadmap_item": {
+    "id": "milestone-slug",
+    "title": "Human-readable title",
+    "source_markdown": "milestone-file.md",
+    "project_url": "https://github.com/orgs/IaC-Toolbox/projects/1",
+    "status": "draft",
+    "notes": "Each ticket entry represents a candidate issue derived from this roadmap milestone. Missing issue_number or repo_url means the ticket has not been created yet."
+  },
+  "tickets": [
+    {
+      "ticket_id": "stable-ticket-slug",
+      "title": "Ticket title",
+      "summary": "Short summary",
+      "repo_url": "https://github.com/IaC-Toolbox/iac-toolbox-cli",
+      "issue_number": null,
+      "issue_url": null,
+      "project_item_id": null,
+      "status": "planned",
+      "source_sections": ["Section heading"],
+      "acceptance_hints": ["Hint 1", "Hint 2"]
+    }
+  ]
+}
+```
+
+The skill describes the schema. The above JSON is the source of issues - created or not. If there is no issue_number then need issue creation.
+
+**Wiring it in a workflow - context-to-issues.sh script**
+
+Next we need a script that will do just that, check the missing issues to be created and create them, then notify us via discord: `context-to-issues.sh`.
+
+**Issue Writing has to update the context metadata**
+
+added a new section to issue writing skill to actually update the metadata next to the roadmap:
+
+````sh
+## Roadmap metadata workflow
+
+When issues are derived from `~/.openclaw/workspace/context/roadmap/`, prefer a sidecar JSON file next to the markdown roadmap item.
+
+Recommended shape:
+- `milestone-name.md` — human-readable roadmap description
+- `milestone-name.metadata.json` — structured ticket tracking metadata
+
+The JSON may contain multiple ticket entries.
+
+Each ticket entry should carry at least:
+- `ticket_id`
+- `title`
+- `summary`
+- `repo_url`
+- `issue_number`
+- `issue_url`
+- `status`
+- `source_sections`
+- `acceptance_hints`
+
+Interpretation rule:
+- if `issue_number` is missing or null, the issue has not been created yet
+- if `repo_url` is missing or null, the issue is not ready to be created yet
+
+After creating an issue from roadmap metadata, update the JSON entry in place.
+
+## AI responsibility for roadmap extraction
+
+Do not leave roadmap decomposition to a naive parser.
+
+When working from roadmap markdown, the LLM should:
+1. read the roadmap markdown
+2. read the relevant product context from `~/.openclaw/workspace/context/`
+3. identify meaningful ticket candidates
+4. infer the most appropriate repo from project architecture and feature description
+5. collect the structured fields for each ticket
+6. edit the sidecar metadata JSON directly
+7. only then create GitHub issues from the resulting metadata
+
+## Required ticket fields for roadmap extraction
+
+For each ticket candidate, collect:
+- `ticket_id` — stable slug for the ticket
+- `title` — concise GitHub issue title
+- `summary` — short but useful issue summary
+- `repo_url` — target repo where work belongs
+- `status` — usually `planned` before issue creation
+- `source_sections` — headings or sections in the roadmap markdown that justify the ticket
+- `acceptance_hints` — short checklist-like hints to seed issue acceptance criteria
+
+## Metadata schema
+
+When creating or updating `*.metadata.json`, use this top-level shape:
+
+```json
+{
+  "roadmap_item": {
+    "id": "milestone-slug",
+    "title": "Human-readable title",
+    "source_markdown": "milestone-file.md",
+    "project_url": "https://github.com/orgs/IaC-Toolbox/projects/1",
+    "status": "draft",
+    "notes": "Each ticket entry represents a candidate issue derived from this roadmap milestone. Missing issue_number or repo_url means the ticket has not been created yet."
+  },
+  "tickets": [
+    {
+      "ticket_id": "stable-ticket-slug",
+      "title": "Ticket title",
+      "summary": "Short summary",
+      "repo_url": "https://github.com/IaC-Toolbox/iac-toolbox-cli",
+      "issue_number": null,
+      "issue_url": null,
+      "project_item_id": null,
+      "status": "planned",
+      "source_sections": ["Section heading"],
+      "acceptance_hints": ["Hint 1", "Hint 2"]
+    }
+  ]
+}
+````
+
+Interpretation rule:
+
+- if `issue_number` is null or missing, the issue has not been created yet
+- if `repo_url` is null or missing, repo assignment is still unresolved
+- preserve existing `issue_number`, `issue_url`, and `project_item_id` values unless there is a clear reason to change them
+
+````
+
+**Wiring it in HEARTBEAT.md to trigger it all**
+
+```sh
+- name: roadmap-context-to-issues
+    interval: 2m
+    prompt: |
+        Periodically inspect `~/.openclaw/workspace/context/roadmap/` for human-written roadmap markdown and AI-maintained metadata sidecars.
+
+        Use the `issue-writing` skill.
+
+        Source of truth:
+        - roadmap markdown files are written by Viktor
+        - You are is responsible for extracting ticket candidates from roadmap markdown
+        - You must write structured ticket data directly into `*.metadata.json` sidecar files using the documented schema
+        - metadata then drives issue creation
+
+        Required behavior:
+        1. Read roadmap markdown and relevant context.
+        2. Use LLM judgment to identify meaningful tickets and infer repo assignment.
+        3. Update the sidecar metadata JSON directly using the documented schema.
+        4. Then run `bash ~/.openclaw/scripts/context-to-issues.sh` to create issues for actionable unticketed entries.
+        5. Ensure metadata JSON is updated with issue number and issue URL after issue creation.
+        6. Notify Discord channel `1493558359495016488` for each newly created issue.
+        7. Do not create duplicate issues.
+
+        Execution rule:
+        - Edit `*.metadata.json` directly; do not rely on a parser script for roadmap decomposition
+        - Use `bash ~/.openclaw/scripts/context-to-issues.sh` for issue creation
+        - Use `bash ~/.openclaw/scripts/publish-new-issues.sh ...` for notifications
+        - Do not inline ad-hoc Discord messaging for this flow
+
+        Reporting rule:
+        - If no new actionable issues are found, reply `HEARTBEAT_OK`.
+        - If issues were created, report only the meaningful summary in chat and rely on the publish script for channel notifications.
+````
+
+**Heartbeat Dryrun test**
+
+Sending this to the agent
+
+```sh
+openclaw agent --agent main --message "Run the roadmap-context-to-issues heartbeat task in inspection mode only. Do not create issues yet. Tell me exactly what files you would update and what commands you would run."
+```
+
+**Hearbeat Actual Test**
+
+For tidying things, I moved heartbeat prompt into a dedicated markdown file. Further, my heartbeat referenced it:
+
+```sh
+- name: roadmap-context-to-issues
+  interval: 12h
+  prompt: |
+    Follow exactly the .openclaw/workspace/heartbeat-prompts/roadmap-context-to-issues.md for prompt instructions in this task.
+```
+
+I can see that the agent executed my request correctly, so now I can leave the heartbeat with reasonable time interval (e.g. 12h)
+
+**Message to Discord dispatch test**
+
+I created a discord channel - `issue-creator-channel` which has the ID defined above. I also asked bot to create `publish-new-issues.sh` that takes OpenClaw CLI to post message to discord. This will allow me reactivelly check if the heartbeat is working and new issues are created. I will wait 10 minutes now, and see if the issues are created. I also tested a script and it produced a test message:
+
+```sh
+📝 New issue created in IaC-Toolbox/iac-toolbox-cli: #9999
+Test issue notification
+This is a test message from publish-new-issues.sh
+https://github.com/IaC-Toolbox/iac-toolbox-cli/issues/9999
+```
+
+#### From Issues to Scanning for Work Items
+
+Final step is to add a hearbeat that will look into the issues and spawn agents. We built the following heartbeat for that: `.openclaw/workspace/heartbeat-prompts/project-autopick.md`.
+
+Some notable changes:
+
+- Refactoring of the `AGENTS.md` and `TOOLS.md` and some skills to stop relying on approval, questioning me and Discord Channel ID. The approvals are bypassed because we are in heartbeat mode
+- The Discord Channel IDs are hardcoded in `TOOLS.md`
+
+```sh
+| Heartbeat name            | Discord Channel ID            |     Purpose                        |
+|---------------------------|-------------------------------|------------------------------------|
+| project-autopick          | 1493601197670666412           | Autopick spawn notifications       |
+| roadmap-context-to-issues | 1493558359495016488           | New issues creations notifications |
+```
+
+**Provided Extra Context Into Heartbeat File and Each Heartbeat**
+
+Since our skills have to deal with interactive vs non-interactive modes, we should provide context about which mode we are in. So we added this in `HEARTBEAT.md`:
+
+```sh
+All tasks listed here are autonomous heartbeat tasks.
+Treat every `prompt_file` as part of the heartbeat execution contract.
+When a task is invoked from this registry, run it in heartbeat/autonomous mode, not as an interactive Viktor request.
+
+Heartbeat-mode rules for all tasks:
+- do not ask Viktor for clarification unless the task explicitly says to
+- do not ask Viktor for a channel ID during heartbeat runs
+- use the heartbeat channel registry in `TOOLS.md` when a channel must be resolved
+- if no task-specific channel is available, use the documented fallback and report that fallback was used
+- if nothing needs attention, reply `HEARTBEAT_OK`
+```
+
+**Actual Heartbeat File**
+
+The heartbeats also carry extra context now:
+
+```sh
+This prompt is an autonomous heartbeat task.
+Treat this run as heartbeat/autonomous mode, not as an interactive Viktor request.
+Do not ask Viktor for clarification or for a channel ID during this task.
+```
+
+And the actual `project-autopick.md` is as follows:
+
+```sh
+# HEARTBEAT.md
+  - name: project-autopick
+    interval: 60m
+    prompt_file: ~/.openclaw/workspace/heartbeat-prompts/project-autopick.md
+```
+
+**Testing agent directly - always shows stale response**
+
+When testing the heartbeats with prompts like:
+
+```sh
+openclaw agent --agent main --message "Run the autonomous heartbeat task please defined in ~/.openclaw/workspace/heartbeat-prompts/project-autopick.md"
+```
+
+I would often get error showing some evidence. But even after manually cleaning the system, the repeated invocations would surface the same error. Which seems to indicate some caching issue. Restarting gateway did not fix that.
+
+#### Removing Old Sessions - Clean up Sessions
+
+What fixed was cleaning the old session files, in particular moving them into archived sessions:
+
+```sh
+mkdir -p ~/.openclaw/agents/main/sessions-archive
+mv ~/.openclaw/agents/main/sessions/*.jsonl ~/.openclaw/agents/main/sessions-archive/
+```
+
+Apparently, when running the session, the old sessions somehow would contribute to the context.
+
+### Sync Obsidian HEARTBEAT.md
+
+All of this might work well, but it when I add new changes into obsidian, the agent has to pull latest business context. So the next thing we need to do is to add the
 
 ## Failing Overnight - Improving Reliability
 
