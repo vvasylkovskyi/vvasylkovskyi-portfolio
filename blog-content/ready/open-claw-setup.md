@@ -2242,6 +2242,63 @@ openclaw agent --agent main --message "Run the autonomous heartbeat task please 
 
 I would often get error showing some evidence. But even after manually cleaning the system, the repeated invocations would surface the same error. Which seems to indicate some caching issue. Restarting gateway did not fix that.
 
+## 16th April
+
+#### Forcing Heartbeat event
+
+```sh
+openclaw system event --text "heartbeat test (force run)" --mode now --json
+{
+  "ok": true
+}
+```
+
+Then immediately check the last heartbeat:
+
+```sh
+openclaw system heartbeat last --json
+{
+  "ts": 1776330936634,
+  "status": "sent",
+  "to": "channel:1493601197670666412",
+  "preview": "⚠️ You have hit your ChatGPT usage limit (plus plan). Try again in ~462 min.",
+  "durationMs": 15475,
+  "hasMedia": false,
+  "channel": "discord",
+  "indicatorType": "alert"
+}
+```
+
+Also, can look in the logs, they usually go into `/tmp/openclaw`.
+
+#### Added GPT-5.4-mini to help with the limits
+
+When chatting with agent, the mini model can be more than enough, and will help to not hit the API limits. So I switched the config:
+
+```sh
+  "agents": {
+    "defaults": {
+      "workspace": "/home/vvasylkovskyi/.openclaw/workspace",
+      "timeoutSeconds": 300,
+      "models": {
+        "anthropic/claude-sonnet-4-6": {},
+        "anthropic/claude-opus-4-6": {},
+        "anthropic/claude-opus-4-5": {},
+        "openai-codex/gpt-5.4": {},
+        "openai-codex/gpt-5.4-mini": {}
+      },
+      "model": {
+        "primary": "openai-codex/gpt-5.4-mini"
+      },
+```
+
+Note that for coding tasks with codex, the remaining the codex configuration in `.codex/config.toml` preferes the `gpt-5.3` or `gpt-5.4`
+
+```sh
+# .codex/config.toml
+model = "gpt-5.3"
+```
+
 #### Removing Old Sessions - Clean up Sessions
 
 What fixed was cleaning the old session files, in particular moving them into archived sessions:
